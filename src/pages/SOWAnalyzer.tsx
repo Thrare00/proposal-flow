@@ -391,7 +391,122 @@ const specialRequirements = [
   'Rapid response time (1 hour for critical incidents)'
 ];
 
+import { useParams } from 'react-router-dom';
+import { useProposalContext } from '../contexts/ProposalContext';
+
 const SOWAnalyzer = () => {
+  const { id } = useParams<{ id: string }>();
+  const { getProposal, updateProposal } = useProposalContext();
+  const proposal = id ? getProposal(id) : undefined;
+
+  // Document types
+  const requiredDocs = [
+    { key: 'sow', label: 'Statement of Work (SOW)' },
+    { key: 'instructions', label: 'Instructions' },
+  ];
+  const optionalDocs = [
+    { key: 'cost', label: 'Cost Proposal / Bid Schedule' },
+    { key: 'scoring', label: 'Proposal Scoring' },
+    { key: 'past', label: 'Past Performance' },
+  ];
+
+  // Helper to get file by type
+  const getFile = (type: string) => proposal?.files?.find(f => f.type === type);
+
+  // Handle file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
+    const file = e.target.files?.[0];
+    if (!file || !proposal) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      const newFile = {
+        id: Date.now().toString(),
+        name: file.name,
+        type,
+        size: file.size,
+        content,
+        uploadedAt: new Date().toISOString(),
+      };
+      const updatedFiles = [...(proposal.files || []).filter(f => f.type !== type), newFile];
+      updateProposal(proposal.id, { files: updatedFiles });
+    };
+    reader.readAsText(file);
+  };
+
+  // UI for required and optional documents
+  return (
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">SOW Analyzer</h1>
+      {!proposal ? (
+        <div className="text-error-600">Proposal not found.</div>
+      ) : (
+        <>
+          <h2 className="text-lg font-semibold mb-2">Required Documents</h2>
+          <div className="space-y-4 mb-6">
+            {requiredDocs.map(doc => {
+              const file = getFile(doc.key);
+              return (
+                <div key={doc.key} className="flex items-center space-x-4">
+                  <span className="font-medium w-56">{doc.label} <span className="text-error-600">*</span></span>
+                  {file ? (
+                    <>
+                      <span className="text-green-700">{file.name}</span>
+                      <a
+                        href={`data:application/octet-stream;base64,${btoa(file.content)}`}
+                        download={file.name}
+                        className="btn btn-xs btn-outline-primary ml-2"
+                      >Download</a>
+                    </>
+                  ) : (
+                    <>
+                      <input type="file" accept=".pdf,.doc,.docx,.txt" onChange={e => handleFileUpload(e, doc.key)} />
+                      <span className="text-error-500 text-sm ml-2">Required</span>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <h2 className="text-lg font-semibold mb-2">Optional Documents</h2>
+          <div className="space-y-4 mb-6">
+            {optionalDocs.map(doc => {
+              const file = getFile(doc.key);
+              return (
+                <div key={doc.key} className="flex items-center space-x-4">
+                  <span className="font-medium w-56">{doc.label}</span>
+                  {file ? (
+                    <>
+                      <span className="text-green-700">{file.name}</span>
+                      <a
+                        href={`data:application/octet-stream;base64,${btoa(file.content)}`}
+                        download={file.name}
+                        className="btn btn-xs btn-outline-primary ml-2"
+                      >Download</a>
+                    </>
+                  ) : (
+                    <input type="file" accept=".pdf,.doc,.docx,.txt" onChange={e => handleFileUpload(e, doc.key)} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Enforce required docs before analysis */}
+          {requiredDocs.every(doc => getFile(doc.key)) ? (
+            <button className="btn btn-primary" /*onClick={analyzeDocuments}*/>
+              Analyze Documents
+            </button>
+          ) : (
+            <div className="text-error-600 font-medium">Please upload all required documents to enable analysis.</div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
   const [isLoading, setIsLoading] = useState(false);
   const [analysis, setAnalysis] = useState<SOWAnalysis | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('overview');

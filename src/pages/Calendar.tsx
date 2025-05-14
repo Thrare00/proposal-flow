@@ -24,9 +24,19 @@ import { useProposalContext } from '../contexts/ProposalContext';
 import { CalendarEvent } from '../types';
 import { isOverdue } from '../utils/dateUtils';
 
+import CalendarEventForm from '../components/CalendarEventForm';
+
 const Calendar = () => {
-  const { proposals } = useProposalContext();
+  const { proposals, customEvents, addCustomEvent, updateCustomEvent, deleteCustomEvent } = useProposalContext();
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingCustomEvent, setEditingCustomEvent] = useState<null | {
+    id: string;
+    title: string;
+    date: string;
+    description?: string;
+    proposalId: string;
+  }>(null);
   
   // Generate calendar days for the current month
   const calendarDays = useMemo(() => {
@@ -45,7 +55,6 @@ const Calendar = () => {
   // Generate calendar events
   const calendarEvents = useMemo(() => {
     const events: CalendarEvent[] = [];
-    
     proposals.forEach(proposal => {
       // Add proposal due date
       events.push({
@@ -56,7 +65,6 @@ const Calendar = () => {
         relatedId: proposal.id,
         proposalId: proposal.id
       });
-      
       // Add tasks
       proposal.tasks.forEach(task => {
         events.push({
@@ -69,9 +77,19 @@ const Calendar = () => {
         });
       });
     });
-    
+    // Add custom events
+    customEvents.forEach(ev => {
+      events.push({
+        id: ev.id,
+        title: ev.title,
+        date: ev.date,
+        type: 'custom',
+        relatedId: ev.id,
+        proposalId: ev.proposalId,
+      });
+    });
     return events;
-  }, [proposals]);
+  }, [proposals, customEvents]);
   
   // Get events for a specific day
   const getEventsForDay = (day: Date) => {
@@ -167,31 +185,48 @@ const Calendar = () => {
                 
                 <div className="space-y-1 overflow-y-auto max-h-[80px]">
                   {dayEvents.map((event) => (
-                    <Link 
-                      key={event.id}
-                      to={
-                        event.type === 'proposal' 
-                          ? `/proposals/${event.proposalId}` 
-                          : `/proposals/${event.proposalId}?editTask=${event.relatedId}`
-                      }
-                      className={`block text-xs p-1 rounded truncate ${
-                        event.type === 'proposal'
-                          ? isOverdue(event.date) ? 'bg-error-100 text-error-800' : 'bg-primary-100 text-primary-800'
-                          : isOverdue(event.date) ? 'bg-error-50 text-error-700' : 'bg-gray-100 text-gray-800'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        {event.type === 'proposal' ? (
-                          <FileText size={10} className="mr-1 flex-shrink-0" />
-                        ) : (
-                          <CheckSquare size={10} className="mr-1 flex-shrink-0" />
-                        )}
-                        <span className="truncate flex-1">{event.title}</span>
-                        {isOverdue(event.date) && (
-                          <AlertTriangle size={10} className="ml-1 flex-shrink-0 text-error-500" />
-                        )}
-                      </div>
-                    </Link>
+                    event.type === 'custom' ? (
+                      <button
+                        key={event.id}
+                        className={`block text-xs w-full text-left p-1 rounded truncate bg-yellow-100 text-yellow-800 hover:bg-yellow-200`}
+                        style={{ outline: 'none', border: 'none' }}
+                        onClick={() => {
+                          setEditingCustomEvent(customEvents.find(ev => ev.id === event.id) || null);
+                          setShowEventForm(true);
+                        }}
+                      >
+                        <div className="flex items-center">
+                          <CalendarIcon size={10} className="mr-1 flex-shrink-0" />
+                          <span className="truncate flex-1">{event.title}</span>
+                        </div>
+                      </button>
+                    ) : (
+                      <Link 
+                        key={event.id}
+                        to={
+                          event.type === 'proposal' 
+                            ? `/proposals/${event.proposalId}` 
+                            : `/proposals/${event.proposalId}?editTask=${event.relatedId}`
+                        }
+                        className={`block text-xs p-1 rounded truncate ${
+                          event.type === 'proposal'
+                            ? isOverdue(event.date) ? 'bg-error-100 text-error-800' : 'bg-primary-100 text-primary-800'
+                            : isOverdue(event.date) ? 'bg-error-50 text-error-700' : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          {event.type === 'proposal' ? (
+                            <FileText size={10} className="mr-1 flex-shrink-0" />
+                          ) : (
+                            <CheckSquare size={10} className="mr-1 flex-shrink-0" />
+                          )}
+                          <span className="truncate flex-1">{event.title}</span>
+                          {isOverdue(event.date) && (
+                            <AlertTriangle size={10} className="ml-1 flex-shrink-0 text-error-500" />
+                          )}
+                        </div>
+                      </Link>
+                    )
                   ))}
                 </div>
               </div>
@@ -214,7 +249,48 @@ const Calendar = () => {
           <span className="text-sm text-gray-700">Overdue</span>
         </div>
       </div>
-    </div>
+    {/* Floating action button to add custom event */}
+    <button
+      className="fixed bottom-10 right-10 z-50 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg focus:outline-none"
+      title="Add Custom Deadline"
+      onClick={() => { setEditingCustomEvent(null); setShowEventForm(true); }}
+    >
+      <CalendarIcon size={28} />
+      <span className="sr-only">Add Custom Deadline</span>
+    </button>
+
+    {/* Modal for adding/editing custom event */}
+    {showEventForm && (
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+          <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-700" onClick={() => setShowEventForm(false)}>
+            ×
+          </button>
+          <h3 className="text-lg font-semibold mb-4">{editingCustomEvent ? 'Edit Custom Deadline' : 'Add Custom Deadline'}</h3>
+          <CalendarEventForm
+            proposalId={editingCustomEvent?.proposalId || ''}
+            onSave={(data) => {
+              if (editingCustomEvent) {
+                // update
+                updateCustomEvent(editingCustomEvent.id, data);
+              } else {
+                addCustomEvent({ ...data, proposalId: '' });
+              }
+              setShowEventForm(false);
+              setEditingCustomEvent(null);
+            }}
+            onCancel={() => { setShowEventForm(false); setEditingCustomEvent(null); }}
+            initialValues={editingCustomEvent || undefined}
+            onDelete={editingCustomEvent ? () => {
+              deleteCustomEvent(editingCustomEvent.id);
+              setShowEventForm(false);
+              setEditingCustomEvent(null);
+            } : undefined}
+          />
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 

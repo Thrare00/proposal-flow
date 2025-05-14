@@ -11,6 +11,8 @@ interface Task {
   owner?: string;
 }
 
+import { CustomCalendarEvent } from '../types/index';
+
 interface ProposalContextType {
   proposals: Proposal[];
   isLoading: boolean;
@@ -23,7 +25,13 @@ interface ProposalContextType {
   updateTask: (proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => void;
   deleteTask: (proposalId: string, taskId: string) => void;
   loadInitialData: () => void;
+  // Custom events
+  customEvents: CustomCalendarEvent[];
+  addCustomEvent: (event: Omit<CustomCalendarEvent, 'id'>) => string;
+  updateCustomEvent: (eventId: string, updates: Partial<CustomCalendarEvent>) => void;
+  deleteCustomEvent: (eventId: string) => void;
 }
+
 
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
 
@@ -35,9 +43,49 @@ export const useProposalContext = () => {
   return context;
 };
 
-export const ProposalProvider = ({ children }: { children: ReactNode }) => {
+export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNode => {
+  // ...existing state and logic...
+
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [customEvents, setCustomEvents] = useState<CustomCalendarEvent[]>([]);
+
+  // --- Custom Calendar Events ---
+  useEffect(() => {
+    const saved = localStorage.getItem('customEvents');
+    if (saved) {
+      try {
+        setCustomEvents(JSON.parse(saved));
+      } catch (e) {
+        setCustomEvents([]);
+      }
+    }
+  }, []);
+
+  const saveCustomEvents = useCallback((events: CustomCalendarEvent[]) => {
+    setCustomEvents(events);
+    localStorage.setItem('customEvents', JSON.stringify(events));
+  }, []);
+
+  const addCustomEvent = useCallback((event: Omit<CustomCalendarEvent, 'id'>) => {
+    const id = `custom-${Date.now()}`;
+    const newEvent: CustomCalendarEvent = { ...event, id };
+    const updated = [...customEvents, newEvent];
+    saveCustomEvents(updated);
+    return id;
+  }, [customEvents, saveCustomEvents]);
+
+  const updateCustomEvent = useCallback((eventId: string, updates: Partial<CustomCalendarEvent>) => {
+    const updated = customEvents.map(ev => ev.id === eventId ? { ...ev, ...updates } : ev);
+    saveCustomEvents(updated);
+  }, [customEvents, saveCustomEvents]);
+
+  const deleteCustomEvent = useCallback((eventId: string) => {
+    const updated = customEvents.filter(ev => ev.id !== eventId);
+    saveCustomEvents(updated);
+  }, [customEvents, saveCustomEvents]);
+
+  // --- END Custom Calendar Events ---
 
   const setSampleData = useCallback(() => {
     const sampleProposals: Proposal[] = [
@@ -165,6 +213,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
       ...proposal,
       id,
       tasks: [],
+      files: [], // Always ensure files property is present
       createdAt: now,
       updatedAt: now,
     };
@@ -259,38 +308,33 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
     const updatedProposals = proposals.map(proposal => {
       if (proposal.id === proposalId) {
         return {
-          ...proposal,
-          tasks: proposal.tasks.filter(task => task.id !== taskId),
-          updatedAt: new Date().toISOString(),
-        };
-      }
-      return proposal;
-    });
-    
-    saveProposals(updatedProposals);
-  }, [saveProposals]);
-  
-  const value = {
-    proposals,
-    isLoading,
-    addProposal,
-    updateProposal,
-    deleteProposal,
-    getProposal,
-    updateProposalStatus,
-    addTask,
-    updateTask,
-    deleteTask,
-    loadInitialData,
-  };
-  
-  useEffect(() => {
-    loadInitialData();
-  }, [loadInitialData]);
-
-  return (
-    <ProposalContext.Provider value={value}>
-      {children}
-    </ProposalContext.Provider>
-  );
 };
+
+useEffect(() => {
+  loadInitialData();
+}, [loadInitialData]);
+
+const value = {
+  proposals,
+  isLoading,
+  addProposal,
+  updateProposal,
+  deleteProposal,
+  getProposal,
+  updateProposalStatus,
+  addTask,
+  updateTask,
+  deleteTask,
+  loadInitialData,
+  customEvents,
+  addCustomEvent,
+  updateCustomEvent,
+  deleteCustomEvent,
+};
+
+return (
+  <ProposalContext.Provider value={value}>
+    {children}
+  </ProposalContext.Provider>
+);
+}

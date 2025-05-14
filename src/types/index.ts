@@ -35,11 +35,23 @@ export interface Proposal {
   updatedAt: string; // ISO string
 }
 
+export type CalendarEventType = 'proposal' | 'task' | 'custom';
+
 export interface CalendarEvent {
   id: string;
   title: string;
   date: string; // ISO string
-  type: 'proposal' | 'task';
-  relatedId: string; // proposalId or taskId
+  type: CalendarEventType;
+  relatedId: string; // proposalId, taskId, or customEventId
   proposalId: string;
+}
+
+export interface CustomCalendarEvent {
+  id: string;
+  title: string;
+  date: string; // ISO string
+  description?: string;
+  proposalId: string;
+  pushNotification?: boolean;
+  notificationTime?: string; // ISO string
 }

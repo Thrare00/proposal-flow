@@ -123,7 +123,7 @@ const ProposalCard = ({ proposal, showActions = true }: ProposalCardProps) => {
           </div>
           
           <Link 
-            to={`/proposals/${proposal.id}`}
+            to={`/proposals/${proposal.id}/analyze`}
             className="flex items-center text-primary-600 hover:text-primary-800 text-sm font-medium"
           >
             View Details

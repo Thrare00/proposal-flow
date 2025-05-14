@@ -23,6 +23,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="proposals/new" element={<ProposalForm />} />
           <Route path="proposals/:id" element={<ProposalDetails />} />
+          <Route path="proposals/:id/analyze" element={<SOWAnalyzer />} />
           <Route path="proposals/:id/edit" element={<ProposalForm />} />
           <Route path="flow" element={<FlowBoard />} />
           <Route path="market-research" element={<MarketResearch />} />
