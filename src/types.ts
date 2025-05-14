@@ -1,0 +1,45 @@
+export enum ProposalType {
+  COMMERCIAL = 'commercial',
+  LOCAL_STATE = 'local_state',
+  FEDERAL = 'federal'
+}
+
+export enum ProposalStatus {
+  INTAKE = 'intake',
+  OUTLINE = 'outline',
+  DRAFTING = 'drafting',
+  INTERNAL_REVIEW = 'internal_review',
+  FINAL_REVIEW = 'final_review',
+  SUBMITTED = 'submitted'
+}
+
+export interface FileMeta {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  content: string; // base64 or text
+  uploadedAt: string;
+}
+
+export interface Proposal {
+  id: string;
+  title: string;
+  agency: string;
+  dueDate: string;
+  status: ProposalStatus;
+  type: ProposalType;
+  notes?: string;
+  tasks: {
+    id: string;
+    title: string;
+    description?: string;
+    dueDate: string;
+    completed: boolean;
+    proposalId: string;
+    owner?: string;
+  }[];
+  files?: FileMeta[];
+  createdAt: string;
+  updatedAt: string;
+}
