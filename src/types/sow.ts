@@ -41,10 +41,11 @@ export interface SOWAnalysis {
   };
   performanceWorkStatement: DocumentSection;
   submissionRequirements: SubmissionRequirements;
+  evaluationFactors: DocumentSection;
   complianceRequirements: ComplianceRequirement[];
 }
 
 export interface Documents {
-  pws: string | null;
-  instructions: string | null;
+  pws: File | null;
+  instructions: File | null;
 }
