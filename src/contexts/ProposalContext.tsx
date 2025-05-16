@@ -32,7 +32,6 @@ interface ProposalContextType {
   deleteCustomEvent: (eventId: string) => void;
 }
 
-
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
 
 export const useProposalContext = () => {
@@ -44,13 +43,10 @@ export const useProposalContext = () => {
 };
 
 export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNode => {
-  // ...existing state and logic...
-
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customEvents, setCustomEvents] = useState<CustomCalendarEvent[]>([]);
 
-  // --- Custom Calendar Events ---
   useEffect(() => {
     const saved = localStorage.getItem('customEvents');
     if (saved) {
@@ -84,8 +80,6 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     const updated = customEvents.filter(ev => ev.id !== eventId);
     saveCustomEvents(updated);
   }, [customEvents, saveCustomEvents]);
-
-  // --- END Custom Calendar Events ---
 
   const setSampleData = useCallback(() => {
     const sampleProposals: Proposal[] = [
@@ -173,7 +167,6 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
       if (savedProposals) {
         const parsedProposals = JSON.parse(savedProposals);
         if (Array.isArray(parsedProposals)) {
-          // Validate the parsed data
           const isValid = parsedProposals.every(proposal => 
             typeof proposal === 'object' &&
             typeof proposal.id === 'string' &&
@@ -191,7 +184,6 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
           }
         }
       }
-      // If we get here, either there was an error or no valid saved proposals
       setSampleData();
       setIsLoading(false);
     } catch (error) {
@@ -213,7 +205,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
       ...proposal,
       id,
       tasks: [],
-      files: [], // Always ensure files property is present
+      files: [], 
       createdAt: now,
       updatedAt: now,
     };
@@ -300,41 +292,50 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
       }
       return proposal;
     });
-    
     saveProposals(updatedProposals);
   }, [saveProposals]);
-  
+
   const deleteTask = useCallback((proposalId: string, taskId: string) => {
     const updatedProposals = proposals.map(proposal => {
       if (proposal.id === proposalId) {
         return {
+          ...proposal,
+          tasks: proposal.tasks.filter(task => task.id !== taskId),
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      return proposal;
+    });
+    saveProposals(updatedProposals);
+  }, [saveProposals]);
+
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
+
+  const value = {
+    proposals,
+    isLoading,
+    addProposal,
+    updateProposal,
+    deleteProposal,
+    getProposal,
+    updateProposalStatus,
+    addTask,
+    updateTask,
+    deleteTask,
+    loadInitialData,
+    customEvents,
+    addCustomEvent,
+    updateCustomEvent,
+    deleteCustomEvent,
+  };
+
+  return (
+    <ProposalContext.Provider value={value}>
+      {children}
+    </ProposalContext.Provider>
+  );
 };
 
-useEffect(() => {
-  loadInitialData();
-}, [loadInitialData]);
-
-const value = {
-  proposals,
-  isLoading,
-  addProposal,
-  updateProposal,
-  deleteProposal,
-  getProposal,
-  updateProposalStatus,
-  addTask,
-  updateTask,
-  deleteTask,
-  loadInitialData,
-  customEvents,
-  addCustomEvent,
-  updateCustomEvent,
-  deleteCustomEvent,
-};
-
-return (
-  <ProposalContext.Provider value={value}>
-    {children}
-  </ProposalContext.Provider>
-);
-}
+export default ProposalProvider;
