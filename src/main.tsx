@@ -6,32 +6,40 @@ import { ProposalProvider } from './contexts/ProposalContext';
 import { useEffect } from 'react';
 import { requestNotificationPermission, showNotification, canUseNotification } from './utils/notificationUtils';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { useProposalContext } from './contexts/ProposalContext';
 import './index.css';
 
 import type { CustomCalendarEvent } from './types/index';
 
 function NotificationWatcher() {
-  const { customEvents } = require('./contexts/ProposalContext').useProposalContext();
+  const { customEvents } = useProposalContext();
   useEffect(() => {
     if (!canUseNotification()) return;
     requestNotificationPermission();
-    const interval = setInterval(() => {
+    
+    const checkNotifications = () => {
       const now = new Date();
-      (customEvents as CustomCalendarEvent[]).forEach((event) => {
+      customEvents.forEach((event: CustomCalendarEvent) => {
         if (event.pushNotification && event.notificationTime && Notification.permission === 'granted') {
           const notifTime = new Date(event.notificationTime);
           // Notify if within 1 minute of scheduled time, and store a flag in localStorage to avoid repeat
-          if (Math.abs(now.getTime() - notifTime.getTime()) < 60000 && !localStorage.getItem('notified-' + event.id)) {
-            showNotification('Upcoming Deadline: ' + event.title, {
-              body: event.description || 'Custom event deadline approaching.',
-            });
-            localStorage.setItem('notified-' + event.id, 'true');
+          if (Math.abs(now.getTime() - notifTime.getTime()) <= 60000) {
+            const notificationId = `notif_${event.id}`;
+            if (!localStorage.getItem(notificationId)) {
+              showNotification(event.title, {
+  body: event.description || 'Proposal deadline approaching'
+});
+              localStorage.setItem(notificationId, 'true');
+            }
           }
         }
       });
-    }, 30000); // check every 30s
+    };
+
+    const interval = setInterval(checkNotifications, 60000);
     return () => clearInterval(interval);
-  }, [customEvents]);
+  }, []);
+
   return null;
 }
 
