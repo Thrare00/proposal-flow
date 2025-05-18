@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, resolve } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => {
@@ -7,6 +7,11 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     plugins: [react()],
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './src')
+      }
+    },
     build: {
       outDir: 'dist',
       emptyOutDir: true,
