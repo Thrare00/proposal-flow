@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(__dirname, './src')
-      }
+      },
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
     build: {
       outDir: 'dist',
@@ -22,7 +23,10 @@ export default defineConfig(({ mode }) => {
           main: './index.html'
         },
         output: {
-          format: 'esm'
+          format: 'esm',
+          entryFileNames: '[name].js',
+          chunkFileNames: '[name].js',
+          assetFileNames: '[name].[ext]'
         }
       }
     }
