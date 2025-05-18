@@ -8,20 +8,28 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
-      
+          cache-dependency-path: package-lock.json
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         run: npm run build
-      
+
+      - name: Clean up build directory
+        run: rm -rf dist/* || true
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -29,3 +37,4 @@ jobs:
           publish_dir: ./dist
           commit_message: 'deploy'
           publish_branch: gh-pages
+          force_orphan: true
