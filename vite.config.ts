@@ -1,5 +1,6 @@
-import { defineConfig, resolve } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 export default defineConfig(({ mode }) => {
   const base = mode === 'production' ? '/proposal-flow/' : '/'
@@ -19,6 +20,9 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: './index.html'
+        },
+        output: {
+          format: 'esm'
         }
       }
     }
