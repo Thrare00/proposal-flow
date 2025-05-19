@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import path from 'path'
 
 export default defineConfig(({ mode }) => {
   const base = mode === 'production' ? '/proposal-flow/' : '/'
@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': resolve(__dirname, './src')
+        '@': path.resolve(__dirname, './src')
       },
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
