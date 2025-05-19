@@ -49,7 +49,8 @@ function NotificationWatcher() {
   return null;
 }
 
-createRoot(document.getElementById('root')!).render(
+const root = createRoot(document.getElementById('root')!);
+root.render(
   <StrictMode>
     <BrowserRouter basename="/proposal-flow">
       <ThemeProvider>
