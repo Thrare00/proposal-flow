@@ -28,7 +28,8 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'assets/[name].js',
           assetFileNames: 'assets/[name].[ext]'
         }
-      }
+      },
+      assetsDir: 'assets'
     },
     publicDir: 'public'
   }
