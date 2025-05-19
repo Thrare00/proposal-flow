@@ -53,11 +53,16 @@ export default defineConfig(({ mode }) => {
     },
     publicDir: 'public',
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom']
+      include: ['react', 'react-dom', 'react-router-dom'],
+      entries: ['react-dom/client']
     },
     server: {
       port: 3000,
-      open: true
+      open: true,
+      headers: {
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Cross-Origin-Embedder-Policy': 'require-corp'
+      }
     }
   }
 })
