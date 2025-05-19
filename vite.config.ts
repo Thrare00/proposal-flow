@@ -30,21 +30,28 @@ export default defineConfig(({ mode }) => {
         },
         output: {
           format: 'esm',
-          entryFileNames: 'assets/[name].js',
-          chunkFileNames: 'assets/[name].js',
-          assetFileNames: 'assets/[name].[ext]'
-        },
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom']
+          entryFileNames: ({ name }) => `assets/${name}.js`,
+          chunkFileNames: ({ name }) => `assets/${name}.js`,
+          assetFileNames: ({ name }) => `assets/${name}[extname]`,
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom']
+          }
         }
       },
       assetsDir: 'assets',
       manifest: true,
-      minify: 'terser'
+      minify: 'terser',
+      target: 'esnext',
+      cssCodeSplit: true
     },
     publicDir: 'public',
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom']
+      include: ['react', 'react-dom', 'react-router-dom'],
+      exclude: ['@babel/plugin-transform-react-jsx']
+    },
+    server: {
+      port: 3000,
+      open: true
     }
   }
 })

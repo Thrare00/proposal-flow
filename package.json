@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "rm -rf dist && tsc && vite build",
     "preview": "vite preview",
-    "build:clean": "rm -rf dist && tsc && vite build"
+    "build:clean": "rm -rf dist && tsc && vite build",
+    "prebuild": "tsc --noEmit && vite build",
+    "postbuild": "cp -r public/* dist/"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
