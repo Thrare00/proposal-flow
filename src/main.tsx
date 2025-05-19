@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ProposalProvider } from './contexts/ProposalContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { requestNotificationPermission, showNotification, canUseNotification } from './utils/notificationUtils';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useProposalContext } from './contexts/ProposalContext';
@@ -13,10 +13,15 @@ import type { CustomCalendarEvent } from './types/index';
 
 function NotificationWatcher() {
   const { customEvents } = useProposalContext();
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     if (!canUseNotification()) return;
-    requestNotificationPermission();
+    
+    if (!initialized) {
+      requestNotificationPermission();
+      setInitialized(true);
+    }
 
     const checkNotifications = () => {
       const now = new Date();
@@ -39,7 +44,7 @@ function NotificationWatcher() {
 
     const interval = setInterval(checkNotifications, 60000);
     return () => clearInterval(interval);
-  }, [customEvents]);
+  }, [customEvents, initialized]);
 
   return null;
 }
@@ -49,8 +54,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename="/proposal-flow">
       <ThemeProvider>
         <ProposalProvider>
-          <NotificationWatcher />
           <App />
+          <NotificationWatcher />
         </ProposalProvider>
       </ThemeProvider>
     </BrowserRouter>
