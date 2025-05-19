@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: ({ name }) => `assets/${name}.js`,
           assetFileNames: ({ name }) => `assets/${name}[extname]`,
           manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom']
+            vendor: ['react', 'react-dom', 'react-router-dom', 'scheduler']
           }
         }
       },
@@ -53,8 +53,8 @@ export default defineConfig(({ mode }) => {
     },
     publicDir: 'public',
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom'],
-      entries: ['react-dom/client']
+      include: ['react', 'react-dom', 'react-router-dom', 'scheduler'],
+      entries: ['react-dom/client', 'scheduler']
     },
     server: {
       port: 3000,
