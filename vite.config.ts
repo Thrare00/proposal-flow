@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      sourcemap: true,
+      sourcemap: 'inline',
       rollupOptions: {
         input: {
           main: './index.html'
@@ -35,7 +35,8 @@ export default defineConfig(({ mode }) => {
           assetFileNames: ({ name }) => `assets/${name}[extname]`,
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom', 'scheduler']
-          }
+          },
+          sourcemap: true
         }
       },
       assetsDir: 'assets',
