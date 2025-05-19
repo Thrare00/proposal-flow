@@ -27,8 +27,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Clean up build directory
-        run: rm -rf dist/* || true
+      - name: Ensure dist directory exists
+        run: mkdir -p dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -38,3 +38,5 @@ jobs:
           commit_message: 'deploy'
           publish_branch: gh-pages
           force_orphan: true
+          clean: true
+          keep_files: true
