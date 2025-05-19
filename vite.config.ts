@@ -49,8 +49,7 @@ export default defineConfig(({ mode }) => {
     },
     publicDir: 'public',
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom'],
-      exclude: ['@babel/plugin-transform-react-jsx']
+      include: ['react', 'react-dom', 'react-router-dom']
     },
     server: {
       port: 3000,
