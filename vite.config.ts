@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      sourcemap: false,
+      sourcemap: true,
       rollupOptions: {
         input: {
           main: './index.html'
@@ -45,6 +45,10 @@ export default defineConfig(({ mode }) => {
       cssCodeSplit: true,
       commonjsOptions: {
         include: [/node_modules/]
+      },
+      error: {
+        includeStack: true,
+        verbose: true
       }
     },
     publicDir: 'public',
