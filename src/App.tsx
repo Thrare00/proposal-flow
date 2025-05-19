@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
 import ProposalForm from '@/pages/ProposalForm';
@@ -36,6 +36,7 @@ function App() {
         <Route path="ai-agent-guide" element={<AIAgentGuide />} />
         <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
