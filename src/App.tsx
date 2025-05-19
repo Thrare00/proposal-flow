@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
 import ProposalForm from '@/pages/ProposalForm';
@@ -16,6 +16,8 @@ import AIAgentGuide from '@/pages/AIAgentGuide';
 import ProposalDevelopmentGuide from '@/pages/ProposalDevelopmentGuide';
 
 function App() {
+  const location = useLocation();
+
   return (
     <div className="app">
       <Routes>

@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      sourcemap: true,
+      sourcemap: false,
       rollupOptions: {
         input: {
           main: './index.html'
@@ -42,7 +42,10 @@ export default defineConfig(({ mode }) => {
       manifest: true,
       minify: 'terser',
       target: 'esnext',
-      cssCodeSplit: true
+      cssCodeSplit: true,
+      commonjsOptions: {
+        include: [/node_modules/]
+      }
     },
     publicDir: 'public',
     optimizeDeps: {

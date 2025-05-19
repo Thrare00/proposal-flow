@@ -8,12 +8,15 @@ import './index.css';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+
 root.render(
-  <BrowserRouter basename="/proposal-flow">
-    <ThemeProvider>
-      <ProposalProvider>
-        <App />
-      </ProposalProvider>
-    </ThemeProvider>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter basename="/proposal-flow">
+      <ThemeProvider>
+        <ProposalProvider>
+          <App />
+        </ProposalProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
