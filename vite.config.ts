@@ -2,12 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+
 export default defineConfig(({ mode }) => {
   const base = mode === 'production' ? '/proposal-flow/' : '/'
 
   return {
     base,
-    plugins: [react()],
+    plugins: [react({
+      babel: {
+        plugins: ['@babel/plugin-transform-react-jsx']
+      }
+    })],
     resolve: {
       alias: {
         '@': resolve(__dirname, './src')

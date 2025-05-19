@@ -9,7 +9,7 @@ import './index.css';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
-  <StrictMode>
+  <React.StrictMode>
     <BrowserRouter basename="/proposal-flow">
       <ThemeProvider>
         <ProposalProvider>
@@ -17,5 +17,5 @@ root.render(
         </ProposalProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </StrictMode>
+  </React.StrictMode>
 );
