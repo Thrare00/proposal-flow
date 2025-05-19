@@ -13,10 +13,11 @@ import type { CustomCalendarEvent } from './types/index';
 
 function NotificationWatcher() {
   const { customEvents } = useProposalContext();
+
   useEffect(() => {
     if (!canUseNotification()) return;
     requestNotificationPermission();
-    
+
     const checkNotifications = () => {
       const now = new Date();
       customEvents.forEach((event: CustomCalendarEvent) => {
@@ -27,8 +28,8 @@ function NotificationWatcher() {
             const notificationId = `notif_${event.id}`;
             if (!localStorage.getItem(notificationId)) {
               showNotification(event.title, {
-  body: event.description || 'Proposal deadline approaching'
-});
+                body: event.description || 'Proposal deadline approaching'
+              });
               localStorage.setItem(notificationId, 'true');
             }
           }
@@ -38,7 +39,7 @@ function NotificationWatcher() {
 
     const interval = setInterval(checkNotifications, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [customEvents]);
 
   return null;
 }
