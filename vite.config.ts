@@ -2,20 +2,18 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-
 export default defineConfig(({ mode }) => {
   const base = mode === 'production' ? '/proposal-flow/' : '/'
 
   return {
     base,
-    plugins: [react({
-      babel: {
-        plugins: ['@babel/plugin-transform-react-jsx']
-      }
-    })],
+    plugins: [
+      react({
+        babel: {
+          plugins: ['@babel/plugin-transform-react-jsx']
+        }
+      })
+    ],
     resolve: {
       alias: {
         '@': resolve(__dirname, './src')
@@ -35,12 +33,18 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name].js',
           chunkFileNames: 'assets/[name].js',
           assetFileNames: 'assets/[name].[ext]'
+        },
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom']
         }
       },
       assetsDir: 'assets',
       manifest: true,
       minify: 'terser'
     },
-    publicDir: 'public'
+    publicDir: 'public',
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom']
+    }
   }
 })
