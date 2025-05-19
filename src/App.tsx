@@ -19,9 +19,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/dashboard/home" element={<Home />} />
       <Route path="/dashboard" element={<Layout />}>
         <Route index element={<Dashboard />} />
+        <Route path="home" element={<Home />} />
         <Route path="proposals/new" element={<ProposalForm />} />
         <Route path="proposals/:id" element={<ProposalDetails />} />
         <Route path="proposals/:id/analyze" element={<SOWAnalyzer />} />

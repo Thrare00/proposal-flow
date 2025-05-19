@@ -29,7 +29,9 @@ export default defineConfig(({ mode }) => {
           assetFileNames: 'assets/[name].[ext]'
         }
       },
-      assetsDir: 'assets'
+      assetsDir: 'assets',
+      manifest: true,
+      minify: 'terser'
     },
     publicDir: 'public'
   }

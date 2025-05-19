@@ -1,53 +1,11 @@
+import React from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ProposalProvider } from './contexts/ProposalContext';
-import { useEffect, useState } from 'react';
-import { requestNotificationPermission, showNotification, canUseNotification } from './utils/notificationUtils';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { useProposalContext } from './contexts/ProposalContext';
 import './index.css';
-
-import type { CustomCalendarEvent } from './types/index';
-
-function NotificationWatcher() {
-  const { customEvents } = useProposalContext();
-  const [initialized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    if (!canUseNotification()) return;
-    
-    if (!initialized) {
-      requestNotificationPermission();
-      setInitialized(true);
-    }
-
-    const checkNotifications = () => {
-      const now = new Date();
-      customEvents.forEach((event: CustomCalendarEvent) => {
-        if (event.pushNotification && event.notificationTime && Notification.permission === 'granted') {
-          const notifTime = new Date(event.notificationTime);
-          // Notify if within 1 minute of scheduled time, and store a flag in localStorage to avoid repeat
-          if (Math.abs(now.getTime() - notifTime.getTime()) <= 60000) {
-            const notificationId = `notif_${event.id}`;
-            if (!localStorage.getItem(notificationId)) {
-              showNotification(event.title, {
-                body: event.description || 'Proposal deadline approaching'
-              });
-              localStorage.setItem(notificationId, 'true');
-            }
-          }
-        }
-      });
-    };
-
-    const interval = setInterval(checkNotifications, 60000);
-    return () => clearInterval(interval);
-  }, [customEvents, initialized]);
-
-  return null;
-}
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
@@ -56,9 +14,8 @@ root.render(
       <ThemeProvider>
         <ProposalProvider>
           <App />
-          <NotificationWatcher />
         </ProposalProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
-);
+);;
