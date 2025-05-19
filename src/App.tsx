@@ -17,27 +17,29 @@ import ProposalDevelopmentGuide from '@/pages/ProposalDevelopmentGuide';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/dashboard" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="home" element={<Home />} />
-        <Route path="proposals/new" element={<ProposalForm />} />
-        <Route path="proposals/:id" element={<ProposalDetails />} />
-        <Route path="proposals/:id/analyze" element={<SOWAnalyzer />} />
-        <Route path="proposals/:id/edit" element={<ProposalForm />} />
-        <Route path="flow" element={<FlowBoard />} />
-        <Route path="market-research" element={<MarketResearch />} />
-        <Route path="getting-started" element={<GettingStarted />} />
-        <Route path="calendar" element={<Calendar />} />
-        <Route path="reminders" element={<Reminders />} />
-        <Route path="guide" element={<Guide />} />
-        <Route path="sow-analyzer" element={<SOWAnalyzer />} />
-        <Route path="ai-agent-guide" element={<AIAgentGuide />} />
-        <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="home" element={<Home />} />
+          <Route path="proposals/new" element={<ProposalForm />} />
+          <Route path="proposals/:id" element={<ProposalDetails />} />
+          <Route path="proposals/:id/analyze" element={<SOWAnalyzer />} />
+          <Route path="proposals/:id/edit" element={<ProposalForm />} />
+          <Route path="flow" element={<FlowBoard />} />
+          <Route path="market-research" element={<MarketResearch />} />
+          <Route path="getting-started" element={<GettingStarted />} />
+          <Route path="calendar" element={<Calendar />} />
+          <Route path="reminders" element={<Reminders />} />
+          <Route path="guide" element={<Guide />} />
+          <Route path="sow-analyzer" element={<SOWAnalyzer />} />
+          <Route path="ai-agent-guide" element={<AIAgentGuide />} />
+          <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
 }
 
