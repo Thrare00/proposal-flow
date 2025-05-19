@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
           assetFileNames: '[name].[ext]'
         }
       }
-    }
+    },
+    publicDir: 'public'
   }
 })
