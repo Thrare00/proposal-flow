@@ -6,7 +6,7 @@
   "homepage": "https://thrare00.github.io/proposal-flow",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "rm -rf dist && tsc && vite build",
     "preview": "vite preview",
     "build:clean": "rm -rf dist && tsc && vite build"
   },

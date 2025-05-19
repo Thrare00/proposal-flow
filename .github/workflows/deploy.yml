@@ -40,3 +40,7 @@ jobs:
           force_orphan: true
           clean: true
           keep_files: true
+          base_branch: main
+          repository_name: thrare00/proposal-flow
+          domain: thrare00.github.io
+          cname: proposal-flow.thrare00.github.io
