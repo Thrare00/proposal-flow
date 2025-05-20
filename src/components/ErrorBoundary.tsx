@@ -1,29 +1,24 @@
 import React from 'react';
-import { useErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary as ErrorBoundaryComponent, FallbackProps } from 'react-error-boundary';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
 }
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
-  const { showBoundary } = useErrorBoundary();
-
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
-      <React.ErrorBoundary
-        FallbackComponent={ErrorFallback}
-        onReset={() => {
-          // Reset the state of your app so the error doesn't happen again
-          window.location.reload();
-        }}
-      >
-        {children}
-      </React.ErrorBoundary>
-    </React.Suspense>
+    <ErrorBoundaryComponent
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        window.location.reload();
+      }}
+    >
+      {children}
+    </ErrorBoundaryComponent>
   );
 };
 
-const ErrorFallback: React.FC<{ error: Error }> = ({ error }) => {
+const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
   return (
     <div style={{
       padding: '2rem',

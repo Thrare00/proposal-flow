@@ -22,6 +22,16 @@ export interface FileMeta {
   uploadedAt: string;
 }
 
+export interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  dueDate: string;
+  completed: boolean;
+  proposalId: string;
+  owner?: string;
+}
+
 export interface Proposal {
   id: string;
   title: string;
@@ -30,15 +40,7 @@ export interface Proposal {
   status: ProposalStatus;
   type: ProposalType;
   notes?: string;
-  tasks: {
-    id: string;
-    title: string;
-    description?: string;
-    dueDate: string;
-    completed: boolean;
-    proposalId: string;
-    owner?: string;
-  }[];
+  tasks: Task[];
   files?: FileMeta[];
   createdAt: string;
   updatedAt: string;

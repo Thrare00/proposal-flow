@@ -6,10 +6,10 @@
   "homepage": "https://thrare00.github.io/proposal-flow",
   "scripts": {
     "dev": "vite",
-    "build": "rimraf dist && tsc && vite build",
+    "build": "rimraf dist && tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
-    "build:clean": "rimraf dist && tsc && vite build",
-    "prebuild": "tsc --noEmit && vite build",
+    "build:clean": "rimraf dist && tsc -p tsconfig.build.json && vite build",
+    "prebuild": "tsc -p tsconfig.build.json && vite build",
     "postbuild": "copyfiles -u 1 public/* dist/"
   },
   "dependencies": {
