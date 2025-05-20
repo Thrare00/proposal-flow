@@ -14,25 +14,25 @@ export const getStatusName = (status: ProposalStatus): string => {
 
 export const getStatusColor = (status: ProposalStatus): string => {
   switch (status) {
-    case 'intake': return 'bg-gray-100 text-gray-800';
-    case 'outline': return 'bg-primary-100 text-primary-800';
-    case 'drafting': return 'bg-accent-100 text-accent-800';
-    case 'internal_review': return 'bg-warning-100 text-warning-800';
-    case 'final_review': return 'bg-success-100 text-success-800';
-    case 'submitted': return 'bg-success-500 text-white';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'intake': return 'bg-gray-50 text-gray-700';
+    case 'outline': return 'bg-blue-50 text-blue-800';
+    case 'drafting': return 'bg-purple-50 text-purple-800';
+    case 'internal_review': return 'bg-yellow-50 text-yellow-800';
+    case 'final_review': return 'bg-green-50 text-green-800';
+    case 'submitted': return 'bg-green-600 text-white';
+    default: return 'bg-gray-50 text-gray-700';
   }
 };
 
 export const getStatusBorderColor = (status: ProposalStatus): string => {
   switch (status) {
-    case 'intake': return 'border-gray-300';
-    case 'outline': return 'border-primary-300';
-    case 'drafting': return 'border-accent-300';
-    case 'internal_review': return 'border-warning-300';
-    case 'final_review': return 'border-success-300';
-    case 'submitted': return 'border-success-500';
-    default: return 'border-gray-300';
+    case 'intake': return 'border-gray-200';
+    case 'outline': return 'border-blue-200';
+    case 'drafting': return 'border-purple-200';
+    case 'internal_review': return 'border-yellow-200';
+    case 'final_review': return 'border-green-200';
+    case 'submitted': return 'border-green-600';
+    default: return 'border-gray-200';
   }
 };
 
@@ -50,35 +50,35 @@ export const getStatusOrder = (status: ProposalStatus): number => {
 
 export const getAllStatuses = (): ProposalStatus[] => {
   return [
-    'intake',
-    'outline',
-    'drafting',
-    'internal_review',
-    'final_review',
-    'submitted'
+    ProposalStatus.INTAKE,
+    ProposalStatus.OUTLINE,
+    ProposalStatus.DRAFTING,
+    ProposalStatus.INTERNAL_REVIEW,
+    ProposalStatus.FINAL_REVIEW,
+    ProposalStatus.SUBMITTED
   ];
 };
 
 export const getNextStatus = (status: ProposalStatus): ProposalStatus | null => {
   switch (status) {
-    case 'intake': return 'outline';
-    case 'outline': return 'drafting';
-    case 'drafting': return 'internal_review';
-    case 'internal_review': return 'final_review';
-    case 'final_review': return 'submitted';
-    case 'submitted': return null;
+    case ProposalStatus.INTAKE: return ProposalStatus.OUTLINE;
+    case ProposalStatus.OUTLINE: return ProposalStatus.DRAFTING;
+    case ProposalStatus.DRAFTING: return ProposalStatus.INTERNAL_REVIEW;
+    case ProposalStatus.INTERNAL_REVIEW: return ProposalStatus.FINAL_REVIEW;
+    case ProposalStatus.FINAL_REVIEW: return ProposalStatus.SUBMITTED;
+    case ProposalStatus.SUBMITTED: return null;
     default: return null;
   }
 };
 
 export const getPreviousStatus = (status: ProposalStatus): ProposalStatus | null => {
   switch (status) {
-    case 'outline': return 'intake';
-    case 'drafting': return 'outline';
-    case 'internal_review': return 'drafting';
-    case 'final_review': return 'internal_review';
-    case 'submitted': return 'final_review';
-    case 'intake': return null;
+    case ProposalStatus.OUTLINE: return ProposalStatus.INTAKE;
+    case ProposalStatus.DRAFTING: return ProposalStatus.OUTLINE;
+    case ProposalStatus.INTERNAL_REVIEW: return ProposalStatus.DRAFTING;
+    case ProposalStatus.FINAL_REVIEW: return ProposalStatus.INTERNAL_REVIEW;
+    case ProposalStatus.SUBMITTED: return ProposalStatus.FINAL_REVIEW;
+    case ProposalStatus.INTAKE: return null;
     default: return null;
   }
 };
