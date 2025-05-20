@@ -46,10 +46,6 @@ export default defineConfig(({ mode }) => {
       cssCodeSplit: true,
       commonjsOptions: {
         include: [/node_modules/]
-      },
-      error: {
-        includeStack: true,
-        verbose: true
       }
     },
     publicDir: 'public',

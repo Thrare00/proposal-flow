@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProposalForm from './pages/ProposalForm';
 import ProposalDetails from './pages/ProposalDetails';
@@ -15,32 +15,26 @@ import AIAgentGuide from './pages/AIAgentGuide';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
 
 function App() {
-  const location = useLocation();
-  
-  // Handle base path for GitHub Pages
-  const basePath = '/proposal-flow';
-  
   return (
     <Routes>
-      <Route path={`${basePath}/`} element={<LandingPage />} />
-      <Route path={`${basePath}/dashboard`} element={<Layout />}>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/dashboard" element={<Layout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
         <Route path="proposals/new" element={<ProposalForm />} />
         <Route path="proposals/:id" element={<ProposalDetails />} />
         <Route path="proposals/:id/analyze" element={<SOWAnalyzer />} />
         <Route path="proposals/:id/edit" element={<ProposalForm />} />
-        <Route path="flow" element={<FlowBoard />} />
+        <Route path="flowboard" element={<FlowBoard />} />
         <Route path="market-research" element={<MarketResearch />} />
         <Route path="getting-started" element={<GettingStarted />} />
         <Route path="calendar" element={<Calendar />} />
         <Route path="reminders" element={<Reminders />} />
         <Route path="guide" element={<Guide />} />
-        <Route path="sow-analyzer" element={<SOWAnalyzer />} />
-        <Route path="ai-agent-guide" element={<AIAgentGuide />} />
+        <Route path="ai-guide" element={<AIAgentGuide />} />
         <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
+        <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
       </Route>
-      <Route path="*" element={<Navigate to={`${basePath}/`} replace />} />
     </Routes>
   );
 }
