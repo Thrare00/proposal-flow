@@ -38,12 +38,12 @@ export const getStatusBorderColor = (status: ProposalStatus): string => {
 
 export const getStatusOrder = (status: ProposalStatus): number => {
   switch (status) {
-    case 'intake': return 0;
-    case 'outline': return 1;
-    case 'drafting': return 2;
-    case 'internal_review': return 3;
-    case 'final_review': return 4;
-    case 'submitted': return 5;
+    case ProposalStatus.INTAKE: return 0;
+    case ProposalStatus.OUTLINE: return 1;
+    case ProposalStatus.DRAFTING: return 2;
+    case ProposalStatus.INTERNAL_REVIEW: return 3;
+    case ProposalStatus.FINAL_REVIEW: return 4;
+    case ProposalStatus.SUBMITTED: return 5;
     default: return 6;
   }
 };
