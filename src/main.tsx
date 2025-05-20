@@ -20,8 +20,10 @@ const NotificationWatcher: React.FC<NotificationWatcherProps> = ({ children }) =
 
     // Request permission only once when component mounts
     requestNotificationPermission();
+      requestNotificationPermission();
 
-    const interval = setInterval(() => {
+      const interval = setInterval(() => {
+        if (!customEvents) return;
       if (!customEvents) return;
 
       const now = new Date();
