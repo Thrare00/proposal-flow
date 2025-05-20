@@ -5,7 +5,10 @@
     "outDir": "./dist/types",
     "declaration": true,
     "declarationMap": true,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "checkJs": true
   },
   "include": ["src"]
 }
