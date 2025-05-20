@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, startTransition } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -70,16 +70,18 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="/proposal-flow">
-      <ThemeProvider>
-        <ProposalProvider>
-          <ErrorBoundary>
-            <NotificationWatcher>
-              <App />
-            </NotificationWatcher>
-          </ErrorBoundary>
-        </ProposalProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <BrowserRouter basename="/proposal-flow">
+        <ThemeProvider>
+          <ProposalProvider>
+            <ErrorBoundary>
+              <NotificationWatcher>
+                <App />
+              </NotificationWatcher>
+            </ErrorBoundary>
+          </ProposalProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </React.Suspense>
   </React.StrictMode>
 );
