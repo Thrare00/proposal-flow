@@ -4,7 +4,8 @@
     "noEmit": false,
     "outDir": "./dist/types",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "allowImportingTsExtensions": false
   },
   "include": ["src"]
 }
