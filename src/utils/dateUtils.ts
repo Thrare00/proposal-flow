@@ -35,11 +35,11 @@ export const getUrgencyLevel = (dueDate: string): UrgencyLevel => {
   const dueDateObj = parseISO(dueDate);
   const daysUntilDue = differenceInDays(dueDateObj, today);
   
-  if (daysUntilDue < 0) return 'critical'; // Overdue
-  if (daysUntilDue <= 2) return 'critical';
-  if (daysUntilDue <= 7) return 'high';
-  if (daysUntilDue <= 14) return 'medium';
-  return 'low';
+  if (daysUntilDue < 0) return UrgencyLevel.CRITICAL; // Overdue
+  if (daysUntilDue <= 2) return UrgencyLevel.CRITICAL;
+  if (daysUntilDue <= 7) return UrgencyLevel.HIGH;
+  if (daysUntilDue <= 14) return UrgencyLevel.MEDIUM;
+  return UrgencyLevel.LOW;
 };
 
 export const getUrgencyColor = (urgency: UrgencyLevel): string => {

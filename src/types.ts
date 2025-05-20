@@ -4,6 +4,13 @@ export enum ProposalType {
   FEDERAL = 'federal'
 }
 
+export enum UrgencyLevel {
+  CRITICAL = 'critical',
+  HIGH = 'high',
+  MEDIUM = 'medium',
+  LOW = 'low'
+}
+
 export enum ProposalStatus {
   INTAKE = 'intake',
   OUTLINE = 'outline',
