@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProposalForm from './pages/ProposalForm';
 import ProposalDetails from './pages/ProposalDetails';
@@ -15,10 +15,15 @@ import AIAgentGuide from './pages/AIAgentGuide';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
 
 function App() {
+  const location = useLocation();
+  
+  // Handle base path for GitHub Pages
+  const basePath = '/proposal-flow';
+  
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/dashboard" element={<Layout />}>
+      <Route path={`${basePath}/`} element={<LandingPage />} />
+      <Route path={`${basePath}/dashboard`} element={<Layout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
         <Route path="proposals/new" element={<ProposalForm />} />
@@ -35,7 +40,7 @@ function App() {
         <Route path="ai-agent-guide" element={<AIAgentGuide />} />
         <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to={`${basePath}/`} replace />} />
     </Routes>
   );
 }

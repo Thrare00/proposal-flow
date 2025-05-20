@@ -16,6 +16,7 @@ import { useState } from 'react';
 const Layout = () => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   const location = useLocation();
+  const basePath = '/proposal-flow';
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -29,7 +30,7 @@ const Layout = () => {
               >
                 {isMenuCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
               </button>
-              <Link to="/dashboard" className="flex items-center">
+              <Link to={`${basePath}/dashboard`} className="flex items-center">
                 <span className="text-xl font-bold text-primary-600 dark:text-primary-400">ProposalFlow</span>
               </Link>
             </div>
@@ -44,11 +45,11 @@ const Layout = () => {
       <div className={`fixed inset-y-16 left-0 ${isMenuCollapsed ? 'w-16' : 'w-64'} bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 md:block transform transition-transform duration-200 ease-in-out z-50`}>
         <nav className="flex-1">
           {[
-            { to: '/dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-            { to: '/dashboard/flow', icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-            { to: '/dashboard/calendar', icon: <CalendarDays size={18} />, label: 'Calendar' },
-            { to: '/dashboard/guide', icon: <BookOpen size={18} />, label: 'Guide' },
-            { to: '/dashboard/reminders', icon: <Clipboard size={18} />, label: 'Reminders' },
+            { to: `${basePath}/dashboard`, icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+            { to: `${basePath}/dashboard/flow`, icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+            { to: `${basePath}/dashboard/calendar`, icon: <CalendarDays size={18} />, label: 'Calendar' },
+            { to: `${basePath}/dashboard/guide`, icon: <BookOpen size={18} />, label: 'Guide' },
+            { to: `${basePath}/dashboard/reminders`, icon: <Clipboard size={18} />, label: 'Reminders' },
             { to: '/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
           ].map((item) => (
             <Link
