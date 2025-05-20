@@ -52,3 +52,13 @@ export interface Proposal {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  date: string;
+  description?: string;
+  proposalId: string;
+  pushNotification?: boolean;
+  notificationTime?: string;
+}
