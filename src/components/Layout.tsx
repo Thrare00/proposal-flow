@@ -1,15 +1,14 @@
 import { 
   LayoutDashboard, 
   CalendarDays, 
-  LayoutGrid, 
+  LayoutGrid,
   Menu,
-  Clipboard,
   ChevronLeft,
   PlusCircle,
   BookOpen,
   FileSearch
 } from 'lucide-react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import ThemeSlider from './ThemeSlider';
 import { useState } from 'react';
 
@@ -17,6 +16,10 @@ interface NavigationItem {
   to: string;
   icon: React.ReactNode;
   label: string;
+}
+
+interface NavLinkProps {
+  isActive: boolean;
 }
 
 const navigationItems: NavigationItem[] = [
