@@ -21,7 +21,7 @@ import {
   parseISO,
 } from 'date-fns';
 import { useProposalContext } from '../contexts/ProposalContext';
-import { CalendarEvent } from '../types';
+import { CustomCalendarEvent } from '../types/index';
 import { isOverdue } from '../utils/dateUtils';
 
 import CalendarEventForm from '../components/CalendarEventForm';
@@ -30,7 +30,7 @@ const Calendar = () => {
   const { proposals, customEvents, addCustomEvent, updateCustomEvent, deleteCustomEvent } = useProposalContext();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showEventForm, setShowEventForm] = useState(false);
-  const [editingCustomEvent, setEditingCustomEvent] = useState<CalendarEvent | null>(null);
+  const [editingCustomEvent, setEditingCustomEvent] = useState<CustomCalendarEvent | null>(null);
   
   // Generate calendar days for the current month
   const calendarDays = useMemo(() => {
@@ -48,7 +48,7 @@ const Calendar = () => {
   
   // Generate calendar events
   const calendarEvents = useMemo(() => {
-    const events: CalendarEvent[] = [];
+    const events: CustomCalendarEvent[] = [];
     proposals.forEach(proposal => {
       // Add proposal due date
       events.push({
@@ -280,6 +280,7 @@ const Calendar = () => {
               setShowEventForm(false);
               setEditingCustomEvent(null);
             } : undefined}
+            type={editingCustomEvent ? editingCustomEvent.type : 'custom'}
           />
         </div>
       </div>

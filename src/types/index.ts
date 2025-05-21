@@ -54,4 +54,6 @@ export interface CustomCalendarEvent {
   proposalId: string;
   pushNotification?: boolean;
   notificationTime?: string; // ISO string
+  type: CalendarEventType;
+  relatedId: string;
 }
