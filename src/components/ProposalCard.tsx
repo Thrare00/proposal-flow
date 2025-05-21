@@ -7,7 +7,7 @@ import {
   ArrowRight,
   AlertTriangle
 } from 'lucide-react';
-import { Proposal } from '../types';
+import { Proposal, ProposalStatus } from '../types';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils';
 import { getStatusName, getStatusColor } from '../utils/statusUtils';
 
