@@ -6,9 +6,10 @@ import {
   ChevronLeft,
   PlusCircle,
   BookOpen,
-  FileSearch
+  FileSearch,
+  Clipboard
 } from 'lucide-react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import ThemeSlider from './ThemeSlider';
 import { useState } from 'react';
 
@@ -20,6 +21,7 @@ interface NavigationItem {
 
 interface NavLinkProps {
   isActive: boolean;
+  className: string;
 }
 
 const navigationItems: NavigationItem[] = [
@@ -33,7 +35,6 @@ const navigationItems: NavigationItem[] = [
 
 const Layout = () => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
-  const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col">
