@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { CalendarEvent } from '../types';
 
 interface CalendarEventFormProps {
   proposalId: string;
-  onSave: (event: { title: string; date: string; description?: string; pushNotification?: boolean; notificationTime?: string }) => void;
+  onSave: (event: Omit<CalendarEvent, 'id'>) => void;
   onCancel: () => void;
-  initialValues?: { title: string; date: string; description?: string; pushNotification?: boolean; notificationTime?: string };
+  initialValues?: Omit<CalendarEvent, 'id'>;
   onDelete?: () => void;
 }
 
