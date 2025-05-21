@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext';
-import { ProposalStatus, ProposalType } from '../types';
+import { ProposalType } from '../types';
+import { ProposalStatus } from '../types';
 
 const ProposalForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ const ProposalForm = () => {
       ? new Date(existingProposal.dueDate).toISOString().slice(0, 10)
       : ''
   );
-  const [status, setStatus] = useState<ProposalStatus>(existingProposal?.status || 'intake');
+  const [status, setStatus] = useState<ProposalStatus>(existingProposal?.status || ProposalStatus.INTAKE);
   const [notes, setNotes] = useState(existingProposal?.notes || '');
   const [type, setType] = useState<ProposalType>(existingProposal?.type || ProposalType.FEDERAL);
   const [errors, setErrors] = useState<Record<string, string>>({});

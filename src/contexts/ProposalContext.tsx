@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { Proposal, ProposalStatus, ProposalType } from '../types';
+import { Proposal, ProposalType } from '../types';
+import { ProposalStatus } from '../types';
 
 interface Task {
   id: string;
