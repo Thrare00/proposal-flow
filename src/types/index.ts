@@ -1,3 +1,5 @@
+import { ProposalStatus } from '../types';
+
 export type UrgencyLevel = 
   | 'low'    // > 2 weeks
   | 'medium' // 1-2 weeks
@@ -21,7 +23,7 @@ export interface Proposal {
   agency: string;
   dueDate: string; // ISO string
   notes?: string;
-  status: 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
+  status: ProposalStatus;
   tasks: Task[];
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
