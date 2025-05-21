@@ -61,4 +61,6 @@ export interface CalendarEvent {
   proposalId: string;
   pushNotification?: boolean;
   notificationTime?: string;
+  type?: 'proposal' | 'task' | 'custom';
+  relatedId?: string;
 }

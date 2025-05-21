@@ -30,13 +30,7 @@ const Calendar = () => {
   const { proposals, customEvents, addCustomEvent, updateCustomEvent, deleteCustomEvent } = useProposalContext();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showEventForm, setShowEventForm] = useState(false);
-  const [editingCustomEvent, setEditingCustomEvent] = useState<null | {
-    id: string;
-    title: string;
-    date: string;
-    description?: string;
-    proposalId: string;
-  }>(null);
+  const [editingCustomEvent, setEditingCustomEvent] = useState<CalendarEvent | null>(null);
   
   // Generate calendar days for the current month
   const calendarDays = useMemo(() => {
