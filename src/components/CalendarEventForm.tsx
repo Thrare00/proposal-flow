@@ -19,7 +19,7 @@ const CalendarEventForm: React.FC<CalendarEventFormProps> = ({ proposalId, onSav
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !date) return;
-    onSave({ title, date, description, pushNotification, notificationTime });
+    onSave({ title, date, description, pushNotification, notificationTime, proposalId });
   };
 
   return (
