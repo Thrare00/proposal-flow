@@ -3,6 +3,7 @@ import { FileText, Upload, Check, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { SOWAnalysis, DocumentSection, SubmissionRequirements, ComplianceRequirement, KeyTerm, Documents } from '@/types/sow';
 import { useProposalContext } from '../../contexts/ProposalContext';
+import { CustomCalendarEvent } from '@/types';
 
 const sampleAnalysis: SOWAnalysis = {
   scopeOfWork: {
@@ -88,7 +89,7 @@ const sampleAnalysis: SOWAnalysis = {
 };
 
 const SOWAnalyzer = () => {
-  const { } = useProposalContext();
+  const { proposals, customEvents } = useProposalContext();
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState<Documents>({
     pws: null,
