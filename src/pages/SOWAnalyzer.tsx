@@ -88,7 +88,7 @@ const sampleAnalysis: SOWAnalysis = {
 };
 
 const SOWAnalyzer = () => {
-  const { customEvents } = useProposalContext();
+  const { } = useProposalContext();
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState<Documents>({
     pws: null,
