@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext';
 import { getStatusName, getStatusColor, getNextStatus, getPreviousStatus } from '../utils/statusUtils';
+import { ProposalStatus } from '../types';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
