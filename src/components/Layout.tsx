@@ -9,7 +9,7 @@ import {
   FileSearch,
   Clipboard
 } from 'lucide-react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import ThemeSlider from './ThemeSlider';
 import { useState } from 'react';
 
@@ -19,10 +19,6 @@ interface NavigationItem {
   label: string;
 }
 
-interface NavLinkProps {
-  isActive: boolean;
-  className: string;
-}
 
 const navigationItems: NavigationItem[] = [
   { to: "/dashboard", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
