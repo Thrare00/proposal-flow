@@ -163,12 +163,12 @@ const ProposalForm = () => {
                   onChange={(e) => setStatus(e.target.value as ProposalStatus)}
                   className="form-select"
                 >
-                  <option value="intake">Intake</option>
-                  <option value="outline">Outline</option>
-                  <option value="drafting">Drafting</option>
-                  <option value="internal_review">Internal Review</option>
-                  <option value="final_review">Final Review</option>
-                  <option value="submitted">Submitted</option>
+                  <option value={ProposalStatus.INTAKE}>Intake</option>
+                  <option value={ProposalStatus.OUTLINE}>Outline</option>
+                  <option value={ProposalStatus.DRAFTING}>Drafting</option>
+                  <option value={ProposalStatus.INTERNAL_REVIEW}>Internal Review</option>
+                  <option value={ProposalStatus.FINAL_REVIEW}>Final Review</option>
+                  <option value={ProposalStatus.SUBMITTED}>Submitted</option>
                 </select>
               </div>
               
