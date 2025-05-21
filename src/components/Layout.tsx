@@ -13,6 +13,21 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import ThemeSlider from './ThemeSlider';
 import { useState } from 'react';
 
+interface NavigationItem {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const navigationItems: NavigationItem[] = [
+  { to: "/dashboard", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+  { to: "/dashboard/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+  { to: "/dashboard/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
+  { to: "/dashboard/guide", icon: <BookOpen size={18} />, label: 'Guide' },
+  { to: "/dashboard/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
+  { to: '/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
+];
+
 const Layout = () => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   const location = useLocation();
@@ -43,14 +58,7 @@ const Layout = () => {
 
       <div className={`fixed inset-y-16 left-0 ${isMenuCollapsed ? 'w-16' : 'w-64'} bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 md:block transform transition-transform duration-200 ease-in-out z-50`}>
         <nav className="flex-1">
-          {[
-            { to: "/dashboard", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-            { to: "/dashboard/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-            { to: "/dashboard/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
-            { to: "/dashboard/guide", icon: <BookOpen size={18} />, label: 'Guide' },
-            { to: "/dashboard/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
-            { to: '/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
-          ].map((item) => (
+          {navigationItems.map((item) => (
             <NavLink
               to={item.to}
               key={item.to}
