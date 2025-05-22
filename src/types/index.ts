@@ -1,10 +1,4 @@
-import { ProposalStatus } from '../types';
-
-export type UrgencyLevel = 
-  | 'low'    // > 2 weeks
-  | 'medium' // 1-2 weeks
-  | 'high'   // < 1 week
-  | 'critical'; // < 2 days
+import { ProposalStatus, UrgencyLevel } from '../types';
 
 export interface Task {
   id: string;
