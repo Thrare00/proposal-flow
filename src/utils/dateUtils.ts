@@ -44,10 +44,10 @@ export const getUrgencyLevel = (dueDate: string): UrgencyLevel => {
 
 export const getUrgencyColor = (urgency: UrgencyLevel): string => {
   switch (urgency) {
-    case 'critical': return 'bg-error-100 text-error-800';
-    case 'high': return 'bg-warning-100 text-warning-800';
-    case 'medium': return 'bg-accent-100 text-accent-800';
-    case 'low': return 'bg-success-100 text-success-800';
+    case UrgencyLevel.CRITICAL: return 'bg-error-100 text-error-800';
+    case UrgencyLevel.HIGH: return 'bg-warning-100 text-warning-800';
+    case UrgencyLevel.MEDIUM: return 'bg-accent-100 text-accent-800';
+    case UrgencyLevel.LOW: return 'bg-success-100 text-success-800';
     default: return 'bg-gray-100 text-gray-800';
   }
 };
