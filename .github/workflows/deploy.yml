@@ -26,12 +26,12 @@ jobs:
       - name: Build
         run: npm run build:clean
 
+      - name: List build output
+        run: ls -la dist/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          force_orphan: true
-          keep_files: true
-          cname: proposal-flow.thrare00.github.io
