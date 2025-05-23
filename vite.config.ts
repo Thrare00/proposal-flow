@@ -4,7 +4,7 @@ import path from 'path'
 import { terser } from 'rollup-plugin-terser'
 
 export default defineConfig(({ mode }): UserConfig => {
-  const base = mode === 'production' ? '/proposal-flow/' : '/'
+  const base = mode === 'production' ? '/' : '/'
 
   return {
     base,
