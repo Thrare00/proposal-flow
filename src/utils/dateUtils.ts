@@ -2,8 +2,7 @@ import {
   format, 
   differenceInDays, 
   isBefore, 
-  parseISO, 
-  addDays,
+  parseISO,
   startOfWeek,
   endOfWeek,
   eachDayOfInterval,
@@ -14,7 +13,9 @@ import {
   addMonths,
   subMonths
 } from 'date-fns';
-import { UrgencyLevel } from '../types';
+
+import type { UrgencyLevel } from '../types';
+
 
 export const formatDate = (dateString: string): string => {
   return format(parseISO(dateString), 'MMM d, yyyy');
@@ -35,22 +36,22 @@ export const getUrgencyLevel = (dueDate: string): UrgencyLevel => {
   const dueDateObj = parseISO(dueDate);
   const daysUntilDue = differenceInDays(dueDateObj, today);
   
-  if (daysUntilDue < 0) return UrgencyLevel.CRITICAL; // Overdue
-  if (daysUntilDue <= 2) return UrgencyLevel.CRITICAL;
-  if (daysUntilDue <= 7) return UrgencyLevel.HIGH;
-  if (daysUntilDue <= 14) return UrgencyLevel.MEDIUM;
-  return UrgencyLevel.LOW;
-};
+  if (daysUntilDue < 0) return 'critical'; // Overdue
+  if (daysUntilDue <= 2) return 'critical';
+  if (daysUntilDue <= 7) return 'high';
+  if (daysUntilDue <= 14) return 'medium';
+  return 'low';
+}
 
 export const getUrgencyColor = (urgency: UrgencyLevel): string => {
   switch (urgency) {
-    case UrgencyLevel.CRITICAL: return 'bg-error-100 text-error-800';
-    case UrgencyLevel.HIGH: return 'bg-warning-100 text-warning-800';
-    case UrgencyLevel.MEDIUM: return 'bg-accent-100 text-accent-800';
-    case UrgencyLevel.LOW: return 'bg-success-100 text-success-800';
+    case 'critical': return 'bg-error-100 text-error-800';
+    case 'high': return 'bg-warning-100 text-warning-800';
+    case 'medium': return 'bg-accent-100 text-accent-800';
+    case 'low': return 'bg-success-100 text-success-800';
     default: return 'bg-gray-100 text-gray-800';
-  }
-};
+  };
+}
 
 export const getUrgencyBorderColor = (urgency: UrgencyLevel): string => {
   switch (urgency) {

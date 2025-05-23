@@ -4,14 +4,13 @@ import {
   Phone, 
   Users, 
   FileSpreadsheet, 
-  CheckCircle, 
-  AlertTriangle 
+  CheckCircle
 } from 'lucide-react';
 
 interface ProposalRecommendationsProps {
   proposal: {
     title: string;
-    status: string;
+    status: 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
     dueDate: string;
     agency: string;
     naicsCodes: string[];

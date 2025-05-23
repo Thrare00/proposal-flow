@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Task } from '../types';
+import { Proposal } from '../types';
 import { useProposalContext } from '../contexts/ProposalContext';
 
 interface TaskFormProps {
@@ -11,7 +11,7 @@ interface TaskFormProps {
 
 const TaskForm = ({ proposalId, taskId, onClose }: TaskFormProps) => {
   const { getProposal, addTask, updateTask } = useProposalContext();
-  const proposal = getProposal(proposalId);
+  const proposal = getProposal(proposalId) as Proposal | undefined;
   const existingTask = taskId ? proposal?.tasks.find(t => t.id === taskId) : undefined;
   
   const [title, setTitle] = useState(existingTask?.title || '');

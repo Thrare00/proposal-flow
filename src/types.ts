@@ -1,24 +1,8 @@
-export enum ProposalType {
-  COMMERCIAL = 'commercial',
-  LOCAL_STATE = 'local_state',
-  FEDERAL = 'federal'
-}
+export type ProposalType = 'commercial' | 'local_state' | 'federal';
 
-export enum UrgencyLevel {
-  CRITICAL = 'critical',
-  HIGH = 'high',
-  MEDIUM = 'medium',
-  LOW = 'low'
-}
+export type UrgencyLevel = 'critical' | 'high' | 'medium' | 'low';
 
-export enum ProposalStatus {
-  INTAKE = 'intake',
-  OUTLINE = 'outline',
-  DRAFTING = 'drafting',
-  INTERNAL_REVIEW = 'internal_review',
-  FINAL_REVIEW = 'final_review',
-  SUBMITTED = 'submitted'
-}
+export type ProposalStatus = 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
 
 export interface FileMeta {
   id: string;
@@ -31,12 +15,13 @@ export interface FileMeta {
 
 export interface Task {
   id: string;
+  proposalId: string;
   title: string;
   description?: string;
+  owner?: string;
   dueDate: string;
   completed: boolean;
-  proposalId: string;
-  owner?: string;
+  createdAt: string;
 }
 
 export interface Proposal {
@@ -48,7 +33,7 @@ export interface Proposal {
   type: ProposalType;
   notes?: string;
   tasks: Task[];
-  files?: FileMeta[];
+  files: FileMeta[];
   createdAt: string;
   updatedAt: string;
 }
@@ -61,6 +46,6 @@ export interface CalendarEvent {
   proposalId: string;
   pushNotification?: boolean;
   notificationTime?: string;
-  type?: 'proposal' | 'task' | 'custom';
+  type: 'proposal' | 'task' | 'custom';
   relatedId?: string;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, startTransition } from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -7,6 +7,21 @@ import { requestNotificationPermission, showNotification, canUseNotification } f
 import { ThemeProvider } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
+
+// Global error handler
+window.onerror = (event: Event | string): boolean => {
+  console.error('Error:', event);
+  return false;
+};
+
+// Handle unhandled promise rejections
+window.onunhandledrejection = (event: PromiseRejectionEvent): void => {
+  console.error('Promise Rejection:', {
+    reason: event.reason,
+    stack: event.reason instanceof Error ? event.reason.stack : undefined
+  });
+  event.preventDefault();
+};
 
 interface NotificationWatcherProps {
   children: React.ReactNode;
@@ -20,10 +35,8 @@ const NotificationWatcher: React.FC<NotificationWatcherProps> = ({ children }) =
 
     // Request permission only once when component mounts
     requestNotificationPermission();
-      requestNotificationPermission();
 
-      const interval = setInterval(() => {
-        if (!customEvents) return;
+    const interval = setInterval(() => {
       if (!customEvents) return;
 
       const now = new Date();
@@ -50,25 +63,11 @@ const NotificationWatcher: React.FC<NotificationWatcherProps> = ({ children }) =
   return <>{children}</>;
 };
 
-// Global error handler
-window.onerror = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
-  if (typeof event === 'string') {
-    console.error('Error:', {
-      message: event,
-      source,
-      lineno,
-      colno,
-      error: error?.message,
-      stack: error?.stack
-    });
-  } else {
-    console.error('Event error:', event);
-  }
-  return false;
-};
-
-const container = document.getElementById('root')!;
-const root = createRoot(container);
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Failed to find the root element');
+}
+const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>

@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -22,22 +24,15 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
-
-      - name: Ensure dist directory exists
-        run: mkdir -p dist
+        run: npm run build:clean
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          commit_message: 'deploy'
+          commit_message: 'Deploy to GitHub Pages'
           publish_branch: gh-pages
           force_orphan: true
-          clean: true
           keep_files: true
-          base_branch: main
-          repository_name: thrare00/proposal-flow
-          domain: thrare00.github.io
           cname: proposal-flow.thrare00.github.io

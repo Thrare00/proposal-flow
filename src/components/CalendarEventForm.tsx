@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { CustomCalendarEvent, CalendarEventType } from '../types/index';
+import { CalendarEvent } from '../types';
 
 interface CalendarEventFormProps {
   proposalId: string;
-  onSave: (event: Omit<CustomCalendarEvent, 'id'>) => void;
+  onSave: (event: Omit<CalendarEvent, 'id'>) => void;
   onCancel: () => void;
-  initialValues?: Omit<CustomCalendarEvent, 'id'>;
+  initialValues?: Omit<CalendarEvent, 'id'> | null;
   onDelete?: () => void;
-  type: CalendarEventType;
+  type: 'proposal' | 'task' | 'custom';
 }
 
 const CalendarEventForm: React.FC<CalendarEventFormProps> = ({ proposalId, onSave, onCancel, initialValues, onDelete, type }) => {

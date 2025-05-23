@@ -9,36 +9,35 @@ import {
   FilterX
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext';
-import { getUrgencyLevel, isOverdue } from '../utils/dateUtils';
-import { parseISO } from 'date-fns';
-import type { ProposalStatus, UrgencyLevel } from '../types';
 import ProposalCard from '../components/ProposalCard';
+import { getUrgencyLevel, isOverdue } from '../utils/dateUtils';
+import type { ProposalStatus, Proposal } from '../types';
 
 const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const;
 
 const Dashboard = () => {
   const { proposals } = useProposalContext();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ProposalStatus | 'all'>('all');
-  const [urgencyFilter, setUrgencyFilter] = useState<UrgencyLevel | 'all' | 'overdue'>('all');
+  const [urgencyFilter, setUrgencyFilter] = useState<string>('all');
 
   // Statistics
   const totalProposals = proposals.length;
-  const overdueProposals = proposals.filter((p) => 
+  const overdueProposals = proposals.filter((p: Proposal) => 
     isOverdue(p.dueDate) && p.status !== 'submitted'
   ).length;
-  const dueSoonProposals = proposals.filter((p) => {
+  const dueSoonProposals = proposals.filter((p: Proposal) => {
     const urgency = getUrgencyLevel(p.dueDate);
     return (urgency === 'high' || urgency === 'critical') && !isOverdue(p.dueDate) && p.status !== 'submitted';
   }).length;
-  const completedProposals = proposals.filter((p) => 
+  const completedProposals = proposals.filter((p: Proposal) => 
     p.status === 'submitted'
   ).length;
-
+  
   // Filter and search proposals
   const filteredProposals = useMemo(() => {
     return proposals
-      .filter((proposal) => {
+      .filter((proposal: Proposal) => {
         // Search term
         if (searchTerm && !proposal.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
             !proposal.agency.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -60,20 +59,16 @@ const Dashboard = () => {
             return false;
           } else if (urgencyFilter === 'high' && urgency !== 'high') {
             return false;
-          } else if (urgencyFilter === 'medium' && urgency !== 'medium') {
-            return false;
-          } else if (urgencyFilter === 'low' && urgency !== 'low') {
+          } else if (urgencyFilter === 'normal' && (urgency !== 'medium' && urgency !== 'low')) {
             return false;
           }
         }
         
         return true;
       })
-      .sort((a, b) => {
+      .sort((a: Proposal, b: Proposal) => {
         // Sort by due date (ascending)
-        const dateA = parseISO(a.dueDate);
-        const dateB = parseISO(b.dueDate);
-        return dateA.getTime() - dateB.getTime();
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
       });
   }, [proposals, searchTerm, statusFilter, urgencyFilter]);
   
@@ -187,7 +182,7 @@ const Dashboard = () => {
             <div>
               <select
                 value={urgencyFilter}
-                onChange={(e) => setUrgencyFilter(e.target.value as UrgencyLevel | 'all' | 'overdue')}
+                onChange={(e) => setUrgencyFilter(e.target.value)}
                 className="form-select"
                 aria-label="Filter by urgency"
               >
@@ -195,8 +190,7 @@ const Dashboard = () => {
                 <option value="overdue">Overdue</option>
                 <option value="critical">Critical (Due in 2 days)</option>
                 <option value="high">High (Due in 1 week)</option>
-                <option value="medium">Medium (Due in 2 weeks)</option>
-                <option value="low">Low (Due later)</option>
+                <option value="normal">Normal (Due later)</option>
               </select>
             </div>
             

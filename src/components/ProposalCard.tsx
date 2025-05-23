@@ -7,7 +7,7 @@ import {
   ArrowRight,
   AlertTriangle
 } from 'lucide-react';
-import { Proposal, ProposalStatus, UrgencyLevel } from '../types';
+import type { Proposal, UrgencyLevel } from '../types';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils';
 import { getStatusName, getStatusColor } from '../utils/statusUtils';
 
@@ -17,7 +17,7 @@ interface ProposalCardProps {
 }
 
 const ProposalCard = ({ proposal, showActions = true }: ProposalCardProps) => {
-  const urgencyLevel = getUrgencyLevel(proposal.dueDate);
+  const urgencyLevel = getUrgencyLevel(proposal.dueDate) as UrgencyLevel;
   const urgencyColorClass = getUrgencyColor(urgencyLevel);
   const statusColorClass = getStatusColor(proposal.status);
   const isTasksCompleted = proposal.tasks.length > 0 && 
@@ -64,15 +64,15 @@ const ProposalCard = ({ proposal, showActions = true }: ProposalCardProps) => {
         <div className="flex items-center text-gray-600">
           <Clock size={16} className="mr-2" />
           <span className={`text-sm ${urgencyColorClass} px-2 py-0.5 rounded-full`}>
-            {urgencyLevel === UrgencyLevel.CRITICAL && isOverdue(proposal.dueDate) 
-              ? 'Overdue' 
-              : urgencyLevel === UrgencyLevel.CRITICAL 
-                ? 'Due immediately' 
-                : urgencyLevel === UrgencyLevel.HIGH 
-                  ? 'Due soon' 
-                  : urgencyLevel === UrgencyLevel.MEDIUM 
-                    ? 'Approaching' 
-                    : 'On track'}
+            {urgencyLevel === 'critical' 
+              ? isOverdue(proposal.dueDate) 
+                ? 'Overdue' 
+                : 'Due immediately' 
+              : urgencyLevel === 'high' 
+                ? 'Due soon' 
+                : urgencyLevel === 'medium' 
+                  ? 'Approaching' 
+                  : 'On track'}
           </span>
         </div>
       </div>

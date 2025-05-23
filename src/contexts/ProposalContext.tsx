@@ -1,24 +1,15 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { Proposal, ProposalType } from '../types';
-import { ProposalStatus } from '../types';
+import { Proposal, Task, CalendarEvent, ProposalStatus } from '../types';
 
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  dueDate: string;
-  completed: boolean;
-  proposalId: string;
-  owner?: string;
-}
-
-import { CustomCalendarEvent } from '../types/index';
+const getCurrentDateTime = (): string => {
+  return new Date().toISOString();
+};
 
 interface ProposalContextType {
   proposals: Proposal[];
   isLoading: boolean;
-  addProposal: (proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks'>) => string;
-  updateProposal: (id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks'>>) => void;
+  addProposal: (proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>) => string;
+  updateProposal: (id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>) => void;
   deleteProposal: (id: string) => void;
   getProposal: (id: string) => Proposal | undefined;
   updateProposalStatus: (id: string, status: ProposalStatus) => void;
@@ -26,16 +17,15 @@ interface ProposalContextType {
   updateTask: (proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => void;
   deleteTask: (proposalId: string, taskId: string) => void;
   loadInitialData: () => void;
-  // Custom events
-  customEvents: CustomCalendarEvent[];
-  addCustomEvent: (event: Omit<CustomCalendarEvent, 'id'>) => string;
-  updateCustomEvent: (eventId: string, updates: Partial<CustomCalendarEvent>) => void;
+  customEvents: CalendarEvent[];
+  addCustomEvent: (event: Omit<CalendarEvent, 'id'>) => string;
+  updateCustomEvent: (eventId: string, updates: Partial<CalendarEvent>) => void;
   deleteCustomEvent: (eventId: string) => void;
 }
 
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
 
-export const useProposalContext = () => {
+export const useProposalContext = (): ProposalContextType => {
   const context = useContext(ProposalContext);
   if (context === undefined) {
     throw new Error('useProposalContext must be used within a ProposalProvider');
@@ -46,7 +36,7 @@ export const useProposalContext = () => {
 export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [customEvents, setCustomEvents] = useState<CustomCalendarEvent[]>([]);
+  const [customEvents, setCustomEvents] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('customEvents');
@@ -59,20 +49,20 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     }
   }, []);
 
-  const saveCustomEvents = useCallback((events: CustomCalendarEvent[]) => {
+  const saveCustomEvents = useCallback((events: CalendarEvent[]) => {
     setCustomEvents(events);
     localStorage.setItem('customEvents', JSON.stringify(events));
   }, []);
 
-  const addCustomEvent = useCallback((event: Omit<CustomCalendarEvent, 'id'>) => {
+  const addCustomEvent = useCallback((event: Omit<CalendarEvent, 'id'>) => {
     const id = `custom-${Date.now()}`;
-    const newEvent: CustomCalendarEvent = { ...event, id };
+    const newEvent: CalendarEvent = { ...event, id };
     const updated = [...customEvents, newEvent];
     saveCustomEvents(updated);
     return id;
   }, [customEvents, saveCustomEvents]);
 
-  const updateCustomEvent = useCallback((eventId: string, updates: Partial<CustomCalendarEvent>) => {
+  const updateCustomEvent = useCallback((eventId: string, updates: Partial<CalendarEvent>) => {
     const updated = customEvents.map(ev => ev.id === eventId ? { ...ev, ...updates } : ev);
     saveCustomEvents(updated);
   }, [customEvents, saveCustomEvents]);
@@ -88,8 +78,8 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
         id: '1',
         title: 'DoD Training System RFP',
         agency: 'Department of Defense',
-        dueDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString(),
-        status: ProposalStatus.DRAFTING,
+        dueDate: '2025-06-04T00:00:00.000Z',
+        status: 'drafting',
         notes: 'This proposal requires security clearance documentation.',
         tasks: [
           {
@@ -97,28 +87,31 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             proposalId: '1',
             title: 'Write Executive Summary',
             owner: 'Jane Smith',
-            dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+            dueDate: '2025-05-25T00:00:00.000Z',
             completed: false,
+            createdAt: '2025-05-23T00:00:00.000Z',
           },
           {
             id: '102',
             proposalId: '1',
             title: 'Prepare Cost Analysis',
             owner: 'John Doe',
-            dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+            dueDate: '2025-05-30T00:00:00.000Z',
             completed: false,
+            createdAt: '2025-05-23T00:00:00.000Z',
           }
         ],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        type: ProposalType.FEDERAL
+        createdAt: '2025-05-23T00:00:00.000Z',
+        updatedAt: '2025-05-23T00:00:00.000Z',
+        type: 'federal',
+        files: []
       },
       {
         id: '2',
         title: 'EPA Environmental Assessment',
         agency: 'Environmental Protection Agency',
-        dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-        status: ProposalStatus.INTERNAL_REVIEW,
+        dueDate: '2025-05-20T00:00:00.000Z',
+        status: 'internal_review',
         notes: 'Need to emphasize environmental impact mitigation strategies.',
         tasks: [
           {
@@ -126,20 +119,22 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             proposalId: '2',
             title: 'Complete Impact Analysis',
             owner: 'Sarah Johnson',
-            dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
+            dueDate: '2025-05-19T00:00:00.000Z',
             completed: true,
+            createdAt: '2025-05-13T00:00:00.000Z',
           }
         ],
-        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString(),
-        type: ProposalType.FEDERAL
+        createdAt: '2025-05-13T00:00:00.000Z',
+        updatedAt: '2025-05-23T00:00:00.000Z',
+        type: 'federal',
+        files: []
       },
       {
         id: '3',
         title: 'HHS Healthcare Portal',
         agency: 'Health and Human Services',
-        dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
-        status: ProposalStatus.FINAL_REVIEW,
+        dueDate: '2025-05-24T00:00:00.000Z',
+        status: 'final_review',
         notes: 'Final compliance review needed before submission.',
         tasks: [
           {
@@ -147,13 +142,15 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             proposalId: '3',
             title: 'Review HIPAA Compliance',
             owner: 'Michael Brown',
-            dueDate: new Date().toISOString(),
+            dueDate: '2025-05-23T00:00:00.000Z',
             completed: false,
+            createdAt: '2025-05-03T00:00:00.000Z',
           }
         ],
-        createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString(),
-        type: ProposalType.FEDERAL
+        createdAt: '2025-05-03T00:00:00.000Z',
+        updatedAt: '2025-05-23T00:00:00.000Z',
+        type: 'federal',
+        files: []
       }
     ];
 
@@ -174,8 +171,8 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             typeof proposal.title === 'string' &&
             typeof proposal.agency === 'string' &&
             typeof proposal.dueDate === 'string' &&
-            Object.values(ProposalStatus).includes(proposal.status as ProposalStatus) &&
-            Object.values(ProposalType).includes(proposal.type as ProposalType)
+            ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'].includes(proposal.status) &&
+            ['commercial', 'local_state', 'federal'].includes(proposal.type)
           );
           
           if (isValid) {
@@ -199,9 +196,9 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     localStorage.setItem('proposals', JSON.stringify(newProposals));
   }, [setProposals]);
   
-  const addProposal = useCallback((proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks'>) => {
+  const addProposal = useCallback((proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>) => {
     const id = Date.now().toString();
-    const now = new Date().toISOString();
+    const now = getCurrentDateTime();
     const newProposal: Proposal = {
       ...proposal,
       id,
@@ -214,20 +211,20 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     const updatedProposals = [...proposals, newProposal];
     saveProposals(updatedProposals);
     return id;
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
   
-  const updateProposal = useCallback((id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks'>>) => {
+  const updateProposal = useCallback((id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>) => {
     const updatedProposals = proposals.map(proposal => 
       proposal.id === id
         ? { 
             ...proposal, 
             ...updates, 
-            updatedAt: new Date().toISOString() 
+            updatedAt: getCurrentDateTime() 
           }
         : proposal
     );
     saveProposals(updatedProposals);
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
   
   const deleteProposal = useCallback((id: string) => {
     const updatedProposals = proposals.filter(proposal => proposal.id !== id);
@@ -244,16 +241,16 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
         ? { 
             ...proposal, 
             status, 
-            updatedAt: new Date().toISOString() 
+            updatedAt: getCurrentDateTime() 
           }
         : proposal
     );
     saveProposals(updatedProposals);
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
   
   const addTask = useCallback((proposalId: string, task: Omit<Task, 'id' | 'proposalId' | 'createdAt'>) => {
     const taskId = `${proposalId}-${Date.now()}`;
-    const now = new Date().toISOString();
+    const now = getCurrentDateTime();
     
     const updatedProposals = proposals.map(proposal => {
       if (proposal.id === proposalId) {
@@ -276,7 +273,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     
     saveProposals(updatedProposals);
     return taskId;
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
   
   const updateTask = useCallback((proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => {
     const updatedProposals = proposals.map(proposal => {
@@ -288,13 +285,13 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
               ? { ...task, ...updates }
               : task
           ),
-          updatedAt: new Date().toISOString(),
+          updatedAt: getCurrentDateTime(),
         };
       }
       return proposal;
     });
     saveProposals(updatedProposals);
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
 
   const deleteTask = useCallback((proposalId: string, taskId: string) => {
     const updatedProposals = proposals.map(proposal => {
@@ -302,13 +299,13 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
         return {
           ...proposal,
           tasks: proposal.tasks.filter(task => task.id !== taskId),
-          updatedAt: new Date().toISOString(),
+          updatedAt: getCurrentDateTime(),
         };
       }
       return proposal;
     });
     saveProposals(updatedProposals);
-  }, [saveProposals]);
+  }, [saveProposals, getCurrentDateTime]);
 
   useEffect(() => {
     loadInitialData();

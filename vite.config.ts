@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv, type UserConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { terser } from 'rollup-plugin-terser'
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }): UserConfig => {
   const base = mode === 'production' ? '/proposal-flow/' : '/'
 
   return {
@@ -12,8 +13,39 @@ export default defineConfig(({ mode }) => {
         babel: {
           plugins: ['@babel/plugin-transform-react-jsx']
         }
+      }),
+      {
+        name: 'typescript-check',
+        buildStart() {
+          const { execSync } = require('child_process');
+          try {
+            execSync('tsc --noEmit --pretty', { stdio: 'inherit' });
+          } catch (error) {
+            console.error('TypeScript compilation failed. Please fix TypeScript errors before building.');
+            process.exit(1);
+          }
+        }
+      },
+      mode === 'production' && terser({
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          ecma: 2020,
+          module: true,
+          toplevel: true,
+          warnings: false
+        },
+        mangle: {
+          toplevel: true
+        },
+        output: {
+          comments: false
+        },
+        format: {
+          comments: false
+        }
       })
-    ],
+    ].filter(Boolean),
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src')
@@ -36,7 +68,8 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom', 'scheduler']
           },
-          sourcemap: true
+          sourcemap: true,
+          compact: true
         }
       },
       assetsDir: 'assets',
