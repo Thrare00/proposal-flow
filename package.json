@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "build:clean": "rimraf dist && npm run build",
     "prebuild": "tsc --noEmit && vite build",
-    "postbuild": "copyfiles -u 1 public/* dist/ && cp -r public/* dist/"
+    "postbuild": "copyfiles -u 1 public/* dist/ && cp -r public/* dist/ && echo proposal-flow.thrare00.github.io > dist/CNAME"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext';
-import { ProposalType } from '../types';
-import { ProposalStatus } from '../types';
+import type { ProposalType } from '../types';
+import type { ProposalStatus } from '../types';
 
 const ProposalForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,9 +20,9 @@ const ProposalForm = () => {
       ? new Date(existingProposal.dueDate).toISOString().slice(0, 10)
       : ''
   );
-  const [status, setStatus] = useState<ProposalStatus>(existingProposal?.status || ProposalStatus.INTAKE);
+  const [status, setStatus] = useState<ProposalStatus>(existingProposal?.status || 'intake');
   const [notes, setNotes] = useState(existingProposal?.notes || '');
-  const [type, setType] = useState<ProposalType>(existingProposal?.type || ProposalType.FEDERAL);
+  const [type, setType] = useState<ProposalType>(existingProposal?.type || 'federal');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   
@@ -163,12 +163,12 @@ const ProposalForm = () => {
                   onChange={(e) => setStatus(e.target.value as ProposalStatus)}
                   className="form-select"
                 >
-                  <option value={ProposalStatus.INTAKE}>Intake</option>
-                  <option value={ProposalStatus.OUTLINE}>Outline</option>
-                  <option value={ProposalStatus.DRAFTING}>Drafting</option>
-                  <option value={ProposalStatus.INTERNAL_REVIEW}>Internal Review</option>
-                  <option value={ProposalStatus.FINAL_REVIEW}>Final Review</option>
-                  <option value={ProposalStatus.SUBMITTED}>Submitted</option>
+                  <option value="intake">Intake</option>
+                  <option value="outline">Outline</option>
+                  <option value="drafting">Drafting</option>
+                  <option value="internal_review">Internal Review</option>
+                  <option value="final_review">Final Review</option>
+                  <option value="submitted">Submitted</option>
                 </select>
               </div>
               
@@ -180,9 +180,9 @@ const ProposalForm = () => {
                   onChange={(e) => setType(e.target.value as ProposalType)}
                   className="form-select"
                 >
-                  <option value={ProposalType.COMMERCIAL}>Commercial</option>
-                  <option value={ProposalType.LOCAL_STATE}>Local/State</option>
-                  <option value={ProposalType.FEDERAL}>Federal</option>
+                  <option value="commercial">Commercial</option>
+                  <option value="local_state">Local/State</option>
+                  <option value="federal">Federal</option>
                 </select>
               </div>
             </div>

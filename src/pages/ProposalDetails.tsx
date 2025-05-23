@@ -14,8 +14,8 @@ import {
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext';
 import { getStatusName, getStatusColor, getNextStatus, getPreviousStatus } from '../utils/statusUtils';
-import { ProposalStatus } from '../types';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils';
+import { FileMeta, Task, Proposal } from '../types';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
 
@@ -27,6 +27,7 @@ const ProposalDetails = () => {
   
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<string | undefined>(undefined);
+  const [newFiles, setNewFiles] = useState<FileMeta[]>([]);
   
   // Get the proposal
   const proposal = id ? getProposal(id) : undefined;
@@ -213,44 +214,46 @@ const ProposalDetails = () => {
               onChange={async (e) => {
                 const files = e.target.files;
                 if (!files) return;
-                const newFiles: import('../types').FileMeta[] = [];
                 for (let i = 0; i < files.length; i++) {
                   const file = files[i];
                   const reader = new FileReader();
-                  const isText = file.type.startsWith('text/') || file.type === '';
-                  await new Promise<void>((resolve) => {
-                    reader.onload = () => {
-                      newFiles.push({
-                        id: Date.now().toString() + Math.random().toString(36).slice(2),
+                  reader.onload = (e) => {
+                    if (e.target?.result && proposal) {
+                      const isText = file.type.startsWith('text/') || file.type === 'application/pdf';
+                      const content = isText ? e.target.result.toString() : btoa(String.fromCharCode(...new Uint8Array(e.target.result as ArrayBuffer)));
+                      const newFile: FileMeta = {
+                        id: crypto.randomUUID(),
                         name: file.name,
                         type: file.type,
                         size: file.size,
-                        content: isText ? reader.result as string : btoa(reader.result as string),
-                        uploadedAt: new Date().toISOString(),
-                      });
-                      resolve();
-                    };
-                    if (isText) {
-                      reader.readAsText(file);
-                    } else {
-                      reader.readAsBinaryString(file);
+                        content,
+                        uploadedAt: new Date().toISOString()
+                      };
+                      
+                      // Save to proposal context
+                      const updatedFiles = [...(proposal.files || []), newFile];
+                      updateProposal(proposal.id, { 
+                        ...proposal, 
+                        files: updatedFiles,
+                        updatedAt: new Date().toISOString()
+                      } as Proposal);
                     }
-                  });
+                  };
+                  if (isText) {
+                    reader.readAsText(file);
+                  } else {
+                    reader.readAsArrayBuffer(file);
+                  }
                 }
-                // Save to proposal context
-                if (newFiles.length > 0) {
-                  const updatedFiles = proposal.files ? [...proposal.files, ...newFiles] : newFiles;
-                  updateProposal(proposal.id, { files: updatedFiles });
-                }
-                e.target.value = '';
               }}
             />
           </label>
         </div>
+        
         <div className="p-6">
           {proposal.files && proposal.files.length > 0 ? (
             <div className="space-y-2">
-              {proposal.files.map((file) => (
+              {proposal.files.map((file: FileMeta) => (
                 <div key={file.id} className="flex items-center justify-between bg-gray-50 rounded px-4 py-2">
                   <div className="flex items-center">
                     <FileText size={18} className="mr-2 text-primary-600" />
@@ -292,7 +295,7 @@ const ProposalDetails = () => {
           )}
         </div>
       </div>
-
+      
       {/* Tasks section */}
       <div className="bg-white shadow-card rounded-lg overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -309,7 +312,7 @@ const ProposalDetails = () => {
         <div className="p-6">
           {sortedTasks.length > 0 ? (
             <div className="space-y-4">
-              {sortedTasks.map(task => (
+              {sortedTasks.map((task: Task) => (
                 <TaskCard 
                   key={task.id} 
                   task={task} 

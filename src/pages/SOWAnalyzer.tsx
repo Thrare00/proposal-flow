@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { SOWAnalysis, Documents, DocumentSection, SubmissionRequirements, ComplianceRequirement, KeyTerm } from '../types/sow';
-import { useProposalContext } from '../../contexts/ProposalContext';
+import { useProposalContext } from '../contexts/ProposalContext';
 
 
 const sampleAnalysis: SOWAnalysis = {

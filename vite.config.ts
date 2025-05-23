@@ -8,6 +8,16 @@ export default defineConfig(({ mode }): UserConfig => {
 
   return {
     base,
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      emptyOutDir: true,
+      rollupOptions: {
+        input: {
+          main: './index.html'
+        }
+      }
+    },
     plugins: [
       react({
         babel: {
