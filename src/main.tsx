@@ -50,6 +50,7 @@ const NotificationWatcher: React.FC<NotificationWatcherProps> = ({ children }) =
             showNotification(`Upcoming Deadline: ${event.title}`, {
               body: event.description || 'Custom event deadline approaching.',
               icon: '/favicon.ico',
+              tag: event.id // Add tag to prevent duplicate notifications
             });
             localStorage.setItem(`notified-${event.id}`, 'true');
           }
@@ -72,7 +73,7 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <React.Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter basename="/proposal-flow">
+      <BrowserRouter>
         <ThemeProvider>
           <ProposalProvider>
             <ErrorBoundary>
