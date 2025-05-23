@@ -29,9 +29,13 @@ jobs:
       - name: List build output
         run: ls -la dist/
 
+      - name: Create CNAME file
+        run: echo proposal-flow.thrare00.github.io > dist/CNAME
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
+          branch: gh-pages
+          folder: dist
+          target_folder: .
+          token: ${{ secrets.GITHUB_TOKEN }}

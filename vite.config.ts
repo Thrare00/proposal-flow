@@ -15,8 +15,12 @@ export default defineConfig(({ mode }): UserConfig => {
       rollupOptions: {
         input: {
           main: './index.html'
+        },
+        output: {
+          assetFileNames: 'assets/[name][extname]'
         }
-      }
+      },
+      manifest: true
     },
     plugins: [
       react({
