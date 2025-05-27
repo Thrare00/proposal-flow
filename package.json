@@ -15,9 +15,7 @@
     "build:dist": "npm run build:clean && echo Build completed && dir dist/",
     "build:all": "npm run build:clean && npm run postbuild",
     "start": "vite",
-    "test": "vite test",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "test": "vite test"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
