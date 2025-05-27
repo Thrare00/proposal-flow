@@ -19,7 +19,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/dashboard" element={<Layout />}>
-        <Route index element={<Home />} />
+        <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
         <Route path="proposals/new" element={<ProposalForm />} />
         <Route path="proposals/:id" element={<ProposalDetails />} />
@@ -34,7 +34,7 @@ function App() {
         <Route path="ai-guide" element={<AIAgentGuide />} />
         <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
       </Route>
-      <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

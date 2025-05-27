@@ -7,12 +7,10 @@ export default defineConfig(({ command }) => ({
   root: './',
   publicDir: 'public',
   build: {
-    outDir: 'build-temp',
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: './src/main.tsx',
-      },
+      // No custom input: let Vite use index.html as the entry
       output: {
         format: 'esm',
         entryFileNames: 'assets/[name].[hash].js',
@@ -21,8 +19,6 @@ export default defineConfig(({ command }) => ({
       },
       preserveEntrySignatures: 'strict',
     },
-    assetsDir: 'assets',
-    minify: true
   },
   plugins: [react()],
   resolve: {
@@ -55,9 +51,5 @@ export default defineConfig(({ command }) => ({
       localsConvention: 'camelCase',
     },
   },
-  envPrefix: 'VITE_',
-  test: {
-    globals: true,
-    environment: 'jsdom',
-  },
+  envPrefix: 'VITE_'
 }));
