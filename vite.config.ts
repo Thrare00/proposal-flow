@@ -7,7 +7,7 @@ export default defineConfig(({ command }) => ({
   root: './',
   publicDir: 'public',
   build: {
-    outDir: 'docs',
+    outDir: 'build-temp',
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -21,6 +21,8 @@ export default defineConfig(({ command }) => ({
       },
       preserveEntrySignatures: 'strict',
     },
+    assetsDir: 'assets',
+    minify: true
   },
   plugins: [react()],
   resolve: {
