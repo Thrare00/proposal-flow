@@ -10,7 +10,6 @@ export default defineConfig(({ command }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      // No custom input: let Vite use index.html as the entry
       output: {
         format: 'esm',
         entryFileNames: 'assets/[name].[hash].js',

@@ -17,7 +17,7 @@ import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/home" element={<LandingPage />} />
       <Route path="/dashboard" element={<Layout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
@@ -34,7 +34,7 @@ function App() {
         <Route path="ai-guide" element={<AIAgentGuide />} />
         <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }
