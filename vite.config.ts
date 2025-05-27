@@ -1,112 +1,61 @@
-import { defineConfig, loadEnv, type UserConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-import { terser } from 'rollup-plugin-terser'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-export default defineConfig(({ mode }): UserConfig => {
-  const base = mode === 'production' ? '/proposal-flow/' : '/'
-
-  return {
-    base,
-    build: {
-      outDir: 'dist',
-      assetsDir: 'assets',
-      emptyOutDir: true,
-      rollupOptions: {
-        input: {
-          main: './index.html'
-        },
-        output: {
-          assetFileNames: 'assets/[name][extname]'
-        }
+export default defineConfig(({ command }) => ({
+  base: command === 'serve' ? '/' : '/proposal-flow/',
+  root: './',
+  publicDir: 'public',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: './src/main.tsx',
       },
-      manifest: true
-    },
-    plugins: [
-      react({
-        babel: {
-          plugins: ['@babel/plugin-transform-react-jsx']
-        }
-      }),
-      {
-        name: 'typescript-check',
-        buildStart() {
-          const { execSync } = require('child_process');
-          try {
-            execSync('tsc --noEmit --pretty', { stdio: 'inherit' });
-          } catch (error) {
-            console.error('TypeScript compilation failed. Please fix TypeScript errors before building.');
-            process.exit(1);
-          }
-        }
+      output: {
+        format: 'esm',
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]',
       },
-      mode === 'production' && terser({
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          ecma: 2020,
-          module: true,
-          toplevel: true,
-          warnings: false
-        },
-        mangle: {
-          toplevel: true
-        },
-        output: {
-          comments: false
-        },
-        format: {
-          comments: false
-        }
-      })
-    ].filter(Boolean),
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, './src')
-      },
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+      preserveEntrySignatures: 'strict',
     },
-    build: {
-      outDir: 'dist',
-      emptyOutDir: true,
-      sourcemap: 'inline',
-      rollupOptions: {
-        input: {
-          main: './index.html'
-        },
-        output: {
-          format: 'esm',
-          entryFileNames: ({ name }) => `assets/${name}.js`,
-          chunkFileNames: ({ name }) => `assets/${name}.js`,
-          assetFileNames: ({ name }) => `assets/${name}[extname]`,
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom', 'scheduler']
-          },
-          sourcemap: true,
-          compact: true
-        }
-      },
-      assetsDir: 'assets',
-      manifest: true,
-      minify: 'terser',
-      target: 'esnext',
-      cssCodeSplit: true,
-      commonjsOptions: {
-        include: [/node_modules/]
-      }
+  },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
     },
-    publicDir: 'public',
-    optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom', 'scheduler'],
-      entries: ['react-dom/client', 'scheduler']
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.wasm'],
+  },
+  server: {
+    host: true,
+    port: 5173,
+    fs: {
+      allow: ['..'],
     },
-    server: {
-      port: 3000,
-      open: true,
-      headers: {
-        'Cross-Origin-Opener-Policy': 'same-origin',
-        'Cross-Origin-Embedder-Policy': 'require-corp'
-      }
-    }
-  }
-})
+  },
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp'],
+  assetsDir: 'assets',
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    global: 'window',
+  },
+  esbuild: {
+    target: 'es2020',
+    loader: 'tsx',
+    jsx: 'react-jsx',
+  },
+  clearScreen: false,
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+    },
+  },
+  envPrefix: 'VITE_',
+  test: {
+    globals: true,
+    environment: 'jsdom',
+  },
+}));

@@ -26,7 +26,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["@types/node", "@types/react", "@types/react-dom"]
   },
   "include": ["src/**/*", "vite.config.ts"]
 }

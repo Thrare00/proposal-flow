@@ -73,7 +73,12 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <React.Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <ThemeProvider>
           <ProposalProvider>
             <ErrorBoundary>

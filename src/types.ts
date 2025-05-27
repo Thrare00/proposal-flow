@@ -2,7 +2,14 @@ export type ProposalType = 'commercial' | 'local_state' | 'federal';
 
 export type UrgencyLevel = 'critical' | 'high' | 'medium' | 'low';
 
-export type ProposalStatus = 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
+export enum ProposalStatus {
+  Intake = 'intake',
+  Outline = 'outline',
+  Drafting = 'drafting',
+  InternalReview = 'internal_review',
+  FinalReview = 'final_review',
+  Submitted = 'submitted'
+}
 
 export interface FileMeta {
   id: string;
