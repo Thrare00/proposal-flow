@@ -44,7 +44,7 @@ const Layout = () => {
               >
                 {isMenuCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
               </button>
-              <Link to="/dashboard" className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <span className="text-xl font-bold text-primary-600 dark:text-primary-400">ProposalFlow</span>
               </Link>
             </div>
