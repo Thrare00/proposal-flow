@@ -26,6 +26,7 @@ const navigationItems: NavigationItem[] = [
   { to: "/dashboard/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
   { to: "/dashboard/guide", icon: <BookOpen size={18} />, label: 'Guide' },
   { to: "/dashboard/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
+  { to: '/dashboard/proposals/new', icon: <PlusCircle size={18} />, label: 'New Proposal' },
   { to: '/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
 ];
 
