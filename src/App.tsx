@@ -18,7 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/home" element={<LandingPage />} />
-      <Route path="/dashboard" element={<Layout />}>
+      <Route path="/proposal-flow/dashboard" element={<Layout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
         <Route path="proposals/new" element={<ProposalForm />} />

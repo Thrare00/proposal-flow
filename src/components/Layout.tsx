@@ -21,13 +21,13 @@ interface NavigationItem {
 
 
 const navigationItems: NavigationItem[] = [
-  { to: "/dashboard", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-  { to: "/dashboard/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-  { to: "/dashboard/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
-  { to: "/dashboard/guide", icon: <BookOpen size={18} />, label: 'Guide' },
-  { to: "/dashboard/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
-  { to: '/dashboard/proposals/new', icon: <PlusCircle size={18} />, label: 'New Proposal' },
-  { to: '/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
+  { to: "/proposal-flow/dashboard", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+  { to: "/proposal-flow/dashboard/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+  { to: "/proposal-flow/dashboard/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
+  { to: "/proposal-flow/dashboard/guide", icon: <BookOpen size={18} />, label: 'Guide' },
+  { to: "/proposal-flow/dashboard/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
+  { to: '/proposal-flow/dashboard/proposals/new', icon: <PlusCircle size={18} />, label: 'New Proposal' },
+  { to: '/proposal-flow/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
 ];
 
 const Layout = () => {
