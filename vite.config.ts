@@ -6,7 +6,22 @@ export default defineConfig(({ command }) => ({
   base: command === 'serve' ? '/' : '/proposal-flow/',
   root: './',
   publicDir: 'public',
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.wasm'],
+  },
+  server: {
+    host: true,
+    port: 5173,
+    fs: {
+      allow: ['..'],
+    },
+  },
   build: {
+    target: 'es2020',
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
@@ -19,30 +34,13 @@ export default defineConfig(({ command }) => ({
       preserveEntrySignatures: 'strict',
     },
   },
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.wasm'],
-  },
-  server: {
-    host: true,
-    port: 5173,
-    fs: {
-      allow: ['..'],
-    },
-  },
   assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp'],
   assetsDir: 'assets',
   define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-    global: 'window',
+    'process.env': {},
   },
-  esbuild: {
-    target: 'es2020',
-    loader: 'tsx',
-    jsx: 'react-jsx',
+  optimizeDeps: {
+    include: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
   },
   clearScreen: false,
   css: {

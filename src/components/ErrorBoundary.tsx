@@ -5,7 +5,7 @@ interface ErrorBoundaryProps {
   children: React.ReactNode;
 }
 
-const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
+function ErrorBoundary({ children }: ErrorBoundaryProps) {
   return (
     <ErrorBoundaryComponent
       FallbackComponent={ErrorFallback}
@@ -16,9 +16,9 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
       {children}
     </ErrorBoundaryComponent>
   );
-};
+}
 
-const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
+function ErrorFallback({ error }: FallbackProps) {
   return (
     <div style={{
       padding: '2rem',
@@ -55,6 +55,6 @@ const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
       </button>
     </div>
   );
-};
+}
 
 export default ErrorBoundary;
