@@ -21,13 +21,13 @@ interface NavigationItem {
 }
 
 const navigationItems: NavigationItem[] = [
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/flowboard', icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/calendar', icon: <CalendarDays size={18} />, label: 'Calendar' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/guide', icon: <BookOpen size={18} />, label: 'Guide' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/reminders', icon: <Clipboard size={18} />, label: 'Reminders' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/proposals/new', icon: <PlusCircle size={18} />, label: 'New Proposal' },
-  { to: process.env.VITE_BASE_URL || '/proposal-flow/dashboard/sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
+  { to: "/", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+  { to: "/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+  { to: "/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
+  { to: "/guide", icon: <BookOpen size={18} />, label: 'Guide' },
+  { to: "/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
+  { to: "/proposals/new", icon: <PlusCircle size={18} />, label: 'New Proposal' },
+  { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
 ];
 
 const Layout = () => {

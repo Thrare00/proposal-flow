@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { ProposalProvider } from './contexts/ProposalContext';
 import Layout from './components/Layout';
 import ProposalForm from './pages/ProposalForm';
@@ -37,7 +37,6 @@ function App() {
           <Route path="market-research" element={<MarketResearch />} />
           <Route path="home" element={<Home />} />
         </Route>
-        <Route path="*" element={<Navigate to="/proposal-flow/" replace />} />
       </Routes>
     </ProposalProvider>
   );
