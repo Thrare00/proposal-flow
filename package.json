@@ -3,19 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://thrare00.github.io/proposal-flow",
+  "homepage": "https://thrare00.github.io/proposal-flow/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "build:clean": "del /s /q dist 2>nul || rmdir /s /q dist 2>nul || echo Directory not found; vite build",
+    "build:clean": "del /s /q dist 2>nul || rmdir /s /q dist 2>nul || echo Directory not found",
     "clean": "del /s /q dist 2>nul || rmdir /s /q dist 2>nul || echo Directory not found",
-    "prebuild": "vite build",
-    "postbuild": "vite build && xcopy /E /I public dist && echo proposal-flow.thrare00.github.io > dist/CNAME",
-    "build:dist": "npm run build:clean && echo Build completed && dir dist/",
-    "build:all": "npm run build:clean && npm run postbuild",
+    "prebuild": "npm run clean",
+    "postbuild": "npm run build && xcopy /E /I public dist && echo proposal-flow > dist/CNAME",
+    "build:dist": "npm run build:clean && npm run build",
+    "build:all": "npm run build:clean && npm run build && npm run postbuild",
     "start": "vite",
-    "test": "vite test"
+    "test": "vite test",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
