@@ -14,6 +14,8 @@ import Dashboard from './pages/Dashboard';
 import SOWAnalyzer from './pages/SOWAnalyzer';
 import AIAgentGuide from './pages/AIAgentGuide';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
+import TestPage from './pages/TestPage';
+import Test from './test';
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
           <Route path="sow-analyzer" element={<SOWAnalyzer />} />
           <Route path="ai-agent-guide" element={<AIAgentGuide />} />
           <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
+          <Route path="test" element={<TestPage />} />
         </Route>
         <Route path="/home" element={<LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
