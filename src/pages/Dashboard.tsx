@@ -11,10 +11,10 @@ import {
 import { useProposalContext } from '../contexts/ProposalContext';
 import { getUrgencyLevel, isOverdue } from '../utils/dateUtils';
 import { parseISO } from 'date-fns';
-import type { ProposalStatus, UrgencyLevel } from '../types';
+import type { ProposalStatus, UrgencyLevel, Overdue } from '../types';
 import ProposalCard from '../components/ProposalCard';
 
-const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const;
+const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const satisfies ProposalStatus[];
 
 const Dashboard = () => {
   const { proposals } = useProposalContext();

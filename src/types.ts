@@ -136,7 +136,7 @@ export interface CalendarEvent {
   id: string;
   title: string;
   date: string;
-  type: 'proposal' | 'task' | 'meeting' | 'deadline';
+  type: 'proposal' | 'task' | 'meeting' | 'deadline' | 'custom';
   proposalId?: string;
   taskId?: string;
   metadata?: {
@@ -146,15 +146,8 @@ export interface CalendarEvent {
     completed: boolean;
     progress: number;
   };
-  description?: string;
-  pushNotification?: boolean;
   notificationTime?: string;
   relatedId?: string;
-}
   description?: string;
-  proposalId: string;
   pushNotification?: boolean;
-  notificationTime?: string;
-  type: 'proposal' | 'task' | 'custom';
-  relatedId?: string;
 }

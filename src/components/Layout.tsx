@@ -22,7 +22,7 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   { to: "/", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-  { to: "/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+  { to: "/flow-board", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
   { to: "/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
   { to: "/guide", icon: <BookOpen size={18} />, label: 'Guide' },
   { to: "/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },

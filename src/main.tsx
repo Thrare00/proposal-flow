@@ -1,27 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ProposalProvider, useProposalContext } from './contexts/ProposalContext';
-import { requestNotificationPermission, showNotification, canUseNotification } from './utils/notificationUtils';
 import { ThemeProvider } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
-
-// Global error handler
-window.onerror = (event: Event | string): boolean => {
-  console.error('Error:', event);
-  return false;
-};
-
-// Handle unhandled promise rejections
-window.onunhandledrejection = (event: PromiseRejectionEvent): void => {
-  console.error('Promise Rejection:', {
-    reason: event.reason,
-    stack: event.reason instanceof Error ? event.reason.stack : undefined
-  });
-  event.preventDefault();
-};
 
 interface NotificationWatcherProps {
   children: React.ReactNode;
@@ -31,32 +15,30 @@ const NotificationWatcher: React.FC<NotificationWatcherProps> = ({ children }) =
   const { customEvents } = useProposalContext();
 
   useEffect(() => {
-    if (!canUseNotification()) return;
-
-    // Request permission only once when component mounts
-    requestNotificationPermission();
+    if (Notification.permission !== 'granted') {
+      return;
+    }
 
     const interval = setInterval(() => {
       if (!customEvents) return;
 
       const now = new Date();
       customEvents.forEach((event) => {
-        if (event.pushNotification && event.notificationTime && Notification.permission === 'granted') {
+        if (event.pushNotification && event.notificationTime) {
           const notifTime = new Date(event.notificationTime);
           const timeDiff = Math.abs(now.getTime() - notifTime.getTime());
 
-          // Notify if within 1 minute of scheduled time, and store a flag in localStorage to avoid repeat
           if (timeDiff < 60000 && !localStorage.getItem(`notified-${event.id}`)) {
-            showNotification(`Upcoming Deadline: ${event.title}`, {
+            const notification = new Notification(`Upcoming Deadline: ${event.title}`, {
               body: event.description || 'Custom event deadline approaching.',
               icon: '/favicon.ico',
-              tag: event.id // Add tag to prevent duplicate notifications
+              tag: event.id
             });
             localStorage.setItem(`notified-${event.id}`, 'true');
           }
         }
       });
-    }, 30000); // check every 30s
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [customEvents]);
@@ -68,27 +50,20 @@ const container = document.getElementById('root');
 if (!container) {
   throw new Error('Failed to find the root element');
 }
-const root = createRoot(container!);
 
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <React.Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <ThemeProvider>
-          <ProposalProvider>
-            <ErrorBoundary>
-              <NotificationWatcher>
-                <App />
-              </NotificationWatcher>
-            </ErrorBoundary>
-          </ProposalProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    </React.Suspense>
+    <BrowserRouter>
+      <ThemeProvider>
+        <ProposalProvider>
+          <ErrorBoundary>
+            <NotificationWatcher>
+              <App />
+            </NotificationWatcher>
+          </ErrorBoundary>
+        </ProposalProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

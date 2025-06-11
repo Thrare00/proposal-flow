@@ -1,52 +1,38 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ command }) => ({
-  base: command === 'serve' ? '/' : process.env.VITE_BASE_URL || '/proposal-flow/',
-  root: './',
-  publicDir: 'public',
+export default defineConfig({
+  base: '/proposal-flow/',
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.wasm'],
-  },
-  server: {
-    host: true,
-    port: 5173,
-    fs: {
-      allow: ['..'],
-    },
+      '@': './src'
+    }
   },
   build: {
-    target: 'es2020',
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      output: {
-        format: 'esm',
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]',
-      },
-      preserveEntrySignatures: 'strict',
+      input: {
+        main: './src/main.tsx'
+      }
     },
+    minify: true,
+    manifest: true,
+    sourcemap: false,
+    assetsDir: 'assets',
+    assetsInlineLimit: 0
   },
-  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp'],
-  assetsDir: 'assets',
-  define: {
-    'process.env': {},
+  publicDir: 'public',
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '*.ico'],
+  server: {
+    port: 3000,
+    strictPort: true,
+    watch: {
+      usePolling: true
+    }
   },
   optimizeDeps: {
-    include: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
-  },
-  clearScreen: false,
-  css: {
-    modules: {
-      localsConvention: 'camelCase',
-    },
-  },
-  envPrefix: 'VITE_'
-}));
+    include: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled']
+  }
+})
