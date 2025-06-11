@@ -32,6 +32,15 @@ jobs:
       - name: Create CNAME file
         run: echo proposal-flow.thrare00.github.io > dist/CNAME
 
+      - name: Setup GitHub Pages
+        run: |
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+          gh repo edit --pages-source main:/ --pages https://${{ github.actor }}.github.io/proposal-flow
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
