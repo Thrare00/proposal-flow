@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build:all
 
       - name: List build output
         run: ls -la dist/
@@ -39,3 +39,5 @@ jobs:
           folder: dist
           token: ${{ secrets.GITHUB_TOKEN }}
           clean: true
+          force: true
+          target-folder: /

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/proposal-flow/' : '/',
+  base: process.env.VITE_BASE_URL || '/',
   resolve: {
     alias: {
       '@': './src'
@@ -16,7 +16,9 @@ export default defineConfig({
       input: {
         main: './src/main.tsx'
       }
-    }
+    },
+    assetsDir: 'assets',
+    assetsInlineLimit: 4096
   },
   server: {
     port: 3000,

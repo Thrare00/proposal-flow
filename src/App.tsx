@@ -16,6 +16,7 @@ import AIAgentGuide from './pages/AIAgentGuide';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
 import TestPage from './pages/TestPage';
 import Test from './test';
+import SimpleTest from './pages/SimpleTest';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="ai-agent-guide" element={<AIAgentGuide />} />
           <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
           <Route path="test" element={<TestPage />} />
+          <Route path="simple-test" element={<SimpleTest />} />
         </Route>
         <Route path="/home" element={<LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
