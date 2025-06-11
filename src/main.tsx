@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -6,6 +6,7 @@ import { ProposalProvider, useProposalContext } from './contexts/ProposalContext
 import { ThemeProvider } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
+const basename = process.env.NODE_ENV === 'production' ? '/proposal-flow' : '';
 
 interface NotificationWatcherProps {
   children: React.ReactNode;
@@ -54,7 +55,7 @@ if (!container) {
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <ThemeProvider>
         <ProposalProvider>
           <ErrorBoundary>
