@@ -11,10 +11,10 @@
     "dev": "vite",
     "build": "vite build",
     "build:dts": "vite-plugin-dts",
-    "build:gh": "npm run build && powershell -ExecutionPolicy Bypass -File build.ps1",
+    "build:gh": "npm run build && gh-pages -d dist",
     "build:all": "npm run clean && npm run build && npm run build:dts && npm run build:gh",
     "preview": "vite preview",
-    "clean": "powershell -Command \"Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force docs -ErrorAction SilentlyContinue\"",
+    "clean": "rimraf dist docs",
     "start": "vite",
     "test": "vite test",
     "deploy": "npm run build:gh && gh-pages -d docs -b main"
