@@ -2,6 +2,10 @@
 
 A modern web application for managing proposal development workflow.
 
+## Requirements
+
+- Node.js 18.0.0 or higher
+
 ## Features
 
 - Proposal management
@@ -16,7 +20,9 @@ The application is deployed to GitHub Pages at: https://thrare00.github.io/propo
 
 ## Development
 
-1. Install dependencies:
+1. Install Node.js 18.0.0 or higher from https://nodejs.org/
+
+2. Install dependencies:
 ```bash
 # First, clean up any existing modules
 npx rimraf node_modules package-lock.json
@@ -25,12 +31,12 @@ npx rimraf node_modules package-lock.json
 npm install
 ```
 
-2. Run the development server:
+3. Run the development server:
 ```bash
 npm run dev
 ```
 
-3. Build for production:
+4. Build for production:
 ```bash
 npm run build
 ```

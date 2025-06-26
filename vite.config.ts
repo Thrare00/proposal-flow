@@ -3,28 +3,30 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VITE_BASE_URL || '/',
+  base: '/',
   resolve: {
     alias: {
       '@': './src'
-    }
+    },
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   build: {
-    outDir: 'dist',
+    outDir: './dist',
     emptyOutDir: true,
+    assetsDir: 'assets',
     rollupOptions: {
       input: {
-        main: './src/main.tsx'
+        index: './index.html'
+      },
+      output: {
+        entryFileNames: `[name].[hash].js`,
+        chunkFileNames: `[name].[hash].js`,
+        assetFileNames: `[name].[hash][extname]`
       }
-    },
-    assetsDir: 'assets',
-    assetsInlineLimit: 4096
+    }
   },
   server: {
     port: 3000,
-    strictPort: true,
-    watch: {
-      usePolling: true
-    }
+    open: true
   }
-});
+})
