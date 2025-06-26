@@ -16,8 +16,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "start": "vite",
-    "test": "vite test",
-    "deploy": "npm run build:gh && gh-pages -d docs -b main"
+    "test": "vite test"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
