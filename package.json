@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "homepage": "https://thrare00.github.io/proposal-flow/",
+  "homepage": "https://Thrare00.github.io/proposal-flow/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
