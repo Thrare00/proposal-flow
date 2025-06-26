@@ -7,15 +7,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gh": "npm run build && powershell -ExecutionPolicy Bypass -File build.ps1",
     "preview": "vite preview",
-    "build:clean": "if exist dist rmdir /s /q dist",
-    "clean": "if exist dist rmdir /s /q dist",
-    "prebuild": "npm run clean",
-    "build:dist": "npm run build",
-    "build:all": "npm run build:clean && npm run build",
+    "clean": "powershell -Command \"Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force docs -ErrorAction SilentlyContinue\"",
     "start": "vite",
     "test": "vite test",
-    "deploy": "gh-pages -d dist -b main"
+    "deploy": "npm run build:gh && gh-pages -d docs -b main"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -39,21 +36,23 @@
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
-    "@types/react-router-dom": "^6.18.0",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "@vitejs/plugin-react": "^4.5.0",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^8.56.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.52.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "gh-pages": "^6.3.0",
-    "prettier": "^3.1.1",
+    "postcss": "^8.4.33",
+    "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.10",
     "rimraf": "^6.0.1",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.3.5",
     "typescript": "^5.3.3",
-    "vite": "^6.3.5"
+    "vite": "^5.0.13",
+    "vite-plugin-dts": "^3.1.0"
   }
 }
