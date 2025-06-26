@@ -41,6 +41,26 @@ npm run dev
 npm run build
 ```
 
+5. Build everything (including type declarations and GitHub Pages):
+```bash
+npm run build:all
+```
+
+Note: The `build:all` script performs all build steps:
+- Cleans previous builds
+- Builds production assets
+- Generates TypeScript declarations (using `npx vite-plugin-dts`)
+- Builds for GitHub Pages
+
+## TypeScript Type Declarations
+
+The `build:dts` script generates TypeScript declaration files using `vite-plugin-dts`. This is automatically invoked as part of `build:all` but can also be run independently:
+```bash
+npm run build:dts
+```
+
+The declarations are generated in the `dist` directory and are used for type checking and IDE support.
+
 ## Troubleshooting
 
 If you encounter any dependency issues:
