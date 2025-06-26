@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rimraf dist docs",
     "build": "vite build",
+    "postbuild": "cp dist/index.html dist/404.html",
     "build:gh": "gh-pages -d dist --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git --branch proposal-flow",
     "build:all": "npm run clean && npm run build && npm run build:gh",
     "dev": "vite",
