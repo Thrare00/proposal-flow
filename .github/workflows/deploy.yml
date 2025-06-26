@@ -32,7 +32,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
+      - name: Install dependencies (generate lockfile if needed)
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "Lockfile missing: running npm install to generate package-lock.json"
+            npm install
+            git diff package-lock.json && git --no-pager diff package-lock.json
+          else
+            echo "Using existing package-lock.json"
+          fi
+
+      - name: Clean install with lockfile
         run: npm ci
 
       - name: Build
