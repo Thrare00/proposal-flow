@@ -39,32 +39,20 @@ jobs:
           git config --global user.email "rareearthcontracting@gmail.com"
           git config --global user.name "Thrare00"
 
-      - name: Install dependencies (generate lockfile if needed)
-        run: |
-          if [ ! -f package-lock.json ]; then
-            echo "Lockfile missing: running npm install to generate package-lock.json"
-            npm install
-            git diff package-lock.json && git --no-pager diff package-lock.json
-          else
-            echo "Using existing package-lock.json"
-          fi
-
-      - name: Clean install with lockfile
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build:all
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+      - name: Build Vite site
+        run: npm run build
 
-      - name: List build output
-        run: ls -la dist/
+      - name: Copy 404.html for SPA routing
+        run: cp dist/index.html dist/404.html
 
       - name: Deploy to GitHub Pages
-        run: npm run build:gh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          force: true
-          target-folder: /
+        run: |
+          npx gh-pages -d dist \
+            --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git \
+            --branch proposal-flow
