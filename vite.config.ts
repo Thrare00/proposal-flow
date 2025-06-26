@@ -7,23 +7,9 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
-      outputDir: 'dist/types'
+      outDir: 'dist/types'
     })
   ],
-  base: '/',
-  resolve: {
-    alias: {
-      '@': './src'
-    }
-  },
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true
-  },
-  server: {
-    port: 3000
-  }
-})
   base: '/',
   resolve: {
     alias: {
@@ -32,7 +18,7 @@ export default defineConfig({
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   build: {
-    outDir: './dist',
+    outDir: 'dist',
     emptyOutDir: true,
     assetsDir: 'assets'
   },
