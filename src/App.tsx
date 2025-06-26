@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProposalProvider } from './contexts/ProposalContext';
 import Layout from './components/Layout';
 import ProposalForm from './pages/ProposalForm';
@@ -20,7 +20,8 @@ import SimpleTest from './pages/SimpleTest';
 function App() {
   return (
     <ProposalProvider>
-      <Routes>
+      <HashRouter basename="/proposal-flow">
+        <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -42,6 +43,7 @@ function App() {
           <Route path="landing" element={<LandingPage />} />
         </Route>
       </Routes>
+      </HashRouter>
     </ProposalProvider>
   );
 }
