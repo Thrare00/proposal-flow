@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Cache npm modules
         uses: actions/cache@v3
@@ -31,6 +33,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Configure Git identity
+        run: |
+          git config --global user.email "rareearthcontracting@gmail.com"
+          git config --global user.name "Thrare00"
 
       - name: Install dependencies (generate lockfile if needed)
         run: |
@@ -44,11 +51,6 @@ jobs:
 
       - name: Clean install with lockfile
         run: npm ci
-
-      - name: Configure Git identity
-        run: |
-          git config --global user.email "rareearthcontracting@gmail.com"
-          git config --global user.name "Thrare00"
 
       - name: Build
         run: npm run build:all
