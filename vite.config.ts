@@ -17,6 +17,7 @@ export default defineConfig({
     })
   ],
   // Base path for GitHub Pages deployment
+  // Ensures all assets and routes use the correct subdirectory
   base: '/proposal-flow/',
   resolve: {
     alias: {
