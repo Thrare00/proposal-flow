@@ -45,6 +45,11 @@ jobs:
       - name: Clean install with lockfile
         run: npm ci
 
+      - name: Configure Git identity
+        run: |
+          git config --global user.email "rareearthcontracting@gmail.com"
+          git config --global user.name "Thrare00"
+
       - name: Build
         run: npm run build:all
         env:
