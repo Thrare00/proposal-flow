@@ -1,0 +1,70 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Cache npm modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Configure Git identity
+        run: |
+          git config --global user.email "rareearthcontracting@gmail.com"
+          git config --global user.name "Thrare00"
+
+      - name: Install dependencies (generate lockfile if needed)
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "Lockfile missing: running npm install to generate package-lock.json"
+            npm install
+            git diff package-lock.json && git --no-pager diff package-lock.json
+          else
+            echo "Using existing package-lock.json"
+          fi
+
+      - name: Clean install with lockfile
+        run: npm ci
+
+      - name: Build
+        run: npm run build:all
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: List build output
+        run: ls -la dist/
+
+      - name: Deploy to GitHub Pages
+        run: npm run build:gh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          force: true
+          target-folder: /
