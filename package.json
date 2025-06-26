@@ -10,9 +10,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:dts": "node node_modules/vite-plugin-dts/dist/index.js",
-    "build:gh": "npm run build && gh-pages -d dist",
-    "build:all": "npm run clean && npm run build && npm run build:dts && npm run build:gh",
+    "build:gh": "gh-pages -d dist",
+    "build:all": "npm run clean && npm run build && npm run build:gh",
     "preview": "vite preview",
     "clean": "rimraf dist docs",
     "start": "vite",
