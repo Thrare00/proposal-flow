@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:dts": "npx vite-plugin-dts",
+    "build:dts": "node node_modules/vite-plugin-dts/dist/index.js",
     "build:gh": "npm run build && gh-pages -d dist",
     "build:all": "npm run clean && npm run build && npm run build:dts && npm run build:gh",
     "preview": "vite preview",
