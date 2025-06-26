@@ -4,7 +4,7 @@ A modern web application for managing proposal development workflow.
 
 ## Requirements
 
-- Node.js 18.0.0 or higher
+- Node.js 18 or higher (LTS version recommended)
 
 ## Features
 
@@ -20,15 +20,15 @@ The application is deployed to GitHub Pages at: https://thrare00.github.io/propo
 
 ## Development
 
-1. Install Node.js 18.0.0 or higher from https://nodejs.org/
+1. Install Node.js 18 or higher from https://nodejs.org/ (LTS version recommended)
 
 2. Install dependencies:
 ```bash
 # First, clean up any existing modules
 npx rimraf node_modules package-lock.json
 
-# Install all dependencies
-npm install
+# Install dependencies using npm ci for consistent builds
+npm ci
 ```
 
 3. Run the development server:
