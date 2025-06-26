@@ -10,7 +10,7 @@ export default defineConfig({
       outDir: 'dist/types'
     })
   ],
-  base: '/',
+  base: '/proposal-flow/',
   resolve: {
     alias: {
       '@': './src'

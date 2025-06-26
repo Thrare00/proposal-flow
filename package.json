@@ -6,11 +6,11 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "homepage": "https://Thrare00.github.io/proposal-flow/",
+  "homepage": "https://Thrare00.github.io/proposal-flow",
   "scripts": {
     "clean": "rimraf dist docs",
     "build": "vite build",
-    "build:gh": "gh-pages -d dist --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git",
+    "build:gh": "gh-pages -d dist --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git --branch proposal-flow",
     "build:all": "npm run clean && npm run build && npm run build:gh",
     "dev": "vite",
     "preview": "vite preview",
