@@ -9,19 +9,34 @@ export interface Task {
   createdAt: string; // ISO string
 }
 
+export type ProposalStatus = 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
+
+export type ProposalStatusOrNull = ProposalStatus | null;
+
 export interface Proposal {
   id: string;
   title: string;
   agency: string;
   dueDate: string; // ISO string
   notes?: string;
-  status: 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
+  status: ProposalStatus;
   tasks: Task[];
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
 }
 
+export const URGENCY_LEVELS = {
+  Critical: 'critical' as const,
+  High: 'high' as const,
+  Medium: 'medium' as const,
+  Low: 'low' as const
+} as const;
+
+export type UrgencyLevel = typeof URGENCY_LEVELS[keyof typeof URGENCY_LEVELS];
+
 export type CalendarEventType = 'proposal' | 'task' | 'custom';
+
+export type ProposalType = 'federal' | 'state' | 'local' | 'commercial';
 
 export interface CalendarEvent {
   id: string;

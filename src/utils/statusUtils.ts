@@ -1,4 +1,4 @@
-import type { ProposalStatus } from '../types';
+import type { ProposalStatus, ProposalStatusOrNull } from '../types';
 
 export const getStatusName = (status: ProposalStatus): string => {
   switch (status) {
@@ -8,7 +8,7 @@ export const getStatusName = (status: ProposalStatus): string => {
     case 'internal_review': return 'Internal Review';
     case 'final_review': return 'Final Review';
     case 'submitted': return 'Submitted';
-    default: return 'Unknown';
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };
 
@@ -20,7 +20,7 @@ export const getStatusColor = (status: ProposalStatus): string => {
     case 'internal_review': return 'bg-yellow-50 text-yellow-800';
     case 'final_review': return 'bg-green-50 text-green-800';
     case 'submitted': return 'bg-green-600 text-white';
-    default: return 'bg-gray-50 text-gray-700';
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };
 
@@ -32,7 +32,7 @@ export const getStatusBorderColor = (status: ProposalStatus): string => {
     case 'internal_review': return 'border-yellow-200';
     case 'final_review': return 'border-green-200';
     case 'submitted': return 'border-green-600';
-    default: return 'border-gray-200';
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };
 
@@ -44,7 +44,7 @@ export const getStatusOrder = (status: ProposalStatus): number => {
     case 'internal_review': return 3;
     case 'final_review': return 4;
     case 'submitted': return 5;
-    default: return 6;
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };
 
@@ -56,10 +56,10 @@ export const getAllStatuses = (): ProposalStatus[] => {
     'internal_review',
     'final_review',
     'submitted'
-  ];
+  ] as ProposalStatus[];
 };
 
-export const getNextStatus = (status: ProposalStatus): ProposalStatus | null => {
+export const getNextStatus = (status: ProposalStatus): ProposalStatusOrNull => {
   switch (status) {
     case 'intake': return 'outline';
     case 'outline': return 'drafting';
@@ -67,11 +67,11 @@ export const getNextStatus = (status: ProposalStatus): ProposalStatus | null => 
     case 'internal_review': return 'final_review';
     case 'final_review': return 'submitted';
     case 'submitted': return null;
-    default: return null;
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };
 
-export const getPreviousStatus = (status: ProposalStatus): ProposalStatus | null => {
+export const getPreviousStatus = (status: ProposalStatus): ProposalStatusOrNull => {
   switch (status) {
     case 'outline': return 'intake';
     case 'drafting': return 'outline';
@@ -79,6 +79,6 @@ export const getPreviousStatus = (status: ProposalStatus): ProposalStatus | null
     case 'final_review': return 'internal_review';
     case 'submitted': return 'final_review';
     case 'intake': return null;
-    default: return null;
+    default: throw new Error(`Unknown status: ${status}`);
   }
 };

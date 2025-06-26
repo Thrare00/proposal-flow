@@ -1,5 +1,4 @@
-import React from 'react';
-import { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import type {
   LandingPageProps,
   DashboardProps,
@@ -13,22 +12,42 @@ import type {
   GuideProps
 } from './components';
 
-export type LandingPage = React.FC<LandingPageProps>;
-export type Dashboard = React.FC<DashboardProps>;
-export type ProposalList = React.FC<ProposalListProps>;
+export type LandingPage = (props: LandingPageProps) => any;
+export type Dashboard = (props: DashboardProps) => any;
+export type ProposalList = (props: ProposalListProps) => any;
 
 export type LazyComponent = () => Promise<{
-  default: ComponentType<any>;
+  default: (props: any) => any;
 }>;
 
-export type LazyComponentType = ComponentType<any>;
+export type LazyComponentType = (props: any) => any;
 
-export type ProposalDetails = LazyComponentType<ProposalDetailsProps>;
-export type ProposalForm = LazyComponentType<ProposalFormProps>;
-export type Calendar = LazyComponentType<CalendarProps>;
-export type FlowBoard = LazyComponentType<FlowBoardProps>;
-export type MarketResearch = LazyComponentType<MarketResearchProps>;
-export type SOWAnalyzer = LazyComponentType<SOWAnalyzerProps>;
-export type Guide = LazyComponentType<GuideProps>;
+export type ProposalDetails = (props: ProposalDetailsProps) => any;
+export type ProposalForm = (props: ProposalFormProps) => any;
+export type Calendar = (props: CalendarProps) => any;
+export type FlowBoard = (props: FlowBoardProps) => any;
+export type MarketResearch = (props: MarketResearchProps) => any;
+export type SOWAnalyzer = (props: SOWAnalyzerProps) => any;
+export type Guide = (props: GuideProps) => any;
 
 export type AppRoutes = RouteObject[];
+
+// Helper types for route definitions
+export type RouteConfig = {
+  path: string;
+  element: any | LazyComponent;
+  children?: RouteConfig[];
+};
+
+export type RouteConfigMap = Record<string, RouteConfig>;
+
+export type RouteParams = {
+  [key: string]: string;
+};
+
+export type RouteMatch = {
+  params: RouteParams;
+  pathname: string;
+  search: string;
+  hash: string;
+};

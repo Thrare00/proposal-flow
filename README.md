@@ -18,50 +18,72 @@ A modern web application for managing proposal development workflow.
 
 The application is deployed to GitHub Pages at: https://thrare00.github.io/proposal-flow/
 
-## Development
+## Installation
 
-1. Install Node.js 18 or higher from https://nodejs.org/ (LTS version recommended)
+1. Clone the repository:
+```bash
+git clone https://github.com/thrare00/proposal-flow.git
+cd proposal-flow
+```
 
 2. Install dependencies:
 ```bash
-# First, clean up any existing modules
-npx rimraf node_modules package-lock.json
+npm install
+```
 
-# Install dependencies using npm ci for consistent builds
+For CI environments, use:
+```bash
 npm ci
 ```
 
-3. Run the development server:
+## Development
+
+Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Build for production:
-```bash
-npm run build
-```
+The app will open automatically in your browser at `http://localhost:3000`.
 
-5. Build everything (including type declarations and GitHub Pages):
+## Building
+
+To build the project and deploy:
 ```bash
 npm run build:all
 ```
 
-Note: The `build:all` script performs all build steps:
-- Cleans previous builds
-- Builds production assets
-- Generates TypeScript declarations (using `npx vite-plugin-dts`)
-- Builds for GitHub Pages
+This will:
+1. Clean the `dist` and `docs` directories
+2. Build the application with type declarations
+3. Deploy to GitHub Pages
+
+## Deployment
+
+The project is automatically deployed to GitHub Pages. Manual deployment can be done with:
+```bash
+npm run build:gh
+```
 
 ## TypeScript Type Declarations
 
-The `build:dts` script generates TypeScript declaration files using `vite-plugin-dts`. This is automatically invoked as part of `build:all` but can also be run independently:
-```bash
-npm run build:dts
-```
-
-The declarations are generated in the `dist` directory and are used for type checking and IDE support.
+TypeScript declaration files are automatically generated during the main build process using `vite-plugin-dts`. The declarations are generated in the `dist/types` directory and are used for type checking and IDE support.
 
 ## Troubleshooting
+
+If you encounter issues with the build:
+1. Ensure you're using Node.js ^18.0.0
+2. Clean the project:
+```bash
+npm run clean
+```
+3. Reinstall dependencies:
+```bash
+npm ci
+```
+4. Try building again:
+```bash
+npm run build:all
+```
 
 If you encounter any dependency issues:
 

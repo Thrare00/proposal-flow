@@ -150,4 +150,5 @@ export interface CalendarEvent {
   relatedId?: string;
   description?: string;
   pushNotification?: boolean;
+  notificationSent?: boolean;
 }

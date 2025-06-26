@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProposalProvider } from './contexts/ProposalContext';
 import Layout from './components/Layout';
 import ProposalForm from './pages/ProposalForm';
@@ -8,14 +9,12 @@ import MarketResearch from './pages/MarketResearch';
 import Calendar from './pages/Calendar';
 import Reminders from './pages/Reminders';
 import Guide from './pages/Guide';
-import Home from './pages/Home';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import SOWAnalyzer from './pages/SOWAnalyzer';
 import AIAgentGuide from './pages/AIAgentGuide';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
 import TestPage from './pages/TestPage';
-import Test from './test';
 import SimpleTest from './pages/SimpleTest';
 
 function App() {
@@ -23,7 +22,7 @@ function App() {
     <ProposalProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Navigate to="/home" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="proposals/new" element={<ProposalForm />} />
           <Route path="proposals/:id" element={<ProposalDetails />} />
@@ -39,9 +38,9 @@ function App() {
           <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
           <Route path="test" element={<TestPage />} />
           <Route path="simple-test" element={<SimpleTest />} />
+          <Route path="home" element={<LandingPage />} />
+          <Route path="landing" element={<LandingPage />} />
         </Route>
-        <Route path="/home" element={<LandingPage />} />
-        <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </ProposalProvider>
   );
