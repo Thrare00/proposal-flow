@@ -10,7 +10,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:dts": "vite-plugin-dts",
     "build:gh": "npm run build && powershell -ExecutionPolicy Bypass -File build.ps1",
+    "build:all": "npm run clean && npm run build && npm run build:dts && npm run build:gh",
     "preview": "vite preview",
     "clean": "powershell -Command \"Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force docs -ErrorAction SilentlyContinue\"",
     "start": "vite",
@@ -36,6 +38,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.5",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
