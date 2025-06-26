@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import proposalIcon from '../assets/proposal-icon.svg';
+const proposalIcon = new URL('../assets/proposal-icon.svg', import.meta.url).href;
 
 const LandingPage: React.FC = () => {
   return (
