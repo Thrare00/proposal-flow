@@ -14,7 +14,7 @@ const LandingPage: React.FC = () => {
           The modern proposal management tool for government contractors.<br/>
           Organize deadlines, break down RFPs, and track progress with ease.
         </p>
-        <Link to="#/dashboard" replace>
+        <Link to="/proposal-flow/#/dashboard" replace>
           <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
             Get Started
           </button>
