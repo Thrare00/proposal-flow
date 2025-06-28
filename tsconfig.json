@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
     "typeRoots": ["./src/types", "./node_modules/@types"],
+    "types": ["react", "react-dom"],
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ES2020",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "moduleSuffixes": [".js", ".ts", ".tsx", ""],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "allowJs": true,
+    "checkJs": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -20,14 +22,15 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "allowJs": true,
-    "checkJs": false,
     "noImplicitAny": false,
     "outDir": "./dist",
     "declaration": true,
     "declarationDir": "./dist/types",
     "forceConsistentCasingInFileNames": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]

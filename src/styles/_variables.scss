@@ -1,0 +1,39 @@
+// Color variables
+:root {
+  --primary-color: #1E40AF;
+  --primary-light: #EFF6FF;
+  --primary-dark: #1D4ED8;
+  --secondary-color: #6B7280;
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --error-color: #EF4444;
+  --background-color: #F9FAFB;
+  
+  // Dark mode colors
+  --dark-primary-color: #3B82F6;
+  --dark-background: #1F2937;
+  --dark-text: #F9FAFB;
+  
+  // Spacing
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  
+  // Border radius
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  
+  // Typography
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  // Transitions
+  --transition-duration: 0.2s;
+  --transition-timing: ease-in-out;
+}

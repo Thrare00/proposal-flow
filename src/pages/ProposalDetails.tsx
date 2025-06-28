@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Edit, 
@@ -8,26 +8,24 @@ import {
   Calendar, 
   Clock,
   FileText,
-  ChevronRight,
-  ChevronLeft,
-  AlertTriangle
 } from 'lucide-react';
-import { useProposalContext } from '../contexts/ProposalContext';
-import { getStatusName, getStatusColor, getNextStatus, getPreviousStatus } from '../utils/statusUtils';
-import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils';
-import { FileMeta, Task, Proposal } from '../types';
-import TaskCard from '../components/TaskCard';
-import TaskForm from '../components/TaskForm';
+import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
+import { useProposalContext } from '../contexts/ProposalContext.js';
+import { getStatusName, getStatusColor, getNextStatus, getPreviousStatus } from '../utils/statusUtils.js';
+import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue, isText } from '../utils/dateUtils.js';
+import { URGENCY_LEVELS } from '../types.js';
+import { FileMeta, Task, Proposal } from '../types.js';
+import TaskCard from '../components/TaskCard.js';
+import TaskForm from '../components/TaskForm.js';
 
 const ProposalDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
   const { getProposal, updateProposalStatus, updateProposal } = useProposalContext();
   
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<string | undefined>(undefined);
-  const [newFiles, setNewFiles] = useState<FileMeta[]>([]);
+  const [newFile, _] = useState<File | null>(null);
   
   // Get the proposal
   const proposal = id ? getProposal(id) : undefined;
@@ -132,13 +130,13 @@ const ProposalDetails = () => {
               <div className="flex items-center text-gray-600">
                 <Clock size={18} className="mr-2" />
                 <span className={`${urgencyColorClass} px-2 py-0.5 rounded-full text-sm`}>
-                  {urgencyLevel === 'critical' && isOverdue(proposal.dueDate) 
+                  {urgencyLevel === URGENCY_LEVELS.Critical && isOverdue(proposal.dueDate) 
                     ? 'Overdue' 
-                    : urgencyLevel === 'critical' 
+                    : urgencyLevel === URGENCY_LEVELS.Critical 
                       ? 'Due immediately' 
-                      : urgencyLevel === 'high' 
+                      : urgencyLevel === URGENCY_LEVELS.High 
                         ? 'Due soon' 
-                        : urgencyLevel === 'medium' 
+                        : urgencyLevel === URGENCY_LEVELS.Medium 
                           ? 'Approaching' 
                           : 'On track'}
                 </span>
@@ -239,7 +237,7 @@ const ProposalDetails = () => {
                       } as Proposal);
                     }
                   };
-                  if (isText) {
+                  if (newFile && isText(newFile)) {
                     reader.readAsText(file);
                   } else {
                     reader.readAsArrayBuffer(file);

@@ -1,50 +1,40 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useProposalContext } from '../contexts/ProposalContext';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Calendar, 
-  Building, 
-  Filter, 
-  FilterX, 
-  User,
-  CheckSquare,
+  AlertTriangle, 
+  Clock, 
+  CheckCircle,
+  FilterX,
   X,
-  InfoIcon,
-  AlertTriangle,
-  Clock,
-  CheckCircle
+  Filter,
+  Building,
+  Calendar,
+  CheckSquare,
+  User,
+  InfoIcon
 } from 'lucide-react';
-import TaskCard from '../components/TaskCard';
-import { formatDateWithDay, isOverdue, formatDate } from '../utils/dateUtils';
+import { useProposalContext } from '../contexts/ProposalContext.js';
+import TaskCard from '../components/TaskCard.js';
+import { formatDate, formatDateWithDay, isOverdue } from '../utils/dateUtils.js';
 import { parseISO, isBefore, addDays, endOfDay } from 'date-fns';
-import { 
-  ProposalStatus, 
-  Proposal 
-} from '../types';
-import { 
-  getStatusName, 
-  getStatusColor, 
-  getStatusBorderColor
-} from '../utils/statusUtils';
-import FlowGuides from '../components/FlowGuides';
+import { ProposalStatus, ProposalStatusType, Proposal } from '../types/index.js';
+import { getStatusName, getStatusColor, getStatusBorderColor } from '../utils/statusUtils.js';
+import FlowGuides from '../components/FlowGuides.js';
 
 const FlowBoard = () => {
   const { proposals, updateProposalStatus } = useProposalContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [agencyFilter, setAgencyFilter] = useState<string>('');
-  const [filteredProposals, setFilteredProposals] = useState<Proposal[]>([]);
   const [draggedProposal, setDraggedProposal] = useState<string | null>(null);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [agencies, setAgencies] = useState<string[]>([]);
-  
+  const [selectedAgency, setSelectedAgency] = useState<string>('');
+
   // Update filteredProposals and calculate agencies when proposals from context change
   useEffect(() => {
     // Calculate agencies first
     const uniqueAgencies = [...new Set(proposals.map(p => p.agency))];
     setAgencies(uniqueAgencies);
-    
-    // Then update filtered proposals
-    setFilteredProposals(proposals);
   }, [proposals]);
   
   // Get all tasks from all proposals
@@ -83,8 +73,10 @@ const FlowBoard = () => {
     );
   }, [allTasks]);
   
-  // Apply filters
-  useEffect(() => {
+  // Filter proposals based on search and agency
+  const filteredProposals = useMemo(() => {
+    if (!proposals) return [];
+    
     let filtered = [...proposals];
     
     if (searchTerm) {
@@ -94,23 +86,23 @@ const FlowBoard = () => {
       );
     }
     
-    if (agencyFilter) {
-      filtered = filtered.filter(p => p.agency === agencyFilter);
+    if (selectedAgency) {
+      filtered = filtered.filter(p => p.agency === selectedAgency);
     }
     
-    setFilteredProposals(filtered);
-  }, [proposals, searchTerm, agencyFilter]);
+    return filtered;
+  }, [proposals, searchTerm, selectedAgency]);
   
   const clearFilters = () => {
     setSearchTerm('');
-    setAgencyFilter('');
+    setSelectedAgency('');
   };
   
   const handleDragStart = (proposalId: string) => {
     setDraggedProposal(proposalId);
   };
   
-  const handleDragOver = (e: React.DragEvent, status: ProposalStatus) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
   
@@ -124,18 +116,26 @@ const FlowBoard = () => {
   };
   
   // Group proposals by status
-  // Get all valid statuses
-  const validStatuses = Object.values(ProposalStatus);
-  
-  // Initialize status groups
-  const proposalsByStatus = validStatuses.reduce((acc, status) => {
-    acc[status] = filteredProposals
-      .filter(p => p.status === status)
-      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-    return acc;
-  }, {} as Record<ProposalStatus, Proposal[]>);
-  
+  // Define valid statuses
+  const validStatuses = Object.values(ProposalStatus) as ProposalStatusType[];
 
+  // Group proposals by status
+  const proposalsByStatus = useMemo(() => {
+    const result: Record<ProposalStatusType, Proposal[]> = {
+      [ProposalStatus.INTAKE]: [],
+      [ProposalStatus.OUTLINE]: [],
+      [ProposalStatus.DRAFTING]: [],
+      [ProposalStatus.INTERNAL_REVIEW]: [],
+      [ProposalStatus.FINAL_REVIEW]: [],
+      [ProposalStatus.SUBMITTED]: []
+    };
+    filteredProposals.forEach(proposal => {
+      if (result[proposal.status]) {
+        result[proposal.status].push(proposal);
+      }
+    });
+    return result;
+  }, [filteredProposals]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -227,7 +227,7 @@ const FlowBoard = () => {
           <div 
             key={status}
             className="flex-shrink-0 w-80 mx-2 first:ml-0 last:mr-0"
-            onDragOver={(e) => handleDragOver(e, status)}
+            onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, status)}
           >
             <div className={`bg-white rounded-lg shadow-card overflow-hidden ${getStatusBorderColor(status)} border-t-4`}>
@@ -315,9 +315,8 @@ const FlowBoard = () => {
                 {overdueTasks.length > 0 ? (
                   <div className="space-y-3">
                     {overdueTasks.map((task) => (
-                      <TaskCard 
-                        key={task.id} 
-                        task={task} 
+                      <TaskCard
+                        task={task}
                         proposalTitle={task.proposalTitle}
                         showProposalLink={true}
                       />

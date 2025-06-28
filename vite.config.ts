@@ -1,12 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
-import copy from 'rollup-plugin-copy'
-
-declare module '*.svg' {
-  const content: string;
-  export default content;
-}
+import path from 'path'
 
 export default defineConfig({
   plugins: [
@@ -16,31 +11,27 @@ export default defineConfig({
       outDir: 'dist/types'
     })
   ],
-  // Base path for GitHub Pages deployment
-  // Ensures all assets and routes use the correct subdirectory
   base: '/proposal-flow/',
   resolve: {
     alias: {
-      '@': './src'
+      '@': path.resolve(__dirname, './src')
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
-    assetsDir: 'assets',
-    rollupOptions: {
-      plugins: [
-        copy({
-          targets: [
-            { src: '404.html', dest: 'dist' }
-          ]
-        })
-      ]
-    }
+    emptyOutDir: true
   },
   server: {
     port: 3000,
-    open: true
-  }
-})
+    open: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:1605',
+        changeOrigin: true
+      }
+    },
+    cors: true
+  },
+  assetsInclude: ['**/*.svg']
+});

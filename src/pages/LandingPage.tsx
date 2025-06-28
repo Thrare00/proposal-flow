@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import proposalIcon from '../assets/proposal-icon.svg';
+import ProposalIcon from '../assets/proposal-icon.svg';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
       <div className="text-center p-8">
-        <img src={proposalIcon} alt="ProposalFlow Logo" className="w-16 h-16 mb-4" />
+        <img src={ProposalIcon} alt="ProposalFlow Logo" className="w-16 h-16 mb-4" />
         <h1 className="text-4xl md:text-6xl font-bold text-blue-900 dark:text-white mb-4">
           ProposalFlow
         </h1>

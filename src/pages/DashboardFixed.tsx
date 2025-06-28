@@ -8,18 +8,18 @@ import {
   CheckCircle,
   FilterX
 } from 'lucide-react';
-import { useProposalContext } from '../contexts/ProposalContext';
-import ProposalCard from '../components/ProposalCard';
-import { getUrgencyLevel, isOverdue } from '../utils/dateUtils';
-import type { ProposalStatus, Proposal } from '../types';
+import { useProposalContext } from '../contexts/ProposalContext.js';
+import ProposalCard from '../components/ProposalCard.js';
+import { getUrgencyLevel, isOverdue } from '../utils/dateUtils.js';
+import { URGENCY_LEVELS, UrgencyLevel, Proposal } from '../types/index.js';
 
-const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const;
+const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const as ProposalStatus[];
 
 const Dashboard = () => {
   const { proposals } = useProposalContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ProposalStatus | 'all'>('all');
-  const [urgencyFilter, setUrgencyFilter] = useState<string>('all');
+  const [urgencyFilter, setUrgencyFilter] = useState<UrgencyLevel | 'all'>('all');
 
   // Statistics
   const totalProposals = proposals.length;
@@ -53,13 +53,13 @@ const Dashboard = () => {
         if (urgencyFilter !== 'all') {
           const urgency = getUrgencyLevel(proposal.dueDate);
           
-          if (urgencyFilter === 'overdue' && !isOverdue(proposal.dueDate)) {
+          if (urgencyFilter === URGENCY_LEVELS.Critical && urgency !== URGENCY_LEVELS.Critical) {
             return false;
-          } else if (urgencyFilter === 'critical' && urgency !== 'critical') {
+          } else if (urgencyFilter === URGENCY_LEVELS.High && urgency !== URGENCY_LEVELS.High) {
             return false;
-          } else if (urgencyFilter === 'high' && urgency !== 'high') {
+          } else if (urgencyFilter === URGENCY_LEVELS.Medium && urgency !== URGENCY_LEVELS.Medium) {
             return false;
-          } else if (urgencyFilter === 'normal' && (urgency !== 'medium' && urgency !== 'low')) {
+          } else if (urgencyFilter === URGENCY_LEVELS.Low && urgency !== URGENCY_LEVELS.Low) {
             return false;
           }
         }
@@ -182,15 +182,15 @@ const Dashboard = () => {
             <div>
               <select
                 value={urgencyFilter}
-                onChange={(e) => setUrgencyFilter(e.target.value)}
+                onChange={(e) => setUrgencyFilter(e.target.value as UrgencyLevel | 'all')}
                 className="form-select"
                 aria-label="Filter by urgency"
               >
                 <option value="all">All Urgency Levels</option>
-                <option value="overdue">Overdue</option>
-                <option value="critical">Critical (Due in 2 days)</option>
-                <option value="high">High (Due in 1 week)</option>
-                <option value="normal">Normal (Due later)</option>
+                <option value={URGENCY_LEVELS.Critical}>Critical (Due in 2 days)</option>
+                <option value={URGENCY_LEVELS.High}>High (Due in 1 week)</option>
+                <option value={URGENCY_LEVELS.Medium}>Medium (Due later)</option>
+                <option value={URGENCY_LEVELS.Low}>Low (Due later)</option>
               </select>
             </div>
             
@@ -211,7 +211,9 @@ const Dashboard = () => {
       {filteredProposals.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProposals.map(proposal => (
-            <ProposalCard key={proposal.id} proposal={proposal} />
+            <ProposalCard
+              proposal={proposal}
+            />
           ))}
         </div>
       ) : (

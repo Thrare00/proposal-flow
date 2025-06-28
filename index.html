@@ -5,7 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proposal Flow</title>
-    <base href="/" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
+      img-src 'self' data:;
+      style-src 'self' 'unsafe-inline';
+      connect-src 'self';
+      font-src 'self';
+      media-src 'self';
+      object-src 'none'"
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: http:;
+      connect-src 'self' http://127.0.0.1:1605/;
+      frame-src 'self' http://127.0.0.1:1605/;
+      font-src 'self';
+      media-src 'self';
+      object-src 'none'
+    ">
+    <base href="/proposal-flow/" />
+    <meta name="theme-color" content="#1E40AF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1D4ED8" media="(prefers-color-scheme: dark)" />
   </head>
   <body>
     <div id="root"></div>

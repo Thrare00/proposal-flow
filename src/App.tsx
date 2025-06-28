@@ -1,21 +1,21 @@
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProposalProvider } from './contexts/ProposalContext';
-import Layout from './components/Layout';
-import ProposalForm from './pages/ProposalForm';
-import ProposalDetails from './pages/ProposalDetails';
-import FlowBoard from './pages/FlowBoard';
-import MarketResearch from './pages/MarketResearch';
-import Calendar from './pages/Calendar';
-import Reminders from './pages/Reminders';
-import Guide from './pages/Guide';
-import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
-import SOWAnalyzer from './pages/SOWAnalyzer';
-import AIAgentGuide from './pages/AIAgentGuide';
-import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide';
-import TestPage from './pages/TestPage';
-import SimpleTest from './pages/SimpleTest';
+import { ProposalProvider } from './contexts/ProposalContext.js';
+import Layout from './components/Layout.js';
+import ProposalForm from './pages/ProposalForm.js';
+import ProposalDetails from './pages/ProposalDetails.js';
+import FlowBoard from './pages/FlowBoard.js';
+import MarketResearch from './pages/MarketResearch.js';
+import Calendar from './pages/Calendar.js';
+import Reminders from './pages/Reminders.js';
+import Guide from './pages/Guide.js';
+import LandingPage from './pages/LandingPage.js';
+import Dashboard from './pages/DashboardFixed.js';
+import SOWAnalyzer from './pages/SOWAnalyzer.js';
+import AIAgentGuide from './pages/AIAgentGuide.js';
+import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide.js';
+import TestPage from './pages/TestPage.js';
+import SimpleTest from './pages/SimpleTest.js';
 
 function App() {
   return (

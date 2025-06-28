@@ -14,7 +14,12 @@ import {
   subMonths
 } from 'date-fns';
 
-import { URGENCY_LEVELS, type UrgencyLevel } from '../types';
+import { URGENCY_LEVELS, type UrgencyLevel } from '../types.js';
+
+export const isText = (file: File): boolean => {
+  const textTypes = ['text/plain', 'text/csv', 'application/json'];
+  return textTypes.includes(file.type);
+};
 
 export const formatDate = (dateString: string): string => {
   return format(parseISO(dateString), 'MMM d, yyyy');

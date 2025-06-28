@@ -9,9 +9,16 @@ export interface Task {
   createdAt: string; // ISO string
 }
 
-export type ProposalStatus = 'intake' | 'outline' | 'drafting' | 'internal_review' | 'final_review' | 'submitted';
+export const ProposalStatus = {
+  INTAKE: 'intake' as const,
+  OUTLINE: 'outline' as const,
+  DRAFTING: 'drafting' as const,
+  INTERNAL_REVIEW: 'internal_review' as const,
+  FINAL_REVIEW: 'final_review' as const,
+  SUBMITTED: 'submitted' as const
+} as const;
 
-export type ProposalStatusOrNull = ProposalStatus | null;
+export type ProposalStatusType = typeof ProposalStatus[keyof typeof ProposalStatus];
 
 export interface Proposal {
   id: string;
@@ -19,7 +26,7 @@ export interface Proposal {
   agency: string;
   dueDate: string; // ISO string
   notes?: string;
-  status: ProposalStatus;
+  status: ProposalStatusType;
   tasks: Task[];
   createdAt: string; // ISO string
   updatedAt: string; // ISO string

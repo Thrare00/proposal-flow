@@ -10,7 +10,7 @@ import {
   Clipboard
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
-import ThemeSlider from './ThemeSlider';
+import ThemeSlider from './ThemeSlider.js';
 import { useState } from 'react';
 // Removed Dashboard import as it's handled by App.tsx
 
