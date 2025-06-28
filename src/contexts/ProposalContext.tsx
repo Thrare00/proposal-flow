@@ -1,26 +1,40 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { Proposal, Task, CalendarEvent, ProposalStatus } from '../types';
+import { v4 as uuidv4 } from 'uuid';
+
+interface OperationResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
 const getCurrentDateTime = (): string => {
-  return new Date().toISOString();
+  try {
+    return new Date().toISOString();
+  } catch (error) {
+    console.error('Error getting current date:', error);
+    return new Date(0).toISOString(); // Fallback to epoch
+  }
 };
 
 interface ProposalContextType {
   proposals: Proposal[];
   isLoading: boolean;
-  addProposal: (proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>) => string;
-  updateProposal: (id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>) => void;
-  deleteProposal: (id: string) => void;
+  error: string | null;
+  addProposal: (proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>) => OperationResult<string>;
+  updateProposal: (id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>) => OperationResult<void>;
+  deleteProposal: (id: string) => OperationResult<void>;
   getProposal: (id: string) => Proposal | undefined;
-  updateProposalStatus: (id: string, status: ProposalStatus) => void;
-  addTask: (proposalId: string, task: Omit<Task, 'id' | 'proposalId' | 'createdAt'>) => string;
-  updateTask: (proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => void;
-  deleteTask: (proposalId: string, taskId: string) => void;
+  updateProposalStatus: (id: string, status: ProposalStatus) => OperationResult<void>;
+  addTask: (proposalId: string, task: Omit<Task, 'id' | 'proposalId' | 'createdAt'>) => OperationResult<string>;
+  updateTask: (proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => OperationResult<void>;
+  deleteTask: (proposalId: string, taskId: string) => OperationResult<void>;
   loadInitialData: () => void;
   customEvents: CalendarEvent[];
-  addCustomEvent: (event: Omit<CalendarEvent, 'id'>) => string;
-  updateCustomEvent: (eventId: string, updates: Partial<CalendarEvent>) => void;
-  deleteCustomEvent: (eventId: string) => void;
+  addCustomEvent: (event: Omit<CalendarEvent, 'id'>) => OperationResult<string>;
+  updateCustomEvent: (eventId: string, updates: Partial<CalendarEvent>) => OperationResult<void>;
+  deleteCustomEvent: (eventId: string) => OperationResult<void>;
+  clearError: () => void;
 }
 
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
@@ -30,47 +44,303 @@ export const useProposalContext = (): ProposalContextType => {
   if (context === undefined) {
     throw new Error('useProposalContext must be used within a ProposalProvider');
   }
-  return context;
+  return {
+    ...context,
+    clearError: () => {
+      context.error = null;
+    }
+  };
 };
 
 export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customEvents, setCustomEvents] = useState<CalendarEvent[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('customEvents');
-    if (saved) {
-      try {
-        setCustomEvents(JSON.parse(saved));
-      } catch (e) {
-        setCustomEvents([]);
-      }
+  const saveProposals = useCallback((proposals: Proposal[]) => {
+    try {
+      localStorage.setItem('proposals', JSON.stringify(proposals));
+      setProposals(proposals);
+    } catch (err) {
+      setError('Failed to save proposals');
+      console.error('Error saving proposals:', err);
     }
   }, []);
+
+  const loadInitialData = useCallback(() => {
+    try {
+      setIsLoading(true);
+      const savedProposals = localStorage.getItem('proposals');
+      if (savedProposals) {
+        const parsedProposals = JSON.parse(savedProposals) as Proposal[];
+        setProposals(parsedProposals);
+      }
+      
+      const savedEvents = localStorage.getItem('customEvents');
+      if (savedEvents) {
+        const parsedEvents = JSON.parse(savedEvents) as CalendarEvent[];
+        setCustomEvents(parsedEvents);
+      }
+    } catch (err) {
+      setError('Failed to load initial data');
+      console.error('Error loading initial data:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
 
   const saveCustomEvents = useCallback((events: CalendarEvent[]) => {
     setCustomEvents(events);
     localStorage.setItem('customEvents', JSON.stringify(events));
   }, []);
 
-  const addCustomEvent = useCallback((event: Omit<CalendarEvent, 'id'>) => {
-    const id = `custom-${Date.now()}`;
-    const newEvent: CalendarEvent = { ...event, id };
-    const updated = [...customEvents, newEvent];
-    saveCustomEvents(updated);
-    return id;
-  }, [customEvents, saveCustomEvents]);
+  // Proposal Operations
+  const addProposal = useCallback((proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>): OperationResult<string> => {
+    try {
+      const id = Date.now().toString();
+      const now = getCurrentDateTime();
+      const newProposal: Proposal = {
+        ...proposal,
+        id,
+        tasks: [],
+        files: [], 
+        createdAt: now,
+        updatedAt: now,
+      };
+      
+      const updatedProposals = [...proposals, newProposal];
+      saveProposals(updatedProposals);
+      return { success: true, data: id };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to add proposal');
+      console.error('Error adding proposal:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to add proposal' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
 
-  const updateCustomEvent = useCallback((eventId: string, updates: Partial<CalendarEvent>) => {
-    const updated = customEvents.map(ev => ev.id === eventId ? { ...ev, ...updates } : ev);
-    saveCustomEvents(updated);
-  }, [customEvents, saveCustomEvents]);
+  const updateProposal = useCallback((id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>): OperationResult<void> => {
+    try {
+      if (!id) {
+        throw new Error('Proposal ID is required');
+      }
 
-  const deleteCustomEvent = useCallback((eventId: string) => {
-    const updated = customEvents.filter(ev => ev.id !== eventId);
-    saveCustomEvents(updated);
-  }, [customEvents, saveCustomEvents]);
+      const updatedProposals = proposals.map(proposal => 
+        proposal.id === id
+          ? { 
+              ...proposal, 
+              ...updates, 
+              updatedAt: getCurrentDateTime() 
+            }
+          : proposal
+      );
+      saveProposals(updatedProposals);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update proposal');
+      console.error('Error updating proposal:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to update proposal' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
+
+  const deleteProposal = useCallback((id: string): OperationResult<void> => {
+    try {
+      if (!id) {
+        throw new Error('Proposal ID is required');
+      }
+
+      const updatedProposals = proposals.filter(proposal => proposal.id !== id);
+      saveProposals(updatedProposals);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to delete proposal');
+      console.error('Error deleting proposal:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete proposal' };
+    }
+  }, [saveProposals]);
+
+  const getProposal = useCallback((id: string) => {
+    return proposals.find(proposal => proposal.id === id);
+  }, [proposals]);
+
+  const updateProposalStatus = useCallback((id: string, status: ProposalStatus): OperationResult<void> => {
+    try {
+      if (!id) {
+        throw new Error('Proposal ID is required');
+      }
+
+      const updatedProposals = proposals.map(proposal => 
+        proposal.id === id
+          ? { 
+              ...proposal, 
+              status, 
+              updatedAt: getCurrentDateTime() 
+            }
+          : proposal
+      );
+      
+      saveProposals(updatedProposals);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update proposal status');
+      console.error('Error updating proposal status:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to update proposal status' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
+
+  // Task Operations
+  const addTask = useCallback((proposalId: string, task: Omit<Task, 'id' | 'proposalId' | 'createdAt'>): OperationResult<string> => {
+    try {
+      if (!proposalId) {
+        throw new Error('Proposal ID is required');
+      }
+
+      const now = getCurrentDateTime();
+      const taskId = uuidv4();
+      const updatedProposals = proposals.map(proposal => {
+        if (proposal.id === proposalId) {
+          return {
+            ...proposal,
+            tasks: [
+              ...proposal.tasks,
+              {
+                ...task,
+                id: taskId,
+                proposalId,
+                createdAt: now,
+              }
+            ],
+            updatedAt: now,
+          };
+        }
+        return proposal;
+      });
+      
+      saveProposals(updatedProposals);
+      return { success: true, data: taskId };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to add task');
+      console.error('Error adding task:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to add task' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
+
+  const updateTask = useCallback((proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>): OperationResult<void> => {
+    try {
+      if (!proposalId || !taskId) {
+        throw new Error('Proposal ID and Task ID are required');
+      }
+
+      const updatedProposals = proposals.map(proposal => {
+        if (proposal.id === proposalId) {
+          return {
+            ...proposal,
+            tasks: proposal.tasks.map(task =>
+              task.id === taskId
+                ? { ...task, ...updates }
+                : task
+            ),
+            updatedAt: getCurrentDateTime(),
+          };
+        }
+        return proposal;
+      });
+      
+      saveProposals(updatedProposals);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update task');
+      console.error('Error updating task:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to update task' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
+
+  const deleteTask = useCallback((proposalId: string, taskId: string): OperationResult<void> => {
+    try {
+      if (!proposalId || !taskId) {
+        throw new Error('Proposal ID and Task ID are required');
+      }
+
+      const updatedProposals = proposals.map(proposal => {
+        if (proposal.id === proposalId) {
+          return {
+            ...proposal,
+            tasks: proposal.tasks.filter(task => task.id !== taskId),
+            updatedAt: getCurrentDateTime(),
+          };
+        }
+        return proposal;
+      });
+      
+      saveProposals(updatedProposals);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to delete task');
+      console.error('Error deleting task:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete task' };
+    }
+  }, [saveProposals, getCurrentDateTime]);
+
+  const addCustomEvent = useCallback((event: Omit<CalendarEvent, 'id'>): OperationResult<string> => {
+    try {
+      const eventId = uuidv4();
+      const now = getCurrentDateTime();
+      const updatedEvents = [
+        ...customEvents,
+        {
+          ...event,
+          id: eventId,
+          createdAt: now,
+        },
+      ];
+      saveCustomEvents(updatedEvents);
+      return { success: true, data: eventId };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to add event');
+      console.error('Error adding event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to add event' };
+    }
+  }, [saveCustomEvents, getCurrentDateTime]);
+
+  const updateCustomEvent = useCallback((eventId: string, updates: Partial<CalendarEvent>): OperationResult<void> => {
+    try {
+      if (!eventId) {
+        throw new Error('Event ID is required');
+      }
+
+      const updatedEvents = customEvents.map(event =>
+        event.id === eventId
+          ? { ...event, ...updates }
+          : event
+      );
+      saveCustomEvents(updatedEvents);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update event');
+      console.error('Error updating event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to update event' };
+    }
+  }, [saveCustomEvents]);
+
+  const deleteCustomEvent = useCallback((eventId: string): OperationResult<void> => {
+    try {
+      if (!eventId) {
+        throw new Error('Event ID is required');
+      }
+
+      const updatedEvents = customEvents.filter(event => event.id !== eventId);
+      saveCustomEvents(updatedEvents);
+      return { success: true };
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to delete event');
+      console.error('Error deleting event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete event' };
+    }
+  }, [saveCustomEvents]);
 
   const setSampleData = useCallback(() => {
     const sampleProposals: Proposal[] = [
@@ -195,117 +465,6 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     setProposals(newProposals);
     localStorage.setItem('proposals', JSON.stringify(newProposals));
   }, [setProposals]);
-  
-  const addProposal = useCallback((proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>) => {
-    const id = Date.now().toString();
-    const now = getCurrentDateTime();
-    const newProposal: Proposal = {
-      ...proposal,
-      id,
-      tasks: [],
-      files: [], 
-      createdAt: now,
-      updatedAt: now,
-    };
-    
-    const updatedProposals = [...proposals, newProposal];
-    saveProposals(updatedProposals);
-    return id;
-  }, [saveProposals, getCurrentDateTime]);
-  
-  const updateProposal = useCallback((id: string, updates: Partial<Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>>) => {
-    const updatedProposals = proposals.map(proposal => 
-      proposal.id === id
-        ? { 
-            ...proposal, 
-            ...updates, 
-            updatedAt: getCurrentDateTime() 
-          }
-        : proposal
-    );
-    saveProposals(updatedProposals);
-  }, [saveProposals, getCurrentDateTime]);
-  
-  const deleteProposal = useCallback((id: string) => {
-    const updatedProposals = proposals.filter(proposal => proposal.id !== id);
-    saveProposals(updatedProposals);
-  }, [saveProposals]);
-  
-  const getProposal = useCallback((id: string) => {
-    return proposals.find(proposal => proposal.id === id);
-  }, []);
-  
-  const updateProposalStatus = useCallback((id: string, status: ProposalStatus) => {
-    const updatedProposals = proposals.map(proposal => 
-      proposal.id === id
-        ? { 
-            ...proposal, 
-            status, 
-            updatedAt: getCurrentDateTime() 
-          }
-        : proposal
-    );
-    saveProposals(updatedProposals);
-  }, [saveProposals, getCurrentDateTime]);
-  
-  const addTask = useCallback((proposalId: string, task: Omit<Task, 'id' | 'proposalId' | 'createdAt'>) => {
-    const taskId = `${proposalId}-${Date.now()}`;
-    const now = getCurrentDateTime();
-    
-    const updatedProposals = proposals.map(proposal => {
-      if (proposal.id === proposalId) {
-        return {
-          ...proposal,
-          tasks: [
-            ...proposal.tasks,
-            {
-              ...task,
-              id: taskId,
-              proposalId,
-              createdAt: now,
-            }
-          ],
-          updatedAt: now,
-        };
-      }
-      return proposal;
-    });
-    
-    saveProposals(updatedProposals);
-    return taskId;
-  }, [saveProposals, getCurrentDateTime]);
-  
-  const updateTask = useCallback((proposalId: string, taskId: string, updates: Partial<Omit<Task, 'id' | 'proposalId' | 'createdAt'>>) => {
-    const updatedProposals = proposals.map(proposal => {
-      if (proposal.id === proposalId) {
-        return {
-          ...proposal,
-          tasks: proposal.tasks.map(task =>
-            task.id === taskId
-              ? { ...task, ...updates }
-              : task
-          ),
-          updatedAt: getCurrentDateTime(),
-        };
-      }
-      return proposal;
-    });
-    saveProposals(updatedProposals);
-  }, [saveProposals, getCurrentDateTime]);
-
-  const deleteTask = useCallback((proposalId: string, taskId: string) => {
-    const updatedProposals = proposals.map(proposal => {
-      if (proposal.id === proposalId) {
-        return {
-          ...proposal,
-          tasks: proposal.tasks.filter(task => task.id !== taskId),
-          updatedAt: getCurrentDateTime(),
-        };
-      }
-      return proposal;
-    });
-    saveProposals(updatedProposals);
-  }, [saveProposals, getCurrentDateTime]);
 
   useEffect(() => {
     loadInitialData();
@@ -314,6 +473,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
   const value = {
     proposals,
     isLoading,
+    error,
     addProposal,
     updateProposal,
     deleteProposal,
@@ -327,13 +487,10 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     addCustomEvent,
     updateCustomEvent,
     deleteCustomEvent,
+    clearError: () => setError(null)
   };
 
-  return (
-    <ProposalContext.Provider value={value}>
-      {children}
-    </ProposalContext.Provider>
-  );
+  return <ProposalContext.Provider value={value}>{children}</ProposalContext.Provider>;
 };
 
 export default ProposalProvider;
