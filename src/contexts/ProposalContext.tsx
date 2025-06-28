@@ -52,7 +52,7 @@ export const useProposalContext = (): ProposalContextType => {
   };
 };
 
-export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNode => {
+export const ProposalProvider = ({ children }: { children: ReactNode }) => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customEvents, setCustomEvents] = useState<CalendarEvent[]>([]);
@@ -454,6 +454,26 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     clearError: () => setError(null)
 
   };
+
+  const value = {
+    proposals,
+    isLoading,
+    error,
+    addProposal,
+    updateProposal,
+    deleteProposal,
+    getProposal,
+    updateProposalStatus,
+    addTask,
+    updateTask,
+    deleteTask,
+    loadInitialData,
+    customEvents,
+    addCustomEvent,
+    updateCustomEvent,
+    deleteCustomEvent,
+    clearError: () => setError(null)
+  } as const;
 
   return <ProposalContext.Provider value={value}>{children}</ProposalContext.Provider>;
 };
