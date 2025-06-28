@@ -9,7 +9,6 @@ import MarketResearch from './pages/MarketResearch.js';
 import Calendar from './pages/Calendar.js';
 import Reminders from './pages/Reminders.js';
 import Guide from './pages/Guide.js';
-import LandingPage from './pages/LandingPage.js';
 import Dashboard from './pages/DashboardFixed.js';
 import SOWAnalyzer from './pages/SOWAnalyzer.js';
 import AIAgentGuide from './pages/AIAgentGuide.js';
@@ -23,7 +22,7 @@ function App() {
       <HashRouter basename="/proposal-flow">
         <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/home" replace />} />
+          <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="proposals/new" element={<ProposalForm />} />
           <Route path="proposals/:id" element={<ProposalDetails />} />
@@ -39,8 +38,6 @@ function App() {
           <Route path="proposal-guide" element={<ProposalDevelopmentGuide />} />
           <Route path="test" element={<TestPage />} />
           <Route path="simple-test" element={<SimpleTest />} />
-          <Route path="home" element={<LandingPage />} />
-          <Route path="landing" element={<LandingPage />} />
         </Route>
       </Routes>
       </HashRouter>

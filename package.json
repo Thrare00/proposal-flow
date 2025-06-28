@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "homepage": "https://thrare00.github.io/proposal-flow",
+  "homepage": "https://thrare00.github.io/proposal-flow/#/dashboard",
   "scripts": {
     "clean": "rimraf dist docs",
     "build": "vite build",
