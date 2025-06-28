@@ -53,13 +53,13 @@ const Dashboard = () => {
         if (urgencyFilter !== 'all') {
           const urgency = getUrgencyLevel(proposal.dueDate);
           
-          if (urgencyFilter === URGENCY_LEVELS.Critical && urgency !== URGENCY_LEVELS.Critical) {
+          if (urgencyFilter === URGENCY_LEVELS[0] && urgency !== URGENCY_LEVELS[0]) {
             return false;
-          } else if (urgencyFilter === URGENCY_LEVELS.High && urgency !== URGENCY_LEVELS.High) {
+          } else if (urgencyFilter === URGENCY_LEVELS[1] && urgency !== URGENCY_LEVELS[1]) {
             return false;
-          } else if (urgencyFilter === URGENCY_LEVELS.Medium && urgency !== URGENCY_LEVELS.Medium) {
+          } else if (urgencyFilter === URGENCY_LEVELS[2] && urgency !== URGENCY_LEVELS[2]) {
             return false;
-          } else if (urgencyFilter === URGENCY_LEVELS.Low && urgency !== URGENCY_LEVELS.Low) {
+          } else if (urgencyFilter === URGENCY_LEVELS[3] && urgency !== URGENCY_LEVELS[3]) {
             return false;
           }
         }

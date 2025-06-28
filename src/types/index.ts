@@ -8,6 +8,9 @@ export type ProposalStatus =
 
 export type ProposalStatusType = ProposalStatus;
 
+export const URGENCY_LEVELS = ['critical', 'high', 'medium', 'low'] as const;
+export type UrgencyLevel = typeof URGENCY_LEVELS[number];
+
 export interface Proposal {
   id: string;
   title: string;

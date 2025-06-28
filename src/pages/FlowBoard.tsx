@@ -117,7 +117,7 @@ const FlowBoard = () => {
   
   // Group proposals by status
   // Define valid statuses
-  const validStatuses = STATUS_OPTIONS as ProposalStatusType[];
+  const validStatuses = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as ProposalStatus[];
 
   // Group proposals by status
   const proposalsByStatus = useMemo(() => {
