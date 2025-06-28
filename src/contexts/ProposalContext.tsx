@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { Proposal, Task, CalendarEvent, ProposalStatus } from '../types/index.ts';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -430,17 +430,6 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
         ],
         createdAt: '2025-05-03T00:00:00.000Z',
         updatedAt: '2025-05-23T00:00:00.000Z',
-        type: 'federal',
-        files: []
-      }
-    ];
-
-    setProposals(sampleProposals);
-    localStorage.setItem('proposals', JSON.stringify(sampleProposals));
-  }, [setProposals]);
-
-
-
   useEffect(() => {
     loadInitialData();
   }, [loadInitialData]);
@@ -463,6 +452,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     updateCustomEvent,
     deleteCustomEvent,
     clearError: () => setError(null)
+
   };
 
   return <ProposalContext.Provider value={value}>{children}</ProposalContext.Provider>;
