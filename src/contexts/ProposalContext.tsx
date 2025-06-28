@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useMemo } from 'react';
-import { Proposal, Task, CalendarEvent, ProposalStatus } from '../types';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { Proposal, Task, CalendarEvent, ProposalStatus } from '../types/index.ts';
 import { v4 as uuidv4 } from 'uuid';
 
 interface OperationResult<T> {
@@ -428,43 +428,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     localStorage.setItem('proposals', JSON.stringify(sampleProposals));
   }, [setProposals]);
 
-  const loadInitialData = useCallback(() => {
-    try {
-      setIsLoading(true);
-      const savedProposals = localStorage.getItem('proposals');
-      if (savedProposals) {
-        const parsedProposals = JSON.parse(savedProposals);
-        if (Array.isArray(parsedProposals)) {
-          const isValid = parsedProposals.every(proposal => 
-            typeof proposal === 'object' &&
-            typeof proposal.id === 'string' &&
-            typeof proposal.title === 'string' &&
-            typeof proposal.agency === 'string' &&
-            typeof proposal.dueDate === 'string' &&
-            ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'].includes(proposal.status) &&
-            ['commercial', 'local_state', 'federal'].includes(proposal.type)
-          );
-          
-          if (isValid) {
-            setProposals(parsedProposals);
-            setIsLoading(false);
-            return;
-          }
-        }
-      }
-      setSampleData();
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading proposals:', error);
-      setSampleData();
-      setIsLoading(false);
-    }
-  }, [setSampleData]);
 
-  const saveProposals = useCallback((newProposals: Proposal[]) => {
-    setProposals(newProposals);
-    localStorage.setItem('proposals', JSON.stringify(newProposals));
-  }, [setProposals]);
 
   useEffect(() => {
     loadInitialData();

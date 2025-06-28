@@ -37,10 +37,11 @@
   "devDependencies": {
     "@alloc/quick-lru": "^5.2.0",
     "@rollup/plugin-typescript": "^12.1.4",
-    "@types/node": "^18.18.0",
+    "@types/node": "^18.19.113",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@types/react-router-dom": "^5.3.3",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
     "@vitejs/plugin-react": "^4.2.1",
