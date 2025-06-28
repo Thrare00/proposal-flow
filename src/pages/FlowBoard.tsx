@@ -17,7 +17,7 @@ import { useProposalContext } from '../contexts/ProposalContext.js';
 import TaskCard from '../components/TaskCard.js';
 import { formatDate, formatDateWithDay, isOverdue } from '../utils/dateUtils.js';
 import { parseISO, isBefore, addDays, endOfDay } from 'date-fns';
-import { ProposalStatus, ProposalStatusType, Proposal } from '../types/index.js';
+import { ProposalStatus, Proposal } from '../types/index.js';
 import { getStatusName, getStatusColor, getStatusBorderColor } from '../utils/statusUtils.js';
 import FlowGuides from '../components/FlowGuides.js';
 
