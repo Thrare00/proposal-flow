@@ -19,15 +19,13 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Cache npm
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: |
             ~/.npm
             node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
@@ -35,7 +33,33 @@ jobs:
       - name: Build Vite app
         run: npm run build
 
-      - name: Add 404 fallback
+      - name: Run TypeScript type-check
+        run: npx tsc --noEmit
+
+      - name: Run ESLint
+        run: npx eslint 'src/**/*.{js,ts,tsx}'
+
+      - name: Validate generated HTML
+        uses: schoeneg/html-validator-action@v1
+        with:
+          files: dist/**/*.html
+
+      - name: Check Content-Security-Policy syntax
+        run: |
+          grep -R "http-equiv=\"Content-Security-Policy\"" dist/index.html \
+            && echo "CSP tag looks good" \
+            || (echo "Missing or malformed CSP meta"; exit 1)
+
+      - name: Smoke-test local server
+        run: |
+          npx serve dist -l 5000 &
+          sleep 2
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/proposal-flow/)
+          test "$http_status" = "200"
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/proposal-flow/dashboard)
+          test "$http_status" = "200"
+
+      - name: Create 404.html fallback
         run: cp dist/index.html dist/404.html
 
       - name: Deploy to gh-pages
@@ -45,4 +69,11 @@ jobs:
         run: |
           npx gh-pages -d dist \
             --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git \
-            --branch gh-pages
+            --branch gh-pages \
+            --silent
+
+      - name: Verify live site
+        run: |
+          sleep 10
+          STATUS=$(curl -I -s https://thrare00.github.io/proposal-flow/ | head -n1 | awk '{print $2}')
+          test "$STATUS" = "200"

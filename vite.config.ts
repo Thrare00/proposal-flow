@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import path from 'path'
-
 export default defineConfig({
   plugins: [
     react(),
@@ -14,10 +13,12 @@ export default defineConfig({
   base: '/proposal-flow/',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './src/assets')
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.ico'],
   build: {
     outDir: 'dist',
     emptyOutDir: true
@@ -32,6 +33,5 @@ export default defineConfig({
       }
     },
     cors: true
-  },
-  assetsInclude: ['**/*.svg']
+  }
 });
