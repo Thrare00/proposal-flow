@@ -68,36 +68,20 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const loadInitialData = useCallback(() => {
+  const loadInitialData = useCallback(async () => {
     try {
       setIsLoading(true);
       const savedProposals = localStorage.getItem('proposals');
-      if (savedProposals) {
-        const parsedProposals = JSON.parse(savedProposals) as Proposal[];
-        setProposals(parsedProposals);
-      }
-      
-      const savedEvents = localStorage.getItem('customEvents');
-      if (savedEvents) {
-        const parsedEvents = JSON.parse(savedEvents) as CalendarEvent[];
-        setCustomEvents(parsedEvents);
-      }
-    } catch (err) {
-      setError('Failed to load initial data');
-      console.error('Error loading initial data:', err);
+      const parsedProposals = savedProposals ? JSON.parse(savedProposals) : [];
+      setProposals(parsedProposals);
+      setError(null);
+    } catch (error) {
+      setError('Failed to load proposals');
+      console.error('Error loading proposals:', error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    loadInitialData();
-  }, [loadInitialData]);
-
-  const saveCustomEvents = useCallback((events: CalendarEvent[]) => {
-    setCustomEvents(events);
-    localStorage.setItem('customEvents', JSON.stringify(events));
-  }, []);
+  }, [setError]);
 
   // Proposal Operations
   const addProposal = useCallback((proposal: Omit<Proposal, 'id' | 'createdAt' | 'updatedAt' | 'tasks' | 'files'>): OperationResult<string> => {
@@ -200,7 +184,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const now = getCurrentDateTime();
-      const taskId = uuidv4();
+      const taskId = Date.now().toString();
       const updatedProposals = proposals.map(proposal => {
         if (proposal.id === proposalId) {
           return {
@@ -235,16 +219,21 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
         throw new Error('Proposal ID and Task ID are required');
       }
 
+      const now = getCurrentDateTime();
       const updatedProposals = proposals.map(proposal => {
         if (proposal.id === proposalId) {
           return {
             ...proposal,
             tasks: proposal.tasks.map(task =>
               task.id === taskId
-                ? { ...task, ...updates }
+                ? { 
+                    ...task, 
+                    ...updates, 
+                    updatedAt: now 
+                  }
                 : task
             ),
-            updatedAt: getCurrentDateTime(),
+            updatedAt: now,
           };
         }
         return proposal;
@@ -265,12 +254,13 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
         throw new Error('Proposal ID and Task ID are required');
       }
 
+      const now = getCurrentDateTime();
       const updatedProposals = proposals.map(proposal => {
         if (proposal.id === proposalId) {
           return {
             ...proposal,
             tasks: proposal.tasks.filter(task => task.id !== taskId),
-            updatedAt: getCurrentDateTime(),
+            updatedAt: now,
           };
         }
         return proposal;
@@ -285,76 +275,58 @@ export const ProposalProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [saveProposals, getCurrentDateTime]);
 
+  // Custom Event Operations
   const addCustomEvent = useCallback((event: Omit<CalendarEvent, 'id'>): OperationResult<string> => {
     try {
-      const eventId = uuidv4();
-      const now = getCurrentDateTime();
-      const updatedEvents = [
-        ...customEvents,
-        {
-          ...event,
-          id: eventId,
-          createdAt: now,
-        },
-      ];
-      saveCustomEvents(updatedEvents);
-      return { success: true, data: eventId };
+      const id = Date.now().toString();
+      const newEvent: CalendarEvent = {
+        ...event,
+        id,
+        createdAt: getCurrentDateTime()
+      };
+      setCustomEvents(prev => [...prev, newEvent]);
+      return { success: true, data: id };
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to add event');
-      console.error('Error adding event:', error);
-      return { success: false, error: error instanceof Error ? error.message : 'Failed to add event' };
+      setError(error instanceof Error ? error.message : 'Failed to add custom event');
+      console.error('Error adding custom event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to add custom event' };
     }
-  }, [saveCustomEvents, getCurrentDateTime]);
+  }, [getCurrentDateTime]);
 
   const updateCustomEvent = useCallback((eventId: string, updates: Partial<CalendarEvent>): OperationResult<void> => {
     try {
       if (!eventId) {
         throw new Error('Event ID is required');
       }
-
-      const updatedEvents = customEvents.map(event =>
-        event.id === eventId
-          ? { ...event, ...updates }
-          : event
+      setCustomEvents(prev => 
+        prev.map(event => 
+          event.id === eventId 
+            ? { ...event, ...updates } 
+            : event
+        )
       );
-      saveCustomEvents(updatedEvents);
       return { success: true };
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to update event');
-      console.error('Error updating event:', error);
-      return { success: false, error: error instanceof Error ? error.message : 'Failed to update event' };
+      setError(error instanceof Error ? error.message : 'Failed to update custom event');
+      console.error('Error updating custom event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to update custom event' };
     }
-  }, [saveCustomEvents]);
+  }, []);
 
   const deleteCustomEvent = useCallback((eventId: string): OperationResult<void> => {
     try {
       if (!eventId) {
         throw new Error('Event ID is required');
       }
-
-      const updatedEvents = customEvents.filter(event => event.id !== eventId);
-      saveCustomEvents(updatedEvents);
+      setCustomEvents(prev => prev.filter(event => event.id !== eventId));
       return { success: true };
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to delete event');
-      console.error('Error deleting event:', error);
-      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete event' };
+      setError(error instanceof Error ? error.message : 'Failed to delete custom event');
+      console.error('Error deleting custom event:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete custom event' };
     }
-  }, [saveCustomEvents]);
+  }, []);
 
-  const setSampleData = useCallback(() => {
-    const sampleProposals: Proposal[] = [
-      {
-        id: '1',
-        title: 'DOD Security System',
-        description: 'Development of a secure information management system for the Department of Defense',
-        agency: 'Department of Defense',
-        dueDate: '2025-06-04T00:00:00.000Z',
-        status: 'drafting',
-        notes: 'This proposal requires security clearance documentation.',
-        tasks: [
-          {
-            id: '101',
             proposalId: '1',
             title: 'Write Executive Summary',
             description: 'Draft the executive summary section of the proposal',
