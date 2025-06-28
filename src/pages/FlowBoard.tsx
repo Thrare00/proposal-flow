@@ -17,7 +17,7 @@ import { useProposalContext } from '../contexts/ProposalContext.js';
 import TaskCard from '../components/TaskCard.js';
 import { formatDate, formatDateWithDay, isOverdue } from '../utils/dateUtils.js';
 import { parseISO, isBefore, addDays, endOfDay } from 'date-fns';
-import { ProposalStatus, Proposal } from '../types/index.js';
+import { ProposalStatus, Proposal } from '../types/index.ts';
 import { getStatusName, getStatusColor, getStatusBorderColor } from '../utils/statusUtils.js';
 import FlowGuides from '../components/FlowGuides.js';
 
@@ -117,17 +117,17 @@ const FlowBoard = () => {
   
   // Group proposals by status
   // Define valid statuses
-  const validStatuses = Object.values(ProposalStatus) as ProposalStatusType[];
+  const validStatuses = STATUS_OPTIONS as ProposalStatusType[];
 
   // Group proposals by status
   const proposalsByStatus = useMemo(() => {
-    const result: Record<ProposalStatusType, Proposal[]> = {
-      [ProposalStatus.INTAKE]: [],
-      [ProposalStatus.OUTLINE]: [],
-      [ProposalStatus.DRAFTING]: [],
-      [ProposalStatus.INTERNAL_REVIEW]: [],
-      [ProposalStatus.FINAL_REVIEW]: [],
-      [ProposalStatus.SUBMITTED]: []
+    const result: Record<ProposalStatus, Proposal[]> = {
+      'intake': [],
+      'outline': [],
+      'drafting': [],
+      'internal_review': [],
+      'final_review': [],
+      'submitted': []
     };
     filteredProposals.forEach(proposal => {
       if (result[proposal.status]) {

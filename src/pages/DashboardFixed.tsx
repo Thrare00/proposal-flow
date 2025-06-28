@@ -11,7 +11,7 @@ import {
 import { useProposalContext } from '../contexts/ProposalContext.js';
 import ProposalCard from '../components/ProposalCard.js';
 import { getUrgencyLevel, isOverdue } from '../utils/dateUtils.js';
-import { URGENCY_LEVELS, UrgencyLevel, Proposal } from '../types/index.js';
+import { URGENCY_LEVELS, UrgencyLevel, Proposal } from '../types/index.ts';
 
 const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'] as const as ProposalStatus[];
 
