@@ -346,7 +346,8 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
     const sampleProposals: Proposal[] = [
       {
         id: '1',
-        title: 'DoD Training System RFP',
+        title: 'DOD Security System',
+        description: 'Development of a secure information management system for the Department of Defense',
         agency: 'Department of Defense',
         dueDate: '2025-06-04T00:00:00.000Z',
         status: 'drafting',
@@ -356,8 +357,10 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             id: '101',
             proposalId: '1',
             title: 'Write Executive Summary',
+            description: 'Draft the executive summary section of the proposal',
             owner: 'Jane Smith',
             dueDate: '2025-05-25T00:00:00.000Z',
+            status: 'pending',
             completed: false,
             createdAt: '2025-05-23T00:00:00.000Z',
           },
@@ -365,8 +368,10 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             id: '102',
             proposalId: '1',
             title: 'Prepare Cost Analysis',
+            description: 'Create detailed cost analysis for proposal',
             owner: 'John Doe',
             dueDate: '2025-05-30T00:00:00.000Z',
+            status: 'pending',
             completed: false,
             createdAt: '2025-05-23T00:00:00.000Z',
           }
@@ -379,6 +384,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
       {
         id: '2',
         title: 'EPA Environmental Assessment',
+        description: 'Comprehensive environmental impact assessment for EPA compliance',
         agency: 'Environmental Protection Agency',
         dueDate: '2025-05-20T00:00:00.000Z',
         status: 'internal_review',
@@ -388,8 +394,10 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             id: '201',
             proposalId: '2',
             title: 'Complete Impact Analysis',
+            description: 'Finalize environmental impact analysis',
             owner: 'Sarah Johnson',
             dueDate: '2025-05-19T00:00:00.000Z',
+            status: 'completed',
             completed: true,
             createdAt: '2025-05-13T00:00:00.000Z',
           }
@@ -402,6 +410,7 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
       {
         id: '3',
         title: 'HHS Healthcare Portal',
+        description: 'Development of a secure healthcare management portal for HHS',
         agency: 'Health and Human Services',
         dueDate: '2025-05-24T00:00:00.000Z',
         status: 'final_review',
@@ -411,8 +420,10 @@ export const ProposalProvider = ({ children }: { children: ReactNode }): ReactNo
             id: '301',
             proposalId: '3',
             title: 'Review HIPAA Compliance',
+            description: 'Conduct final HIPAA compliance review',
             owner: 'Michael Brown',
             dueDate: '2025-05-23T00:00:00.000Z',
+            status: 'pending',
             completed: false,
             createdAt: '2025-05-03T00:00:00.000Z',
           }

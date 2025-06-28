@@ -20,6 +20,8 @@ export interface Proposal {
   createdAt: string;
   updatedAt: string;
   agency: string;
+  notes: string;
+  type: 'commercial' | 'local_state' | 'federal';
   tasks: Task[];
   files: FileMeta[];
 }
@@ -43,4 +45,15 @@ export interface FileMeta {
   size: number;
   url: string;
   createdAt: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  description: string;
+  type: 'proposal' | 'task' | 'meeting';
+  proposalId?: string;
+  taskId?: string;
 }
