@@ -12,7 +12,7 @@ import {
 import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.js';
 import { getStatusName, getStatusColor, getNextStatus, getPreviousStatus } from '../utils/statusUtils.js';
-import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue, isText } from '../utils/dateUtils.js';
+import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils.js';
 import { URGENCY_LEVELS } from '../types.js';
 import { FileMeta, Task, Proposal } from '../types.js';
 import TaskCard from '../components/TaskCard.js';
