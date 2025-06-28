@@ -1,0 +1,35 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
+import path from 'path'
+import ts from '@rollup/plugin-typescript'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    dts({
+      insertTypesEntry: true,
+      outDir: 'dist/types'
+    }),
+    ts({
+      tsconfig: './tsconfig.json',
+      declaration: false
+    })
+  ],
+  base: '/proposal-flow/',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './src/assets')
+    },
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        '404': './404.html'
+      }
+    }
+  }
+})
