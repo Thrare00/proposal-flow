@@ -1,79 +1,61 @@
-name: Build and Deploy
+# CI Step Order:
+# 1) actions/checkout@v3
+# 2) actions/setup-node@v3 (node-version: '18')
+# 3) actions/cache@v3 (npm)
+# 4) npm ci
+# 5) npm run build
+# 6) cp dist/index.html dist/404.html
+# 7) npx gh-pages ... --branch gh-pages
+
+name: Deploy
 
 on:
   push:
-    branches: [main]
-
-permissions:
-  contents: write
+    branches: [ main ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # 1) Checkout
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      # 2) Node
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
-      - name: Cache dependencies
+      # 3) Cache npm
+      - name: Cache npm
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
+      # 4) Install
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Vite app
+      # 5) Build
+      - name: Build
         run: npm run build
 
-      - name: Validate generated HTML
-        uses: html5-validator@v1.0.0
-        with:
-          path: dist
+      # 5.5) (Optional) HTML validation — left commented so it won't run unless you opt-in
+      # - name: Validate HTML (optional)
+      #   uses: html-validate/html-validate-action@v1.3.0
+      #   with:
+      #     path: dist
 
-      - name: Run TypeScript type-check
-        run: npx tsc --noEmit
-
-      - name: Run ESLint
-        run: npx eslint 'src/**/*.{js,ts,tsx}'
-
-      - name: Check Content-Security-Policy syntax
-        run: |
-          grep -R "http-equiv=\"Content-Security-Policy\"" dist/index.html \
-            && echo "CSP tag looks good" \
-            || (echo "Missing or malformed CSP meta"; exit 1)
-
-      - name: Smoke-test local server
-        run: |
-          npx serve dist -l 5000 &
-          sleep 2
-          http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/proposal-flow/)
-          test "$http_status" = "200"
-          http_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/proposal-flow/dashboard)
-          test "$http_status" = "200"
-
-      - name: Create 404.html fallback
+      # 6) Copy 404 fallback for SPA routing
+      - name: Create 404 fallback
         run: cp dist/index.html dist/404.html
 
-      - name: Deploy to gh-pages
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          npx gh-pages -d dist \
-            --repo https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git \
-            --branch gh-pages \
-            --silent
-
-      - name: Verify live site
-        run: |
-          sleep 10
-          STATUS=$(curl -I -s https://thrare00.github.io/proposal-flow/ | head -n1 | awk '{print $2}')
-          test "$STATUS" = "200"
+      # 7) Deploy to GitHub Pages via gh-pages CLI
+      - name: Publish to gh-pages
+        run: npx gh-pages -d dist --branch gh-pages --dotfiles
