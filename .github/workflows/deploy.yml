@@ -56,6 +56,10 @@ jobs:
       - name: Create 404 fallback
         run: npm run copy-404
 
-      # 7) Publish to gh-pages (DISABLED for local-only workflow)
-      # - name: Publish to gh-pages
-      #   run: npx gh-pages -d dist --branch gh-pages --dotfiles
+      # 7) Publish to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true
