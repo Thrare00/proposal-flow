@@ -74,4 +74,19 @@ export const getPreviousStatus = (status) => {
         default: return null;
     }
 };
+
+export const getUrgencyLevel = (dueDate) => {
+    if (!dueDate) return 'low';
+    
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diffTime = due - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return 'overdue';
+    if (diffDays <= 2) return 'critical';
+    if (diffDays <= 7) return 'high';
+    if (diffDays <= 14) return 'medium';
+    return 'low';
+};
 //# sourceMappingURL=statusUtils.js.map

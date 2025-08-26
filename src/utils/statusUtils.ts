@@ -1,4 +1,4 @@
-import type { ProposalStatus, ProposalStatusOrNull } from '../types';
+import type { ProposalStatus, ProposalStatusOrNull } from '../types/index.js';
 
 export const getStatusName = (status: ProposalStatus): string => {
   switch (status) {

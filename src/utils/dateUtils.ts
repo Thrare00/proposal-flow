@@ -1,20 +1,6 @@
-import { 
-  format, 
-  differenceInDays, 
-  isBefore, 
-  parseISO,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  startOfMonth,
-  endOfMonth,
-  isWithinInterval,
-  isSameDay,
-  addMonths,
-  subMonths
-} from 'date-fns';
+import { format, differenceInDays, isBefore, parseISO, startOfWeek, endOfWeek, eachDayOfInterval, startOfMonth, endOfMonth, isWithinInterval, isSameDay, addMonths, subMonths, addDays, subDays, isToday, endOfDay } from 'date-fns';
 
-import { URGENCY_LEVELS, type UrgencyLevel } from '../types.js';
+import { URGENCY_LEVELS, type UrgencyLevel } from '../types/index.ts';
 
 export const isText = (file: File): boolean => {
   const textTypes = ['text/plain', 'text/csv', 'application/json'];
@@ -29,6 +15,10 @@ export const formatDateWithDay = (dateString: string): string => {
   return format(parseISO(dateString), 'EEE, MMM d, yyyy');
 };
 
+export const formatISO = (date: Date): string => {
+  return date.toISOString();
+};
+
 export const isOverdue = (dateString: string): boolean => {
   const date = parseISO(dateString);
   const today = new Date();
@@ -40,29 +30,29 @@ export const getUrgencyLevel = (dueDate: string): UrgencyLevel => {
   const dueDateObj = parseISO(dueDate);
   const daysUntilDue = differenceInDays(dueDateObj, today);
   
-  if (daysUntilDue < 0) return URGENCY_LEVELS.Critical;
-  if (daysUntilDue <= 2) return URGENCY_LEVELS.Critical;
-  if (daysUntilDue <= 7) return URGENCY_LEVELS.High;
-  if (daysUntilDue <= 14) return URGENCY_LEVELS.Medium;
-  return URGENCY_LEVELS.Low;
+  if (daysUntilDue < 0) return URGENCY_LEVELS[0];
+  if (daysUntilDue <= 2) return URGENCY_LEVELS[0];
+  if (daysUntilDue <= 7) return URGENCY_LEVELS[1];
+  if (daysUntilDue <= 14) return URGENCY_LEVELS[2];
+  return URGENCY_LEVELS[3];
 };
 
 export const getUrgencyColor = (urgency: UrgencyLevel): string => {
   switch (urgency) {
-    case URGENCY_LEVELS.Critical: return 'bg-error-100 text-error-800';
-    case URGENCY_LEVELS.High: return 'bg-warning-100 text-warning-800';
-    case URGENCY_LEVELS.Medium: return 'bg-accent-100 text-accent-800';
-    case URGENCY_LEVELS.Low: return 'bg-success-100 text-success-800';
+    case URGENCY_LEVELS[0]: return 'bg-error-100 text-error-800';
+    case URGENCY_LEVELS[1]: return 'bg-warning-100 text-warning-800';
+    case URGENCY_LEVELS[2]: return 'bg-accent-100 text-accent-800';
+    case URGENCY_LEVELS[3]: return 'bg-success-100 text-success-800';
     default: return 'bg-gray-100 text-gray-800';
   }
 };
 
 export const getUrgencyBorderColor = (urgency: UrgencyLevel): string => {
   switch (urgency) {
-    case URGENCY_LEVELS.Critical: return 'border-error-300';
-    case URGENCY_LEVELS.High: return 'border-warning-300';
-    case URGENCY_LEVELS.Medium: return 'border-accent-300';
-    case URGENCY_LEVELS.Low: return 'border-success-300';
+    case URGENCY_LEVELS[0]: return 'border-error-300';
+    case URGENCY_LEVELS[1]: return 'border-warning-300';
+    case URGENCY_LEVELS[2]: return 'border-accent-300';
+    case URGENCY_LEVELS[3]: return 'border-success-300';
     default: return 'border-gray-300';
   }
 };

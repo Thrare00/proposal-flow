@@ -1,4 +1,4 @@
-import { NotificationPermission } from './types';
+import { NotificationPermission } from './types.js';
 
 interface NotificationOptions {
   body?: string;

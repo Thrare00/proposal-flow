@@ -33,6 +33,11 @@ jobs:
       - name: Build Vite app
         run: npm run build
 
+      - name: Validate generated HTML
+        uses: html5-validator@v1.0.0
+        with:
+          path: dist
+
       - name: Run TypeScript type-check
         run: npx tsc --noEmit
 

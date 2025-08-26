@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Proposal, ProposalType, URGENCY_LEVELS, PROPOSAL_TYPES } from '../types';
+import { Proposal, ProposalType, URGENCY_LEVELS } from '../types/index.ts';
 
 export const ROUTES = {
   ROOT: '/',
@@ -53,11 +53,9 @@ export const getRouteWithParams = (path: RoutePaths, params: Record<string, stri
 
 export const useIntelligentRouting = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const navigateToProposal = (proposal: Proposal) => {
-    const urgency = URGENCY_LEVELS[proposal.metadata.urgency.level];
-    const isHighPriority = urgency.priority <= 2;
+    const isHighPriority = proposal.urgency === 'high' || proposal.urgency === 'critical';
     
     // High priority proposals go directly to details
     if (isHighPriority) {
@@ -79,13 +77,13 @@ export const useIntelligentRouting = () => {
 
   const navigateToTypeSpecificRoute = (proposalType: ProposalType) => {
     switch (proposalType) {
-      case PROPOSAL_TYPES.commercial:
+      case 'commercial':
         navigate(getRoutePath(ROUTES.MARKET_RESEARCH));
         break;
-      case PROPOSAL_TYPES.local_state:
+      case 'local_state':
         navigate(getRoutePath(ROUTES.CALENDAR));
         break;
-      case PROPOSAL_TYPES.federal:
+      case 'federal':
         navigate(getRoutePath(ROUTES.SOW_ANALYZER));
         break;
       default:
