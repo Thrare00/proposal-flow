@@ -4,7 +4,7 @@
 # 3) actions/cache@v3 (npm)
 # 4) npm ci
 # 5) npm run build
-# 6) cp dist/index.html dist/404.html
+# 6) cp dist/index.html dist/404.html (here via npm run copy-404)
 # 7) npx gh-pages ... --branch gh-pages
 
 name: Deploy
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2) Node
+      # 2) Setup Node
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -46,16 +46,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      # 5.5) (Optional) HTML validation — left commented so it won't run unless you opt-in
+      # 5.5) (Optional) HTML validation — left commented until opt-in
       # - name: Validate HTML (optional)
       #   uses: html-validate/html-validate-action@v1.3.0
       #   with:
       #     path: dist
 
-      # 6) Copy 404 fallback for SPA routing
+      # 6) Cross-platform 404 fallback copy (no Windows 'copy')
       - name: Create 404 fallback
-        run: cp dist/index.html dist/404.html
+        run: npm run copy-404
 
-      # 7) Deploy to GitHub Pages via gh-pages CLI
+      # 7) Publish to gh-pages
       - name: Publish to gh-pages
         run: npx gh-pages -d dist --branch gh-pages --dotfiles

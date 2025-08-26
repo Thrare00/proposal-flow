@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf dist docs",
     "build": "vite build",
-    "postbuild": "copy dist\\index.html dist\\404.html",
+    "copy-404": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
     "dev": "vite --port 3007 --strictPort",
     "preview": "vite preview --port 3006 --strictPort",
     "start": "node server.js",
