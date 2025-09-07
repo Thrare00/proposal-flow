@@ -6,8 +6,12 @@ import {
   AlertTriangle, 
   Clock, 
   CheckCircle,
-  FilterX
+  FilterX,
+  FolderOpen,
+  UserCog,
+  FileText
 } from 'lucide-react';
+import ConnectivityStatus from '../components/ConnectivityStatus';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
 import ProposalCard from '../components/ProposalCard.jsx';
 import { getUrgencyLevel, isOverdue } from '../utils/dateUtils.js';
@@ -72,7 +76,10 @@ const Dashboard = () => {
     <div className="max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold mb-2">Proposal Dashboard</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <ConnectivityStatus />
+          </div>
           <p className="text-gray-600">Manage and track your government contract proposals</p>
         </div>
         
@@ -201,41 +208,86 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Proposals grid */}
-      {filteredProposals.length > 0 ? (
+      {/* Quick Access Cards */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Access</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProposals.map(proposal => (
-            <ProposalCard
-              key={proposal.id}
-              proposal={proposal}
-            />
-          ))}
+          <Link 
+            to="/directories"
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex items-center space-x-4"
+          >
+            <div className="p-3 bg-blue-100 rounded-full text-blue-600">
+              <FolderOpen className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">Directories</h3>
+              <p className="text-sm text-gray-500">Manage portal directories and statuses</p>
+            </div>
+          </Link>
+
+          <Link 
+            to="/ceo-actions"
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex items-center space-x-4"
+          >
+            <div className="p-3 bg-purple-100 rounded-full text-purple-600">
+              <UserCog className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">CEO Actions</h3>
+              <p className="text-sm text-gray-500">Create reminders and follow-ups</p>
+            </div>
+          </Link>
+
+          <Link 
+            to="/reports"
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex items-center space-x-4"
+          >
+            <div className="p-3 bg-green-100 rounded-full text-green-600">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">Reports</h3>
+              <p className="text-sm text-gray-500">Generate and view reports</p>
+            </div>
+          </Link>
         </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow-card p-8 text-center">
-          <div className="text-gray-500 mb-4">
-            <FilterX size={64} className="mx-auto mb-4 text-gray-400" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">No proposals found</h3>
-            <p className="mb-6">
-              {searchTerm || statusFilter !== 'all' || urgencyFilter !== 'all' 
-                ? "Try adjusting your search filters to find what you're looking for."
-                : "You haven't created any proposals yet. Get started by creating your first proposal."}
-            </p>
-            {searchTerm || statusFilter !== 'all' || urgencyFilter !== 'all' ? (
-              <button
-                onClick={clearFilters}
-                className="btn btn-primary"
-              >
-                Clear Filters
-              </button>
-            ) : (
-              <Link to="/dashboard/proposals/new" className="btn btn-primary">
-                Create Your First Proposal
-              </Link>
-            )}
+      </div>
+
+      {/* Proposals Section */}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Proposals</h2>
+        {filteredProposals.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProposals.map((proposal) => (
+              <ProposalCard key={proposal.id} proposal={proposal} />
+            ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="bg-white rounded-lg shadow-card p-8 text-center">
+            <div className="text-gray-500 mb-4">
+              <FilterX size={64} className="mx-auto mb-4 text-gray-400" />
+              <h3 className="text-xl font-medium text-gray-700 mb-2">No proposals found</h3>
+              <p className="mb-6">
+                {searchTerm || statusFilter !== 'all' || urgencyFilter !== 'all' 
+                  ? "Try adjusting your search filters to find what you're looking for."
+                  : "You haven't created any proposals yet. Get started by creating your first proposal."}
+              </p>
+              {searchTerm || statusFilter !== 'all' || urgencyFilter !== 'all' ? (
+                <button
+                  onClick={clearFilters}
+                  className="btn btn-primary"
+                >
+                  Clear Filters
+                </button>
+              ) : (
+                <Link to="/dashboard/proposals/new" className="btn btn-primary">
+                  Create Your First Proposal
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -36,9 +36,9 @@ import {
 } from 'date-fns';
 import { getUrgencyLevel } from '../utils/statusUtils.js';
 
-// Lazy load heavy components
-const TaskCard = React.lazy(() => import('../components/TaskCard.jsx'));
-const ProposalCard = React.lazy(() => import('../components/ProposalCard.jsx'));
+// Static imports
+import TaskCard from '../components/TaskCard.jsx';
+import ProposalCard from '../components/ProposalCard.jsx';
 
 // Loading component for Suspense fallback
 const LoadingSpinner = ({ text = 'Loading...', size = 'md' }) => {

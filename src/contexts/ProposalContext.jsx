@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { generateUUID } from '../utils/uuid.js';
+import { generateUUID } from '../utils/uuidUtils.js';
 
 // Helper function to get current date time in ISO format
 const getCurrentDateTime = () => new Date().toISOString();

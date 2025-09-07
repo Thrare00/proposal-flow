@@ -11,26 +11,36 @@ import SOWAnalyzer from './pages/SOWAnalyzer.jsx';
 import Guide from './pages/Guide.jsx';
 import AIAgentGuide from './pages/AIAgentGuide.jsx';
 import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide.jsx';
+import Directories from './pages/Directories.jsx';
+import CeoActions from './pages/CeoActions.jsx';
+import Reports from './pages/Reports.jsx';
+import TestEnqueue from '@/components/TestEnqueue';
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/flowboard" element={<FlowBoard />} />
-        <Route path="/reminders" element={<Reminders />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/proposals/new" element={<ProposalForm />} />
-        <Route path="/proposals/:id" element={<ProposalDetails />} />
-        <Route path="/proposals/:id/edit" element={<ProposalForm />} />
-        <Route path="/proposals/:id/analyze" element={<SOWAnalyzer />} />
-        <Route path="/market-research" element={<MarketResearch />} />
-        <Route path="/sow-analyzer" element={<SOWAnalyzer />} />
-        <Route path="/guide" element={<Guide />} />
-        <Route path="/ai-agent-guide" element={<AIAgentGuide />} />
-        <Route path="/proposal-development-guide" element={<ProposalDevelopmentGuide />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/flowboard" element={<FlowBoard />} />
+          <Route path="/reminders" element={<Reminders />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/proposals/new" element={<ProposalForm />} />
+          <Route path="/proposals/:id" element={<ProposalDetails />} />
+          <Route path="/proposals/:id/edit" element={<ProposalForm />} />
+          <Route path="/proposals/:id/analyze" element={<SOWAnalyzer />} />
+          <Route path="/market-research" element={<MarketResearch />} />
+          <Route path="/sow-analyzer" element={<SOWAnalyzer />} />
+          <Route path="/guide" element={<Guide />} />
+          <Route path="/ai-agent-guide" element={<AIAgentGuide />} />
+          <Route path="/proposal-development-guide" element={<ProposalDevelopmentGuide />} />
+          <Route path="/directories" element={<Directories />} />
+          <Route path="/ceo-actions" element={<CeoActions />} />
+          <Route path="/reports" element={<Reports />} />
+        </Route>
+      </Routes>
+      <TestEnqueue />
+    </>
   );
 }

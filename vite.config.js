@@ -1,40 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
-export default defineConfig(({ command }) => {
-  const isProduction = command === 'build';
-  
+export default defineConfig(({ mode }) => {
+  const base = '/proposal-flow/'; // required for GitHub Pages under thrare00.github.io/proposal-flow
+  const port = Number(process.env.PORT || 3010);
   return {
+    base,
     plugins: [react()],
-    base: isProduction ? '/proposal-flow/' : '/',
+    resolve: {
+      alias: { '@': resolve(__dirname, 'src') },
+    },
     server: {
-      port: 3007,
+      port,
       strictPort: true,
-      host: '0.0.0.0',
-      open: true,
-      cors: true,
-      hmr: {
-        host: 'localhost',
-        port: 3007,
-        protocol: 'ws'
-      }
     },
-    preview: {
-      port: 3008,
-      strictPort: true
-    },
-    build: {
-      outDir: 'dist',
-      assetsDir: 'assets',
-      sourcemap: true,
-      copyPublicDir: true,
-      rollupOptions: {
-        output: {
-          assetFileNames: 'assets/[name]-[hash][extname]',
-          entryFileNames: 'assets/[name]-[hash].js',
-          chunkFileNames: 'assets/[name]-[hash].js'
-        }
-      }
-    }
+    build: { chunkSizeWarningLimit: 1024 },
   };
-})
+});
