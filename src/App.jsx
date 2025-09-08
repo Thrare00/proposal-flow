@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 import Layout from './components/Layout.jsx';
 import Dashboard from './pages/DashboardFixed.jsx';
 import FlowBoard from './pages/FlowBoard.jsx';
@@ -17,10 +18,20 @@ import Reports from './pages/Reports.jsx';
 import TestEnqueue from '@/components/TestEnqueue';
 
 export default function App() {
+  const [showTestEnqueue, setShowTestEnqueue] = useState(false);
+
   return (
     <>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={
+          <Layout onToggleTestEnqueue={() => setShowTestEnqueue(!showTestEnqueue)}>
+            {showTestEnqueue && (
+              <div className="fixed bottom-4 right-4 z-50">
+                <TestEnqueue />
+              </div>
+            )}
+          </Layout>
+        }>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/flowboard" element={<FlowBoard />} />
@@ -40,7 +51,6 @@ export default function App() {
           <Route path="/reports" element={<Reports />} />
         </Route>
       </Routes>
-      <TestEnqueue />
     </>
   );
 }

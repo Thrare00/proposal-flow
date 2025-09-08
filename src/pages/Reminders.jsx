@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, Suspense, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   AlertTriangle, 
@@ -36,9 +36,18 @@ import {
 } from 'date-fns';
 import { getUrgencyLevel } from '../utils/statusUtils.js';
 
-// Static imports
-import TaskCard from '../components/TaskCard.jsx';
-import ProposalCard from '../components/ProposalCard.jsx';
+// Lazy load heavy components with preloading
+const TaskCard = lazy(() => {
+  // Start preloading
+  const taskCard = import('../components/TaskCard.jsx');
+  return taskCard;
+});
+
+const ProposalCard = lazy(() => {
+  // Start preloading
+  const proposalCard = import('../components/ProposalCard.jsx');
+  return proposalCard;
+});
 
 // Loading component for Suspense fallback
 const LoadingSpinner = ({ text = 'Loading...', size = 'md' }) => {
@@ -144,12 +153,74 @@ const filterUpcomingTasks = (tasks) => {
   );
 };
 
+// Memoized task item component to prevent unnecessary re-renders
+const TaskItem = React.memo(({ task }) => (
+  <div className="mb-2">
+    <TaskCard task={task} />
+  </div>
+));
+
+// Memoized proposal item component to prevent unnecessary re-renders
+const ProposalItem = React.memo(({ proposal }) => (
+  <div className="mb-4">
+    <ProposalCard proposal={proposal} />
+  </div>
+));
+
+// Virtualized list component for better performance with large lists
+const VirtualList = React.memo(({ items, renderItem, itemHeight = 100, containerHeight = 400 }) => {
+  const containerRef = React.useRef();
+  const [scrollTop, setScrollTop] = React.useState(0);
+  const [visibleItems, setVisibleItems] = React.useState([]);
+
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const container = containerRef.current;
+    const startIndex = Math.floor(scrollTop / itemHeight);
+    const visibleCount = Math.ceil(containerHeight / itemHeight) + 2; // +2 for buffer
+    const endIndex = Math.min(startIndex + visibleCount, items.length - 1);
+    
+    setVisibleItems(items.slice(startIndex, endIndex));
+    
+    const handleScroll = () => setScrollTop(container.scrollTop);
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [items, scrollTop, itemHeight, containerHeight]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className="overflow-y-auto" 
+      style={{ height: `${containerHeight}px` }}
+    >
+      <div style={{ height: `${items.length * itemHeight}px`, position: 'relative' }}>
+        {visibleItems.map((item, index) => (
+          <div 
+            key={item.id || index}
+            style={{
+              position: 'absolute',
+              top: 0,
+              transform: `translateY(${itemHeight * (items.indexOf(item) - Math.floor(scrollTop / itemHeight)) * itemHeight}px)`,
+              width: '100%',
+              height: `${itemHeight}px`
+            }}
+          >
+            {renderItem(item, index)}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
 const Reminders = () => {
   const { proposals = [], isLoading, error } = useProposalContext();
   const [localError, setLocalError] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [activeTab, setActiveTab] = useState('overdue');
   
-  // Process tasks with error handling
+  // Process tasks with error handling and memoization
   const allTasks = useMemo(() => {
     try {
       return processTasks(proposals);
@@ -160,6 +231,11 @@ const Reminders = () => {
     }
   }, [proposals]);
   
+  // Memoize tab change handler
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
+  
   // Memoize all filtered data in a single useMemo hook
   const {
     overdueTasks,
@@ -169,10 +245,20 @@ const Reminders = () => {
     completedTasks,
     proposalsDueSoon
   } = useMemo(() => {
-    setIsProcessing(true);
+    if (!proposals || !allTasks) {
+      return {
+        overdueTasks: [],
+        tasksThisWeek: [],
+        upcomingTasks: [],
+        overdueProposals: [],
+        completedTasks: [],
+        proposalsDueSoon: []
+      };
+    }
+
     try {
       // Process proposals for overdue status
-      const overdueProposals = (proposals ?? [])
+      const overdueProposals = proposals
         .filter(p => p.status !== 'submitted' && isOverdue(p.dueDate))
         .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
@@ -248,234 +334,219 @@ const Reminders = () => {
     );
   }
   
+  // Memoize the render functions for VirtualList
+  const renderTaskItem = useCallback((task) => (
+    <div key={task.id} className="mb-2">
+      <TaskCard task={task} />
+    </div>
+  ), []);
+  
+  const renderProposalItem = useCallback((proposal) => (
+    <div key={proposal.id} className="mb-4">
+      <ProposalCard proposal={proposal} />
+    </div>
+  ), []);
+
+  // Tab content mapping
+  const tabContent = {
+    overdue: (
+      <div className="space-y-4">
+        {overdueTasks.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-red-600 flex items-center">
+              <AlertTriangle className="mr-2" /> Overdue Tasks
+            </h3>
+            <VirtualList 
+              items={overdueTasks}
+              renderItem={renderTaskItem}
+              itemHeight={120}
+              containerHeight={Math.min(overdueTasks.length * 120, 400)}
+            />
+          </div>
+        )}
+        {overdueProposals.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-red-600 flex items-center">
+              <FileText className="mr-2" /> Overdue Proposals
+            </h3>
+            <VirtualList 
+              items={overdueProposals}
+              renderItem={renderProposalItem}
+              itemHeight={180}
+              containerHeight={Math.min(overdueProposals.length * 180, 400)}
+            />
+          </div>
+        )}
+        {overdueTasks.length === 0 && overdueProposals.length === 0 && (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No overdue items"
+            description="You're all caught up! No overdue tasks or proposals."
+          />
+        )}
+      </div>
+    ),
+    thisWeek: (
+      <div className="space-y-4">
+        {tasksThisWeek.length > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-amber-600">
+              Due This Week
+            </h3>
+            <VirtualList 
+              items={tasksThisWeek}
+              renderItem={renderTaskItem}
+              itemHeight={120}
+              containerHeight={Math.min(tasksThisWeek.length * 120, 400)}
+            />
+          </div>
+        ) : (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No tasks due this week"
+            description="You're all caught up for this week!"
+          />
+        )}
+      </div>
+    ),
+    upcoming: (
+      <div className="space-y-4">
+        {upcomingTasks.length > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-blue-600">
+              Upcoming Tasks
+            </h3>
+            <VirtualList 
+              items={upcomingTasks}
+              renderItem={renderTaskItem}
+              itemHeight={120}
+              containerHeight={Math.min(upcomingTasks.length * 120, 400)}
+            />
+          </div>
+        ) : (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No upcoming tasks"
+            description="You don't have any tasks scheduled for the near future."
+          />
+        )}
+      </div>
+    ),
+    proposals: (
+      <div className="space-y-4">
+        {proposalsDueSoon.length > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-amber-600">
+              Proposals Due Soon
+            </h3>
+            <VirtualList 
+              items={proposalsDueSoon}
+              renderItem={renderProposalItem}
+              itemHeight={180}
+              containerHeight={Math.min(proposalsDueSoon.length * 180, 400)}
+            />
+          </div>
+        ) : (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No upcoming proposals"
+            description="You don't have any proposals due soon."
+          />
+        )}
+      </div>
+    ),
+    completed: (
+      <div className="space-y-4">
+        {completedTasks.length > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 text-green-600">
+              Recently Completed
+            </h3>
+            <VirtualList 
+              items={completedTasks}
+              renderItem={renderTaskItem}
+              itemHeight={120}
+              containerHeight={Math.min(completedTasks.length * 120, 400)}
+            />
+          </div>
+        ) : (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No completed tasks"
+            description="You haven't completed any tasks recently."
+          />
+        )}
+      </div>
+    )
+  };
+  
+  // Tab definitions
+  const tabs = [
+    { id: 'overdue', label: 'Overdue', count: overdueTasks.length + overdueProposals.length },
+    { id: 'thisWeek', label: 'This Week', count: tasksThisWeek.length },
+    { id: 'upcoming', label: 'Upcoming', count: upcomingTasks.length },
+    { id: 'proposals', label: 'Proposals', count: proposalsDueSoon.length },
+    { id: 'completed', label: 'Completed', count: completedTasks.length }
+  ];
+
   // Show error state if there's an error
   if (error || localError) {
     return (
-      <ErrorState 
-        error={error || localError} 
-        onRetry={() => window.location.reload()} 
-      />
+      <div className="p-4">
+        <ErrorState 
+          error={error || localError} 
+          onRetry={() => window.location.reload()}
+        />
+      </div>
     );
   }
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your reminders...</p>
-          <p className="text-sm text-gray-500 mt-2">Please wait while we gather your tasks and proposals</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // Show error state if there's an error
-  if (error || localError) {
-    const errorMessage = error?.message || localError || 'An unknown error occurred';
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertTriangle className="h-5 w-5 text-red-400" aria-hidden="true" />
-            </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Error loading reminders</h3>
-              <div className="mt-2 text-sm text-red-700">
-                <p>{errorMessage}</p>
-              </div>
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={() => window.location.reload()}
-                  className="rounded-md bg-red-50 px-2 py-1.5 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50"
-                >
-                  Try again
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  // Proposals in final review
-  const proposalsInFinalReview = useMemo(() => {
-    return proposals.filter(proposal => 
-      proposal.status === 'final_review'
-    );
-  }, [proposals]);
-  
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Reminders</h1>
-        <p className="text-gray-600 dark:text-gray-400">Stay on top of upcoming deadlines and tasks</p>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Reminders</h1>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Overdue tasks section */}
-        <div className={`lg:col-span-2 ${overdueTasks.length > 0 ? 'order-first' : 'order-2'}`}>
-          <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-card overflow-hidden border-l-4 ${
-            overdueTasks.length > 0 ? 'border-l-error-500' : 'border-l-success-500'
-          }`}>
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                overdueTasks.length > 0 ? 'bg-error-100 dark:bg-error-900 text-error-600 dark:text-error-400' : 'bg-success-100 dark:bg-success-900 text-success-600 dark:text-success-400'
-              }`}>
-                {overdueTasks.length > 0 ? (
-                  <AlertTriangle size={18} />
-                ) : (
-                  <CheckCircle size={18} />
-                )}
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold">Overdue Tasks</h2>
-                <p className="text-sm text-gray-600">
-                  {overdueTasks.length > 0 
-                    ? `You have ${overdueTasks.length} overdue ${overdueTasks.length === 1 ? 'task' : 'tasks'}`
-                    : 'No overdue tasks'}
-                </p>
-              </div>
-            </div>
-            
-            <div className={`p-4 ${overdueTasks.length > 0 ? 'bg-error-50' : ''}`}>
-              {overdueTasks.length > 0 ? (
-                <div className="space-y-3">
-                  {overdueTasks.map((task) => (
-                    <TaskCard 
-                      key={task.id} 
-                      task={task} 
-                      proposalTitle={task.proposalTitle}
-                      showProposalLink={true}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-6 text-success-600">
-                  <CheckCircle size={48} className="mx-auto mb-3" />
-                  <p>All caught up! No overdue tasks.</p>
-                </div>
+      {/* Tabs */}
+      <div className="border-b border-gray-200 mb-6">
+        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  {tab.count}
+                </span>
               )}
-            </div>
-          </div>
-        </div>
-        
-        {/* Tasks due this week */}
-        <div className="lg:col-span-1 order-3">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-card overflow-hidden border-l-4 border-l-warning-500">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
-              <div className="w-8 h-8 rounded-full bg-warning-100 dark:bg-warning-900 text-warning-600 dark:text-warning-400 flex items-center justify-center mr-3">
-                <Clock size={18} />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold">Tasks Due This Week</h2>
-                <p className="text-sm text-gray-600">
-                  {tasksThisWeek.length > 0 
-                    ? `${tasksThisWeek.length} ${tasksThisWeek.length === 1 ? 'task' : 'tasks'} due soon`
-                    : 'No tasks due this week'}
-                </p>
-              </div>
-            </div>
-            
-            <div className="p-4">
-              {tasksThisWeek.length > 0 ? (
-                <div className="space-y-3">
-                  {tasksThisWeek.map((task) => (
-                    <Link 
-                      key={task.id}
-                      to={`/proposals/${task.proposalId}`}
-                      className="block p-3 border rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex items-start">
-                        <CheckSquare size={16} className="mr-2 text-warning-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-medium line-clamp-1">{task.title}</p>
-                          <p className="text-sm text-gray-500 line-clamp-1">{task.proposalTitle}</p>
-                          <div className="flex items-center mt-1 text-sm">
-                            <CalendarIcon size={14} className="mr-1 text-gray-500" />
-                            <span className="text-warning-700">{formatDateWithDay(task.dueDate)}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-6 text-gray-500">
-                  <CalendarIcon size={48} className="mx-auto mb-3 text-gray-400" />
-                  <p>No tasks due this week.</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        
-        {/* Proposals due soon */}
-        <div className="lg:col-span-3 order-4">
-          <div className="bg-white rounded-lg shadow-card overflow-hidden">
-            <div className="p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold">Proposals Needing Attention</h2>
-              <p className="text-sm text-gray-600">Proposals with upcoming deadlines or in final stages</p>
-            </div>
-            
-            <div className="p-4">
-              {overdueProposals.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-md font-semibold text-error-700 mb-3 flex items-center">
-                    <AlertTriangle size={16} className="mr-2" />
-                    Overdue Proposals
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {overdueProposals.map(proposal => (
-                      <ProposalCard key={proposal.id} proposal={proposal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {proposalsDueSoon.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-md font-semibold text-warning-700 mb-3 flex items-center">
-                    <Clock size={16} className="mr-2" />
-                    Proposals Due Soon
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {proposalsDueSoon.map(proposal => (
-                      <ProposalCard key={proposal.id} proposal={proposal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {proposalsInFinalReview.length > 0 && (
-                <div>
-                  <h3 className="text-md font-semibold text-primary-700 mb-3 flex items-center">
-                    <FileText size={16} className="mr-2" />
-                    Proposals in Final Review
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {proposalsInFinalReview.map(proposal => (
-                      <ProposalCard key={proposal.id} proposal={proposal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {overdueProposals.length === 0 && proposalsDueSoon.length === 0 && proposalsInFinalReview.length === 0 && (
-                <div className="text-center py-10 text-gray-500">
-                  <CheckCircle size={64} className="mx-auto mb-4 text-success-500" />
-                  <h3 className="text-xl font-medium text-gray-700 mb-2">All Caught Up!</h3>
-                  <p>No proposals need immediate attention right now.</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+            </button>
+          ))}
+        </nav>
       </div>
+      
+      {/* Tab Content */}
+      <ErrorBoundary>
+        <Suspense fallback={
+          <div className="flex items-center justify-center h-64">
+            <LoadingSpinner text="Loading content..." />
+          </div>
+        }>
+          {tabContent[activeTab] || (
+            <EmptyState 
+              icon={CheckCircle}
+              title="No items found"
+              description="There are no items to display in this section."
+            />
+          )}
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

@@ -7,7 +7,8 @@ import {
   Plus,
   BookOpen,
   FileSearch,
-  Clipboard
+  Clipboard,
+  TestTube2
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
 import ThemeSlider from './ThemeSlider.jsx';
@@ -24,7 +25,7 @@ const navigationItems = [
   { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
 ];
 
-const Layout = () => {
+const Layout = ({ onToggleTestEnqueue, children }) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   // Removed location = useLocation();
 
@@ -46,6 +47,13 @@ const Layout = () => {
             </div>
 
             <div className="flex items-center space-x-4">
+              <button
+                onClick={onToggleTestEnqueue}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                title="Toggle Test Enqueue"
+              >
+                <TestTube2 size={18} />
+              </button>
               <ThemeSlider />
             </div>
           </div>
@@ -71,20 +79,23 @@ const Layout = () => {
         </nav>
       </div>
 
-      <div className="ml-64 md:ml-64 pt-16">
-        <div className="flex justify-end mb-6">
-          <NavLink 
-            to="/proposals/new" 
-            className="btn btn-primary bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-900 dark:hover:bg-primary-800"
-          >
-            <Plus size={18} />
-            <span>New Proposal</span>
-          </NavLink>
+      <main className="flex-1 pt-16">
+        <div className="ml-64 md:ml-64">
+          <div className="flex justify-end mb-6 p-4">
+            <NavLink 
+              to="/proposals/new" 
+              className="btn btn-primary bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-900 dark:hover:bg-primary-800"
+            >
+              <Plus size={18} />
+              <span>New Proposal</span>
+            </NavLink>
+          </div>
+          <div className="p-4">
+            <Outlet />
+            {children}
+          </div>
         </div>
-        <Outlet />
-        
-        {/* Removed conditional Dashboard rendering */}
-      </div>
+      </main>
     </div>
   );
 };
