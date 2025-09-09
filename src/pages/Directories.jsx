@@ -2,10 +2,29 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue.js';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+// Inline styles for form elements
+const formStyles = {
+  container: 'max-w-2xl mx-auto p-6 bg-white rounded-lg shadow',
+  form: 'space-y-4',
+  formGroup: 'space-y-2',
+  label: 'block text-sm font-medium text-gray-700',
+  input: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500',
+  select: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500',
+  button: 'px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50',
+  checkbox: 'h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500',
+};
 
 const PORTAL_OPTIONS = [
   { id: 'sam', name: 'SAM.gov', url: 'https://sam.gov' },
@@ -36,6 +55,7 @@ export default function Directories() {
     notes: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [autoRegister, setAutoRegister] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,13 +73,37 @@ export default function Directories() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
-      await enqueue({
-        id: `dir-${Date.now()}`,
-        action: 'log_directory',
-        payload: formData
-      });
-      toast.success('Directory entry submitted successfully!');
+      if (autoRegister) {
+        // Enqueue registration job
+        const job = {
+          id: `dir-${Date.now()}`,
+          action: "register_vendor",
+          payload: {
+            portal: PORTAL_OPTIONS.find(p => p.id === formData.portal)?.name || formData.portal,
+            portalUrl: formData.url,
+            company: "Rare Earth Ltd",
+            contact: { 
+              name: "Eric White", 
+              phone: "478-718-1278", 
+              email: "admin@thrarecontracting.com" 
+            },
+            notes: formData.notes || ""
+          }
+        };
+        await enqueue(job);
+        toast.success('Vendor registration job enqueued successfully!');
+      } else {
+        // Original directory entry submission
+        await enqueue({
+          type: 'directory_entry',
+          payload: formData
+        });
+        toast.success('Directory entry submitted successfully!');
+      }
+      
+      // Reset form
       setFormData({
         portal: '',
         url: '',
@@ -86,30 +130,31 @@ export default function Directories() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-2xl font-bold mb-6">Directory Management</h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h1 className="text-2xl font-bold mb-6">Directory Entry</h1>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="portal">Portal</Label>
-          <select
-            id="portal"
-            name="portal"
+          <Label htmlFor="portal">Portal *</Label>
+          <Select
             value={formData.portal}
-            onChange={handleChange}
-            className="border rounded px-3 py-2 w-full"
+            onValueChange={(value) => setFormData(prev => ({ ...prev, portal: value }))}
             required
           >
-            <option value="">Select a portal</option>
-            {PORTAL_OPTIONS.map(portal => (
-              <option key={portal.id} value={portal.id}>
-                {portal.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a portal" />
+            </SelectTrigger>
+            <SelectContent>
+              {PORTAL_OPTIONS.map(portal => (
+                <SelectItem key={portal.id} value={portal.id}>
+                  {portal.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="url">URL</Label>
+          <Label htmlFor="url">URL *</Label>
           <Input
             id="url"
             name="url"
@@ -120,7 +165,7 @@ export default function Directories() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="username">Username *</Label>
           <Input
             id="username"
             name="username"
@@ -131,22 +176,23 @@ export default function Directories() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
-          <select
-            id="status"
-            name="status"
+          <Label htmlFor="status">Status *</Label>
+          <Select
             value={formData.status}
-            onChange={handleChange}
-            className="border rounded px-3 py-2 w-full"
+            onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
             required
           >
-            <option value="">Select status</option>
-            {STATUS_OPTIONS.map(status => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              {STATUS_OPTIONS.map(status => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -157,23 +203,37 @@ export default function Directories() {
             name="submittedDate"
             value={formData.submittedDate}
             onChange={handleChange}
-            required
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="notes">Notes</Label>
-          <textarea
+          <Input
             id="notes"
             name="notes"
             value={formData.notes}
             onChange={handleChange}
-            rows="3"
-            className="w-full border rounded px-3 py-2"
+            placeholder="Any additional notes..."
           />
         </div>
 
-        <div className="flex justify-end space-x-2 pt-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="autoRegister"
+            checked={autoRegister}
+            onChange={(e) => setAutoRegister(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <label htmlFor="autoRegister" className="text-sm font-medium text-gray-700">
+            Auto-register vendor
+          </label>
+        </div>
+
+        <div className="flex space-x-4 pt-4">
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Save Entry'}
+          </Button>
           <Button
             type="button"
             variant="outline"
@@ -181,12 +241,6 @@ export default function Directories() {
             disabled={isSubmitting}
           >
             Cancel
-          </Button>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Submitting...' : 'Save Directory'}
           </Button>
         </div>
       </form>

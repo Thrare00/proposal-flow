@@ -2,6 +2,9 @@ import { lazy, Suspense } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { ProposalProvider } from '../contexts/ProposalContext';
 
+// Development tools (only imported when needed)
+const TestEnqueue = lazy(() => import('../components/TestEnqueue.jsx'));
+
 // Lazy load all page components with proper error boundaries and loading states
 const createLazyComponent = (importFn, fallbackText = 'Loading...') => {
   const LazyComponent = lazy(() => importFn().catch(err => {
@@ -40,6 +43,9 @@ const SOWAnalyzer = createLazyComponent(() => import('../pages/SOWAnalyzer.jsx')
 const AIAgentGuide = createLazyComponent(() => import('../pages/AIAgentGuide.jsx'));
 const ProposalDevelopmentGuide = createLazyComponent(() => import('../pages/ProposalDevelopmentGuide.jsx'));
 const Reminders = createLazyComponent(() => import('../pages/Reminders.jsx'));
+const Reports = createLazyComponent(() => import('../pages/Reports.jsx'));
+const CadenceSettings = createLazyComponent(() => import('../pages/CadenceSettings.jsx'));
+const SystemHealth = createLazyComponent(() => import('../pages/SystemHealth.jsx'));
 
 // Base URL for the application
 export const basename = '/proposal-flow';
@@ -115,6 +121,32 @@ export const routeConfig = [
       {
         path: 'calendar',
         element: <Calendar />,
+      },
+      // Reports
+      {
+        path: 'reports',
+        element: <Reports />,
+      },
+      // Cadence Settings
+      {
+        path: 'cadence',
+        element: <CadenceSettings />,
+      },
+      // System Health
+      {
+        path: 'health',
+        element: <SystemHealth />,
+      },
+      // Development tools (only in development)
+      {
+        path: 'tools/enqueue',
+        element: (
+          <ErrorBoundary>
+            <Suspense fallback={<div>Loading test tools...</div>}>
+              <TestEnqueue />
+            </Suspense>
+          </ErrorBoundary>
+        ),
       },
       // 404 - Catch all
       {

@@ -1,63 +1,74 @@
-const ENDPOINT = import.meta.env.VITE_PF_ENDPOINT;   // e.g. https://script.google.com/macros/s/XXXXX/exec
-const TOKEN = import.meta.env.VITE_QUEUE_TOKEN;   // must match Apps Script validator
-
-function assertEnv() {
-  if (!ENDPOINT) throw new Error("VITE_PF_ENDPOINT missing");
-  if (!TOKEN) throw new Error("VITE_QUEUE_TOKEN missing");
-}
-
 export async function enqueue(job) {
-  assertEnv();
-  const payload = Array.isArray(job) ? job : [job];
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
+  const endpoint = import.meta.env.VITE_ENQUEUE_ENDPOINT;
+  const token = import.meta.env.VITE_QUEUE_TOKEN;
+
+  if (!endpoint || !token) {
+    throw new Error("Missing VITE_ENQUEUE_ENDPOINT or VITE_QUEUE_TOKEN in .env");
+  }
+
+  const res = await fetch(endpoint, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Queue-Token': TOKEN,
+      "Content-Type": "application/json",
+      "X-Queue-Token": token,
     },
-    body: JSON.stringify(payload),
-    mode: 'cors',
-    redirect: 'follow',
+    body: JSON.stringify(job),
   });
 
   if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`enqueue failed: ${res.status} ${res.statusText} ${text}`);
+    throw new Error(`Failed to enqueue: ${res.status} ${res.statusText}`);
   }
 
-  try {
-    return await res.json();
-  } catch (e) {
-    return await res.text();
+  return await res.json();
+}
+
+// Plural helper for batching multiple jobs
+export async function enqueueJobs(jobs) {
+  if (!Array.isArray(jobs)) {
+    throw new Error("enqueueJobs expects an array of jobs");
   }
+
+  const results = [];
+  for (const job of jobs) {
+    results.push(await enqueue(job));
+  }
+  return results;
 }
 
-export async function enqueueJobs(jobs = []) {
-  if (!Array.isArray(jobs)) throw new Error("enqueueJobs expects an array");
-  return enqueue(jobs);
-}
-
+/**
+ * Check connectivity to the enqueue endpoint
+ * @returns {Promise<Object>} Object with connection status
+ */
 export async function checkConnectivity() {
+  const endpoint = import.meta.env.VITE_ENQUEUE_ENDPOINT;
+  const token = import.meta.env.VITE_QUEUE_TOKEN;
+
+  if (!endpoint) {
+    return {
+      ok: false,
+      status: 0,
+      statusText: "No endpoint configured"
+    };
+  }
+
   try {
-    const response = await fetch(ENDPOINT, {
+    const response = await fetch(endpoint, {
       method: 'HEAD',
-      headers: {
-        'X-Queue-Token': TOKEN,
-      },
-      mode: 'cors'
+      headers: token ? { 'X-Queue-Token': token } : {}
     });
+
     return {
       ok: response.ok,
       status: response.status,
-      statusText: response.statusText
+      statusText: response.statusText,
+      lastChecked: new Date().toISOString()
     };
   } catch (error) {
     return {
       ok: false,
       status: 0,
-      statusText: error.message
+      statusText: error.message,
+      lastChecked: new Date().toISOString()
     };
   }
 }
-
-export default { enqueue, enqueueJobs, checkConnectivity };

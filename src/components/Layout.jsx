@@ -1,14 +1,15 @@
 import { 
   LayoutDashboard, 
   CalendarDays, 
-  LayoutGrid,
+  LayoutGrid, 
   Menu,
   ChevronLeft,
   Plus,
   BookOpen,
   FileSearch,
   Clipboard,
-  TestTube2
+  TestTube2,
+  Activity
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
 import ThemeSlider from './ThemeSlider.jsx';
@@ -19,10 +20,16 @@ const navigationItems = [
   { to: "/", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
   { to: "/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
   { to: "/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
+  { to: "/reports", icon: <Clipboard size={18} />, label: 'Reports' },
+  { to: "/cadence", icon: <CalendarDays size={18} />, label: 'Cadence Settings' },
+  { to: "/health", icon: <Activity size={18} />, label: 'System Health' },
   { to: "/guide", icon: <BookOpen size={18} />, label: 'Guide' },
   { to: "/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
   { to: "/proposals/new", icon: <Plus size={18} />, label: 'New Proposal' },
-  { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' }
+  { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' },
+  ...(import.meta.env.DEV ? [
+    { to: "/tools/enqueue", icon: <TestTube2 size={18} />, label: 'Queue Tester' }
+  ] : [])
 ];
 
 const Layout = ({ onToggleTestEnqueue, children }) => {

@@ -1,20 +1,26 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
+import { fileURLToPath, URL } from 'node:url';
+import path from 'path';
 
-export default defineConfig(({ mode }) => {
-  const base = '/proposal-flow/'; // required for GitHub Pages under thrare00.github.io/proposal-flow
-  const port = Number(process.env.PORT || 3010);
-  return {
-    base,
-    plugins: [react()],
-    resolve: {
-      alias: { '@': resolve(__dirname, 'src') },
+export default defineConfig({
+  base: process.env.VITE_BASE_URL || '/proposal-flow/',
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    server: {
-      port,
-      strictPort: true,
-    },
-    build: { chunkSizeWarningLimit: 1024 },
-  };
+  },
+  server: {
+    port: Number(process.env.PORT || 3010),
+    strictPort: true,
+  },
+  build: {
+    chunkSizeWarningLimit: 1024,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
+    }
+  }
 });
