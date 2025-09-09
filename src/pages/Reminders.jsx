@@ -218,6 +218,7 @@ const VirtualList = React.memo(({ items, renderItem, itemHeight = 100, container
 const Reminders = () => {
   const { proposals = [], isLoading, error } = useProposalContext();
   const [localError, setLocalError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState('overdue');
   
   // Process tasks with error handling and memoization
