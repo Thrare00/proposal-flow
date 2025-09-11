@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue.js';
 import { format } from 'date-fns';
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
+  Button,
+  Input,
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui";
 
 // Inline styles for form elements
 const formStyles = {
