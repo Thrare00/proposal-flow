@@ -2,9 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import ButtonDefault, { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+// Simple runtime check in dev
+if (import.meta.env.DEV && typeof Button !== 'function') {
+  console.warn('Button import did not resolve to a component');
+}
 
 export default function CeoActions() {
   const [formData, setFormData] = useState({
