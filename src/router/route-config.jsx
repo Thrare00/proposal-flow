@@ -3,7 +3,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import { ProposalProvider } from '../contexts/ProposalContext';
 
 // Development tools (only imported when needed)
-const TestEnqueue = lazy(() => import('../components/TestEnqueue.jsx'));
+const AutomationConsole = lazy(() => import('../components/AutomationConsole.jsx'));
 
 // Lazy load all page components with proper error boundaries and loading states
 const createLazyComponent = (importFn, fallbackText = 'Loading...') => {
@@ -137,16 +137,10 @@ export const routeConfig = [
         path: 'health',
         element: <SystemHealth />,
       },
-      // Development tools (only in development)
+      // Console route
       {
-        path: 'tools/enqueue',
-        element: (
-          <ErrorBoundary>
-            <Suspense fallback={<div>Loading test tools...</div>}>
-              <TestEnqueue />
-            </Suspense>
-          </ErrorBoundary>
-        ),
+        path: 'console',
+        element: <AutomationConsole />,
       },
       // 404 - Catch all
       {

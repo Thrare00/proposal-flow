@@ -14,6 +14,7 @@ import {
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
 import ThemeSlider from './ThemeSlider.jsx';
 import { useState } from 'react';
+import AutomationConsole from './AutomationConsole';
 // Removed Dashboard import as it's handled by App.tsx
 
 const navigationItems = [
@@ -27,12 +28,10 @@ const navigationItems = [
   { to: "/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
   { to: "/proposals/new", icon: <Plus size={18} />, label: 'New Proposal' },
   { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' },
-  ...(import.meta.env.DEV ? [
-    { to: "/tools/enqueue", icon: <TestTube2 size={18} />, label: 'Queue Tester' }
-  ] : [])
+  // Development tools removed - using AutomationConsole instead
 ];
 
-const Layout = ({ onToggleTestEnqueue, children }) => {
+const Layout = ({ children }) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   // Removed location = useLocation();
 
@@ -54,14 +53,10 @@ const Layout = ({ onToggleTestEnqueue, children }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-              <button
-                onClick={onToggleTestEnqueue}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-                title="Toggle Test Enqueue"
-              >
-                <TestTube2 size={18} />
-              </button>
               <ThemeSlider />
+              <div className="ml-4">
+                <AutomationConsole />
+              </div>
             </div>
           </div>
         </div>
