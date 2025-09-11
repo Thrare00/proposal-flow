@@ -35,16 +35,14 @@ export default defineConfig({
       ],
     },
   },
-  build: {
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-  },
   server: {
     port: Number(process.env.PORT || 3010),
     strictPort: true,
   },
   build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
       input: {
