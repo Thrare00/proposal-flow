@@ -1,5 +1,7 @@
 # Proposal Flow - Vite SPA Deployment
 
+> Last deployment: 2025-09-11 13:15:00 UTC
+
 A modern proposal management tool built with React, Vite, and TypeScript.
 
 ## Environment Variables
