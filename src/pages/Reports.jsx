@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button } from '../components/ui/button';
+import { Button } from '@/components/ui';
 import { format } from 'date-fns';
 import { ExternalLink, Loader2, FolderOpen } from 'lucide-react';
 import HealthPanel from '../components/HealthPanel';
