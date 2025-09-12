@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue';
-import ButtonDefault, { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Label from '@/components/ui/label.jsx';
+import { Button, Input, Label } from '@/components/ui';
 
 // Simple runtime check in dev
 if (import.meta.env.DEV && typeof Button !== 'function') {

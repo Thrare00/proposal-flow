@@ -3,16 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue.js';
 import { format } from 'date-fns';
-import {
-  Button,
-  Input,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui";
+import { Button, Input, Label } from '@/components/ui';
 
 // Inline styles for form elements
 const formStyles = {
@@ -134,23 +125,24 @@ export default function Directories() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="portal">Portal *</Label>
-          <Select
-            value={formData.portal}
-            onValueChange={(value) => setFormData(prev => ({ ...prev, portal: value }))}
-            required
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a portal" />
-            </SelectTrigger>
-            <SelectContent>
-              {PORTAL_OPTIONS.map(portal => (
-                <SelectItem key={portal.id} value={portal.id}>
-                  {portal.name}
-                </SelectItem>
+          <div className="space-y-2">
+            <Label htmlFor="portal">Portal *</Label>
+            <select
+              id="portal"
+              name="portal"
+              className="w-full border rounded px-3 py-2"
+              value={formData.portal}
+              onChange={(e) =>
+                setFormData(prev => ({ ...prev, portal: e.target.value }))
+              }
+              required
+            >
+              <option value="" disabled>Select a portal</option>
+              {PORTAL_OPTIONS.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
               ))}
-            </SelectContent>
-          </Select>
+            </select>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -177,22 +169,21 @@ export default function Directories() {
 
         <div className="space-y-2">
           <Label htmlFor="status">Status *</Label>
-          <Select
+          <select
+            id="status"
+            name="status"
+            className="w-full border rounded px-3 py-2"
             value={formData.status}
-            onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
+            onChange={(e) =>
+              setFormData(prev => ({ ...prev, status: e.target.value }))
+            }
             required
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              {STATUS_OPTIONS.map(status => (
-                <SelectItem key={status} value={status}>
-                  {status}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>Select status</option>
+            {STATUS_OPTIONS.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
         </div>
 
         <div className="space-y-2">

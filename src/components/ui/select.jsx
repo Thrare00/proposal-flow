@@ -91,8 +91,12 @@ const SelectSeparator = React.forwardRef(({ className, ...props }, ref) => (
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
+// Default export for Select
+export default Select;
+
+// Named exports for all components
 export {
-  Select,
+  Select as Select,
   SelectGroup,
   SelectValue,
   SelectTrigger,
