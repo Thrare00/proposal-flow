@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { gasGet } from "../lib/api";
+import { getHealth } from "@/lib/api";
 
 export default function HealthPanel(){
   const [rows, setRows] = useState([]);
@@ -7,10 +7,11 @@ export default function HealthPanel(){
   useEffect(() => { 
     (async () => { 
       try { 
-        const data = await gasGet("getHealth");
-        setRows(Array.isArray(data) ? data : []);
+        const data = await getHealth();
+        setRows(Array.isArray(data?.health) ? data.health : []);
       } catch(e) { 
         console.error("Failed to load health data:", e);
+        setRows([]);
       }
     })(); 
   }, []);

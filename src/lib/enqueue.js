@@ -1,25 +1,35 @@
-export async function enqueue(job) {
-  const endpoint = import.meta.env.VITE_ENQUEUE_ENDPOINT;
-  const token = import.meta.env.VITE_QUEUE_TOKEN;
+const QUEUE_URL = import.meta.env.VITE_QUEUE_URL || import.meta.env.VITE_ENQUEUE_ENDPOINT;
+const QUEUE_TOKEN = import.meta.env.VITE_QUEUE_TOKEN;
 
-  if (!endpoint || !token) {
-    throw new Error("Missing VITE_ENQUEUE_ENDPOINT or VITE_QUEUE_TOKEN in .env");
+export async function enqueue(jobOrArray) {
+  if (!QUEUE_URL) throw new Error('Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables');
+  if (!QUEUE_TOKEN) throw new Error('Missing VITE_QUEUE_TOKEN in environment variables');
+  
+  const jobs = Array.isArray(jobOrArray) ? jobOrArray : [jobOrArray];
+  const url = `${QUEUE_URL}?fn=enqueue`;
+  
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'X-Queue-Token': QUEUE_TOKEN 
+      },
+      body: JSON.stringify({ jobs })
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`enqueue failed ${res.status}: ${text || res.statusText}`);
+    }
+    
+    return await res.json().catch(() => ({}));
+  } catch (error) {
+    if (error.message.includes('<!DOCTYPE')) {
+      throw new Error('Server returned HTML instead of JSON. Check if the endpoint URL is correct.');
+    }
+    throw error;
   }
-
-  const res = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Queue-Token": token,
-    },
-    body: JSON.stringify(job),
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to enqueue: ${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
 }
 
 // Plural helper for batching multiple jobs

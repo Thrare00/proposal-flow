@@ -17,18 +17,20 @@ import { useState } from 'react';
 import AutomationConsole from './AutomationConsole';
 // Removed Dashboard import as it's handled by App.tsx
 
+// Get base URL from environment or use empty string for root
+const base = import.meta.env.BASE_URL || '/';
+
 const navigationItems = [
-  { to: "/", icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-  { to: "/flowboard", icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-  { to: "/calendar", icon: <CalendarDays size={18} />, label: 'Calendar' },
-  { to: "/reports", icon: <Clipboard size={18} />, label: 'Reports' },
-  { to: "/cadence", icon: <CalendarDays size={18} />, label: 'Cadence Settings' },
-  { to: "/health", icon: <Activity size={18} />, label: 'System Health' },
-  { to: "/guide", icon: <BookOpen size={18} />, label: 'Guide' },
-  { to: "/reminders", icon: <Clipboard size={18} />, label: 'Reminders' },
-  { to: "/proposals/new", icon: <Plus size={18} />, label: 'New Proposal' },
-  { to: "/sow-analyzer", icon: <FileSearch size={18} />, label: 'SOW Analyzer' },
-  // Development tools removed - using AutomationConsole instead
+  { to: `${base}`, icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+  { to: `${base}flowboard`, icon: <LayoutGrid size={18} />, label: 'Flow Board' },
+  { to: `${base}calendar`, icon: <CalendarDays size={18} />, label: 'Calendar' },
+  { to: `${base}reports`, icon: <Clipboard size={18} />, label: 'Reports' },
+  { to: `${base}cadence`, icon: <CalendarDays size={18} />, label: 'Cadence Settings' },
+  { to: `${base}health`, icon: <Activity size={18} />, label: 'System Health' },
+  { to: `${base}guide`, icon: <BookOpen size={18} />, label: 'Guide' },
+  { to: `${base}reminders`, icon: <Clipboard size={18} />, label: 'Reminders' },
+  { to: `${base}proposals/new`, icon: <Plus size={18} />, label: 'New Proposal' },
+  { to: `${base}sow-analyzer`, icon: <FileSearch size={18} />, label: 'SOW Analyzer' },
 ];
 
 const Layout = ({ children }) => {
@@ -47,7 +49,7 @@ const Layout = ({ children }) => {
               >
                 {isMenuCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
               </button>
-              <Link to="/" className="flex items-center">
+              <Link to={base} className="flex items-center">
                 <span className="text-xl font-bold text-primary-600 dark:text-primary-400">ProposalFlow</span>
               </Link>
             </div>

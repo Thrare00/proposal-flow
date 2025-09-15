@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { enqueue } from '../lib/enqueue';
-import { fetchHealth } from '../lib/api';
+import { getHealth } from '../lib/api';
 
 export default function AutomationConsole() {
   const [payload, setPayload] = useState(
@@ -29,7 +29,7 @@ export default function AutomationConsole() {
     
     const fetchStatus = async () => {
       try {
-        const health = await fetchHealth();
+        const health = await getHealth();
         if (health?.last_processed) {
           setLastProcessed({
             ts: health.last_processed.timestamp,
@@ -66,7 +66,7 @@ export default function AutomationConsole() {
       setLastEnqueue(now);
       
       // Refresh health status
-      const health = await fetchHealth();
+      const health = await getHealth();
       if (health?.last_processed) {
         setLastProcessed({
           ts: health.last_processed.timestamp,

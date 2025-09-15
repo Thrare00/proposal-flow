@@ -1,19 +1,75 @@
-export async function gasGet(fn) {
-  const base = import.meta.env.VITE_GAS_URL;
-  const u = `${base}?fn=${encodeURIComponent(fn)}`;
-  const r = await fetch(u, { method: "GET" });
-  if (!r.ok) throw new Error(`GAS ${fn} failed ${r.status}`);
-  return r.json();
+const GAS = import.meta.env.VITE_GAS_URL;
+const HEALTH = import.meta.env.VITE_HEALTH_URL || GAS;
+const FOLDER = import.meta.env.VITE_REPORTS_FOLDER_ID;
+
+async function j(url, opt) { 
+  const r = await fetch(url, {
+    ...opt,
+    credentials: 'omit',
+    headers: {
+      'Accept': 'application/json',
+      ...(opt?.headers || {})
+    }
+  }); 
+  
+  if (!r.ok) {
+    const text = await r.text().catch(() => '');
+    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+      throw new Error('Server returned HTML instead of JSON. Check if the endpoint URL is correct.');
+    }
+    throw new Error(`${r.status} ${r.statusText} — ${text.slice(0, 200)}`);
+  }
+  
+  try {
+    return await r.json();
+  } catch (e) {
+    throw new Error('Failed to parse JSON response');
+  }
 }
 
-export async function fetchHealth() {
-  try {
-    const res = await fetch(import.meta.env.VITE_HEALTH_URL || '/health.json', { 
-      cache: 'no-store' 
-    });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
+export async function withRetry(fn, tries = 3, delay = 600) {
+  let last;
+  for (let i = 0; i < tries; i++) { 
+    try { 
+      return await fn(); 
+    } catch (e) { 
+      last = e; 
+      if (i < tries - 1) {
+        await new Promise(r => setTimeout(r, delay * (i + 1)));
+      }
+    }
   }
+  throw last;
+}
+
+export async function getHealth() { 
+  if (!HEALTH) throw new Error('Missing VITE_HEALTH_URL/VITE_GAS_URL');
+  return withRetry(() => j(`${HEALTH}?fn=getHealth`));
+}
+
+export async function getCadence() { 
+  if (!GAS) throw new Error('Missing VITE_GAS_URL');
+  return withRetry(() => j(`${GAS}?fn=getCadence`));
+}
+
+export async function setCadence(payload) {
+  if (!GAS) throw new Error('Missing VITE_GAS_URL');
+  return withRetry(() => j(
+    `${GAS}?fn=setCadence`, 
+    { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(payload) 
+    }
+  ));
+}
+
+export async function getReports() { 
+  if (!GAS || !FOLDER) throw new Error('Missing VITE_GAS_URL or VITE_REPORTS_FOLDER_ID');
+  return withRetry(() => j(`${GAS}?fn=getReports&folderId=${encodeURIComponent(FOLDER)}`));
+}
+
+// Backward compatibility
+export async function gasGet(fn) {
+  return withRetry(() => j(`${GAS}?fn=${encodeURIComponent(fn)}`));
 }

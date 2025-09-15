@@ -5,7 +5,7 @@
 # 4) npm ci
 # 5) npm run build
 # 6) cp dist/index.html dist/404.html (here via npm run copy-404)
-# 7) npx gh-pages ... --branch gh-pages
+# 7) npx gh-pages ... --branch main
 
 name: Deploy
 
@@ -56,10 +56,9 @@ jobs:
       - name: Create 404 fallback
         run: npm run copy-404
 
-      # 7) Publish to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          keep_files: true
+      # 7) Deploy to main branch
+      - name: Deploy to main branch
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          npx gh-pages -d dist -b main

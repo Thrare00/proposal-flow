@@ -1,4 +1,12 @@
-import React, { useMemo, useState, useCallback, lazy, Suspense } from 'react';
+import { 
+  useMemo, 
+  useState, 
+  useCallback, 
+  useEffect, 
+  useRef,
+  useDeferredValue,
+  memo
+} from 'react';
 import { Link } from 'react-router-dom';
 import { 
   AlertTriangle, 
@@ -23,203 +31,177 @@ import {
 } from '../utils/dateUtils.js';
 import { 
   startOfDay,
-  parseISO, 
-  isBefore, 
-  addDays, 
   endOfDay,
-  isWithinInterval,
   endOfWeek,
   startOfWeek,
-  subDays,
   isAfter,
-  format
+  isToday,
+  isTomorrow,
+  isThisWeek,
+  addDays
 } from 'date-fns';
 import { getUrgencyLevel } from '../utils/statusUtils.js';
+// Import components directly
+import TaskCard from '../components/TaskCard.jsx';
+import ProposalCard from '../components/ProposalCard.jsx';
 
-// Lazy load heavy components with preloading
-const TaskCard = lazy(() => {
-  // Start preloading
-  const taskCard = import('../components/TaskCard.jsx');
-  return taskCard;
-});
+// Skeleton loading components
+const TaskSkeleton = () => (
+  <div className="animate-pulse p-4 border rounded-lg mb-2 bg-gray-50">
+    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+    <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+  </div>
+);
 
-const ProposalCard = lazy(() => {
-  // Start preloading
-  const proposalCard = import('../components/ProposalCard.jsx');
-  return proposalCard;
-});
-
-// Loading component for Suspense fallback
-const LoadingSpinner = ({ text = 'Loading...', size = 'md' }) => {
-  const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-6 w-6',
-    lg: 'h-8 w-8',
-    xl: 'h-10 w-10'
-  };
-  
-  return (
-    <div className="flex items-center justify-center p-4">
-      <Loader2 className={`${sizeClasses[size] || sizeClasses.md} animate-spin text-blue-600 mr-2`} />
-      <span className="text-gray-600">{text}</span>
-    </div>
-  );
-};
-
-// Error state component
-const ErrorState = ({ error, onRetry, className = '' }) => (
-  <div className={`bg-red-50 border-l-4 border-red-500 p-4 rounded-lg ${className}`}>
-    <div className="flex">
-      <div className="flex-shrink-0">
-        <AlertCircle className="h-5 w-5 text-red-500" />
-      </div>
-      <div className="ml-3">
-        <h3 className="text-sm font-medium text-red-800">
-          {error?.message || 'An error occurred while loading reminders'}
-        </h3>
-        <div className="mt-2 text-sm text-red-700">
-          <p>Please try again or contact support if the problem persists.</p>
-          {onRetry && (
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={onRetry}
-                className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                <RefreshCw className="h-3 w-3 mr-1" />
-                Retry
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+const SectionSkeleton = ({ title }) => (
+  <div className="mb-6">
+    <div className="h-6 bg-gray-200 rounded w-1/3 mb-3"></div>
+    <div className="space-y-2">
+      <TaskSkeleton />
+      <TaskSkeleton />
     </div>
   </div>
 );
 
-// Empty state component
-const EmptyState = ({ icon: Icon, title, description, action }) => (
-  <div className="text-center py-12">
-    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-      <Icon className="h-6 w-6 text-blue-600" />
+
+// Error state component with retry functionality
+const ErrorState = memo(({ error, onRetry, className = '' }) => (
+  <div className={`p-4 bg-red-50 border border-red-200 rounded-md ${className}`}>
+    <div className="flex items-center">
+      <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
+      <h3 className="text-sm font-medium text-red-800">Error loading reminders</h3>
     </div>
+    <div className="mt-2 text-sm text-red-700">
+      {error?.message || 'An unknown error occurred'}
+    </div>
+    {onRetry && (
+      <div className="mt-4">
+        <button
+          type="button"
+          onClick={onRetry}
+          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          <RefreshCw className="h-3 w-3 mr-1" />
+          Try Again
+        </button>
+      </div>
+    )}
+  </div>
+));
+
+ErrorState.displayName = 'ErrorState';
+
+// Empty state component with memoization
+const EmptyState = React.memo(({ icon: Icon, title, description, action }) => (
+  <div className="text-center py-8">
+    <Icon className="mx-auto h-12 w-12 text-gray-400" />
     <h3 className="mt-2 text-sm font-medium text-gray-900">{title}</h3>
     <p className="mt-1 text-sm text-gray-500">{description}</p>
     {action && <div className="mt-6">{action}</div>}
   </div>
-);
+));
 
-// Memoized task processing functions
-const processTasks = (proposals) => {
-  if (!Array.isArray(proposals)) return [];
-  
-  return proposals.flatMap(proposal => {
-    if (!proposal?.tasks?.length) return [];
-    
-    return proposal.tasks
-      .map(task => ({
-        ...task,
-        proposalTitle: proposal.title || 'Untitled Proposal',
-        proposalId: proposal.id,
-        dueDate: task.dueDate ? parseISO(task.dueDate) : null,
-        _proposal: { id: proposal.id, title: proposal.title }
-      }))
-      .filter(task => task.dueDate);
-  });
-};
+EmptyState.displayName = 'EmptyState';
 
-// Memoized filter functions
-const filterOverdueTasks = (tasks) => 
-  tasks.filter(task => !task.completed && isBefore(task.dueDate, startOfDay(new Date())));
+// Filter functions will be moved inside the component
 
-const filterTasksThisWeek = (tasks) => {
-  const today = startOfDay(new Date());
-  const endOfThisWeek = endOfWeek(today, { weekStartsOn: 1 });
-  
-  return tasks.filter(task => 
-    !task.completed && 
-    !isBefore(task.dueDate, today) && 
-    isBefore(task.dueDate, endOfThisWeek)
-  );
-};
-
-const filterUpcomingTasks = (tasks) => {
-  const today = startOfDay(new Date());
-  const endOfThisWeek = endOfWeek(today, { weekStartsOn: 1 });
-  
-  return tasks.filter(task => 
-    !task.completed && 
-    isAfter(task.dueDate, endOfThisWeek)
-  );
-};
-
-// Memoized task item component to prevent unnecessary re-renders
-const TaskItem = React.memo(({ task }) => (
+// Simple task item component
+const TaskItem = memo(({ task }) => (
   <div className="mb-2">
     <TaskCard task={task} />
   </div>
 ));
 
+TaskItem.displayName = 'TaskItem';
+
 // Memoized proposal item component to prevent unnecessary re-renders
-const ProposalItem = React.memo(({ proposal }) => (
+const ProposalItem = memo(({ proposal }) => (
   <div className="mb-4">
     <ProposalCard proposal={proposal} />
   </div>
 ));
 
-// Virtualized list component for better performance with large lists
-const VirtualList = React.memo(({ items, renderItem, itemHeight = 100, containerHeight = 400 }) => {
-  const containerRef = React.useRef();
-  const [scrollTop, setScrollTop] = React.useState(0);
-  const [visibleItems, setVisibleItems] = React.useState([]);
-
-  React.useEffect(() => {
-    if (!containerRef.current) return;
-    
-    const container = containerRef.current;
-    const startIndex = Math.floor(scrollTop / itemHeight);
-    const visibleCount = Math.ceil(containerHeight / itemHeight) + 2; // +2 for buffer
-    const endIndex = Math.min(startIndex + visibleCount, items.length - 1);
-    
-    setVisibleItems(items.slice(startIndex, endIndex));
-    
-    const handleScroll = () => setScrollTop(container.scrollTop);
-    container.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [items, scrollTop, itemHeight, containerHeight]);
-
-  return (
-    <div 
-      ref={containerRef}
-      className="overflow-y-auto" 
-      style={{ height: `${containerHeight}px` }}
-    >
-      <div style={{ height: `${items.length * itemHeight}px`, position: 'relative' }}>
-        {visibleItems.map((item, index) => (
-          <div 
-            key={item.id || index}
-            style={{
-              position: 'absolute',
-              top: 0,
-              transform: `translateY(${itemHeight * (items.indexOf(item) - Math.floor(scrollTop / itemHeight)) * itemHeight}px)`,
-              width: '100%',
-              height: `${itemHeight}px`
-            }}
-          >
-            {renderItem(item, index)}
-          </div>
-        ))}
+// Simple list component
+const SimpleList = memo(({ items, renderItem, containerHeight = 400 }) => (
+  <div style={{ maxHeight: containerHeight, overflow: 'auto' }}>
+    {items.map((item, index) => (
+      <div key={item.id || index}>
+        {renderItem({ item, index })}
       </div>
-    </div>
-  );
-});
+    ))}
+  </div>
+));
+
+SimpleList.displayName = 'SimpleList';
+
+// Use SimpleList as the default VirtualList
+const VirtualList = SimpleList;
 
 const Reminders = () => {
   const { proposals = [], isLoading, error } = useProposalContext();
   const [localError, setLocalError] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState('overdue');
+  
+  // Filter functions with memoization
+  const filterOverdueTasks = useCallback((tasks) => {
+    return tasks.filter(task => task.urgency === 'overdue');
+  }, []);
+
+  const filterTasksThisWeek = useCallback((tasks) => {
+    return tasks.filter(task => 
+      task.timeStatus === 'today' || 
+      task.timeStatus === 'tomorrow' || 
+      task.timeStatus === 'this_week'
+    );
+  }, []);
+
+  const filterUpcomingTasks = useCallback((tasks) => {
+    return tasks.filter(task => task.timeStatus === 'upcoming');
+  }, []);
+  
+  // Task processing function
+  const processTasks = useCallback((proposals) => {
+    if (!proposals || !Array.isArray(proposals)) return [];
+    
+    const now = new Date();
+    const weekEnd = endOfWeek(now);
+    
+    return proposals.flatMap(proposal => {
+      if (!proposal || !proposal.tasks) return [];
+      
+      return proposal.tasks
+        .filter(task => task && !task.completed)
+        .map(task => {
+          const dueDate = task.dueDate || task.due_date;
+          const due = dueDate ? new Date(dueDate) : null;
+          let timeStatus = '';
+          
+          if (due) {
+            if (isToday(due)) {
+              timeStatus = 'today';
+            } else if (isTomorrow(due)) {
+              timeStatus = 'tomorrow';
+            } else if (isThisWeek(due)) {
+              timeStatus = 'this_week';
+            } else if (isAfter(due, weekEnd)) {
+              timeStatus = 'upcoming';
+            }
+          }
+          
+          return {
+            ...task,
+            proposalId: proposal.id,
+            proposalTitle: proposal.title,
+            dueDate: due,
+            timeStatus,
+            status: task.status || 'pending',
+            priority: task.priority || 'medium',
+            urgency: getUrgencyLevel(task.status, dueDate)
+          };
+        });
+    });
+  }, []);
   
   // Process tasks with error handling and memoization
   const allTasks = useMemo(() => {
@@ -534,22 +516,20 @@ const Reminders = () => {
       
       {/* Tab Content */}
       <ErrorBoundary>
-        <Suspense fallback={
-          <div className="flex items-center justify-center h-64">
-            <LoadingSpinner text="Loading content..." />
-          </div>
-        }>
-          {tabContent[activeTab] || (
-            <EmptyState 
-              icon={CheckCircle}
-              title="No items found"
-              description="There are no items to display in this section."
-            />
-          )}
-        </Suspense>
+        {tabContent[activeTab] || (
+          <EmptyState 
+            icon={CheckCircle}
+            title="No items found"
+            description="There are no items to display in this section."
+          />
+        )}
       </ErrorBoundary>
     </div>
   );
 };
 
-export default Reminders;
+// Memoize the main component to prevent unnecessary re-renders
+const MemoizedReminders = memo(Reminders);
+MemoizedReminders.displayName = 'MemoizedReminders';
+
+export default MemoizedReminders;

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui';
 import { format } from 'date-fns';
 import { ExternalLink, Loader2, FolderOpen } from 'lucide-react';
 import HealthPanel from '../components/HealthPanel';
-import { gasGet } from '../lib/api';
+import { getReports } from '@/lib/api';
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -19,19 +19,21 @@ export default function Reports() {
         setIsLoading(true);
         setError(null);
         
-        const data = await gasGet('getReports');
-        if (data && Array.isArray(data)) {
+        const data = await getReports();
+        if (data?.reports && Array.isArray(data.reports)) {
           // Sort by updated time (newest first)
-          const sortedReports = [...data].sort((a, b) => 
+          const sortedReports = [...data.reports].sort((a, b) => 
             new Date(b.updatedTime || b.createdTime) - new Date(a.updatedTime || a.createdTime)
           );
           setReports(sortedReports);
         } else {
           setReports([]);
+          throw new Error('Invalid response format from server');
         }
-      } catch (err) {
-        console.error('Error fetching reports:', err);
-        setError('Failed to load reports. ' + (err.message || 'Please try again later.'));
+      } catch (error) {
+        console.error('Error fetching reports:', error);
+        setError(error.message || 'Failed to load reports');
+        setReports([]); // Clear reports on error
       } finally {
         setIsLoading(false);
       }

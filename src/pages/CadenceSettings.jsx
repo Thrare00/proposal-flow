@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { gasGet } from "../lib/api";
-import { enqueue } from "../lib/enqueue";
+import { setCadence, getHealth } from "../lib/api";
 
 const ALL_DAYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 
@@ -25,21 +24,32 @@ export default function CadenceSettings() {
   const applyCadence = async () => {
     setBusy(true);
     try {
-      // 1) Tell Manus watcher to write cadence.json
-      const job = {
-        id: `setcad-${Date.now()}`,
-        action: "set_cadence",
-        payload: { days, time, tz }
-      };
-      await enqueue(job);
-
-      // 2) (Optional) ask Apps Script to rebuild its triggers from Drive
-      const res = await gasGet("rebuildCadence"); // returns { ok:true, rebuilt:true, cfg }
-      if (res?.ok) toast.success("Cadence applied & Apps Script triggers rebuilt.");
-      else toast.warn("Cadence applied. Trigger rebuild returned a warning.");
+      // Set the cadence using the new API function
+      const response = await setCadence({ days, time, tz });
+      
+      if (response?.success) {
+        // If we have a rebuild response, show appropriate message
+        if (response.rebuilt) {
+          toast.success("Cadence applied & Apps Script triggers rebuilt.");
+        } else {
+          toast.success("Cadence applied successfully.");
+        }
+        
+        // Refresh health data to show updated status
+        try {
+          const health = await getHealth();
+          if (health?.last_processed) {
+            toast.info(`Last processed: ${new Date(health.last_processed.timestamp).toLocaleString()}`);
+          }
+        } catch (healthError) {
+          console.warn('Could not refresh health status:', healthError);
+        }
+      } else {
+        throw new Error(response?.error || 'Unknown error applying cadence');
+      }
     } catch (e) {
-      console.error(e);
-      toast.error(`Failed to apply cadence: ${e.message}`);
+      console.error('Cadence update failed:', e);
+      toast.error(`Failed to apply cadence: ${e.message || 'Unknown error'}`);
     } finally {
       setBusy(false);
     }
