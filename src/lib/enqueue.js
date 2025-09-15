@@ -1,9 +1,30 @@
-const QUEUE_URL = import.meta.env.VITE_QUEUE_URL || import.meta.env.VITE_ENQUEUE_ENDPOINT;
-const QUEUE_TOKEN = import.meta.env.VITE_QUEUE_TOKEN;
+// Use a function to safely get environment variables that works during both build and runtime
+function getEnvVar(name, defaultValue = '') {
+  // During build, import.meta.env is not available
+  if (typeof import.meta === 'undefined' || !import.meta.env) {
+    return process.env[name] || defaultValue;
+  }
+  return import.meta.env[name] || process.env[name] || defaultValue;
+}
+
+const QUEUE_URL = getEnvVar('VITE_QUEUE_URL') || getEnvVar('VITE_ENQUEUE_ENDPOINT');
+const QUEUE_TOKEN = getEnvVar('VITE_QUEUE_TOKEN');
 
 export async function enqueue(jobOrArray) {
-  if (!QUEUE_URL) throw new Error('Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables');
-  if (!QUEUE_TOKEN) throw new Error('Missing VITE_QUEUE_TOKEN in environment variables');
+  if (typeof window === 'undefined') {
+    // Skip during SSR/build
+    return { id: 'build-skip', status: 'skipped' };
+  }
+
+  if (!QUEUE_URL) {
+    console.warn('Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables');
+    return { id: 'no-queue-url', status: 'error', error: 'Queue URL not configured' };
+  }
+  
+  if (!QUEUE_TOKEN) {
+    console.warn('Missing VITE_QUEUE_TOKEN in environment variables');
+    return { id: 'no-queue-token', status: 'error', error: 'Queue token not configured' };
+  }
   
   const jobs = Array.isArray(jobOrArray) ? jobOrArray : [jobOrArray];
   const url = `${QUEUE_URL}?fn=enqueue`;
@@ -50,21 +71,35 @@ export async function enqueueJobs(jobs) {
  * @returns {Promise<Object>} Object with connection status
  */
 export async function checkConnectivity() {
-  const endpoint = import.meta.env.VITE_ENQUEUE_ENDPOINT;
-  const token = import.meta.env.VITE_QUEUE_TOKEN;
-
-  if (!endpoint) {
+  if (typeof window === 'undefined') {
+    // Skip during SSR/build
     return {
-      ok: false,
-      status: 0,
-      statusText: "No endpoint configured"
+      connected: true,
+      status: 'skipped',
+      message: 'Skipping connectivity check during build'
+    };
+  }
+
+  if (!QUEUE_URL) {
+    return {
+      connected: false,
+      status: 'error',
+      error: 'Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables',
+    };
+  }
+
+  if (!QUEUE_TOKEN) {
+    return {
+      connected: false,
+      status: 'error',
+      error: 'Missing VITE_QUEUE_TOKEN in environment variables',
     };
   }
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetch(QUEUE_URL, {
       method: 'HEAD',
-      headers: token ? { 'X-Queue-Token': token } : {}
+      headers: QUEUE_TOKEN ? { 'X-Queue-Token': QUEUE_TOKEN } : {}
     });
 
     return {

@@ -15,7 +15,7 @@ import ProposalDevelopmentGuide from './pages/ProposalDevelopmentGuide.jsx';
 import Directories from './pages/Directories.jsx';
 import CeoActions from './pages/CeoActions.jsx';
 import Reports from './pages/Reports.jsx';
-import TestEnqueue from '@/components/TestEnqueue';
+import TestEnqueue from './components/TestEnqueue.jsx';
 
 export default function App() {
   const [showTestEnqueue, setShowTestEnqueue] = useState(false);
