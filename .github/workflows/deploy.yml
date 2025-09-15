@@ -5,7 +5,7 @@
 # 4) npm ci
 # 5) npm run build
 # 6) cp dist/index.html dist/404.html (here via npm run copy-404)
-# 7) npx gh-pages ... --branch main
+# 7) npx gh-pages ... --branch gh-pages
 
 name: Deploy
 
@@ -29,7 +29,15 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      # 3) Cache npm
+      # 3) Verify file paths (case sensitivity check)
+      - name: Verify file paths
+        run: |
+          echo "Checking for input.jsx..."
+          ls -la src/components/ui/
+          echo "Contents of ui directory:"
+          find src/components/ui -type f -exec echo "  {}" \;
+
+      # 4) Cache npm
       - name: Cache npm
         uses: actions/cache@v3
         with:
@@ -38,27 +46,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # 4) Install
+      # 5) Install
       - name: Install dependencies
         run: npm ci
 
-      # 5) Build
+      # 6) Build
       - name: Build
         run: npm run build
 
-      # 5.5) (Optional) HTML validation — left commented until opt-in
+      # 6.5) (Optional) HTML validation — left commented until opt-in
       # - name: Validate HTML (optional)
       #   uses: html-validate/html-validate-action@v1.3.0
       #   with:
       #     path: dist
 
-      # 6) Cross-platform 404 fallback copy (no Windows 'copy')
+      # 7) Cross-platform 404 fallback copy (no Windows 'copy')
       - name: Create 404 fallback
         run: npm run copy-404
 
-      # 7) Deploy to main branch
-      - name: Deploy to main branch
+      # 8) Deploy to gh-pages branch
+      - name: Deploy to gh-pages branch
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          npx gh-pages -d dist -b main
+          npx gh-pages -d dist -b gh-pages
