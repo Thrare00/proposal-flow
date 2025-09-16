@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue.js';
 import { format } from 'date-fns';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '../components/ui/index.js';
 
 // Inline styles for form elements
 const formStyles = {

@@ -1,10 +1,11 @@
-// Use a function to safely get environment variables that works during both build and runtime
+// Safely get environment variables that works in the browser
 function getEnvVar(name, defaultValue = '') {
-  // During build, import.meta.env is not available
-  if (typeof import.meta === 'undefined' || !import.meta.env) {
-    return process.env[name] || defaultValue;
+  // In Vite, environment variables are available under import.meta.env
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[name] || defaultValue;
   }
-  return import.meta.env[name] || process.env[name] || defaultValue;
+  // Fallback to empty string if import.meta.env is not available
+  return defaultValue;
 }
 
 const QUEUE_URL = getEnvVar('VITE_QUEUE_URL') || getEnvVar('VITE_ENQUEUE_ENDPOINT');

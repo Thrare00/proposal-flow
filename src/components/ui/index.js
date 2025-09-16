@@ -1,13 +1,11 @@
-// Core UI components
 export { default as Button } from './button.jsx';
-export { default as Input } from './input.jsx';
-export { default as Label } from './label.jsx';
+export { default as Input }  from './input.jsx';
+export { default as Label }  from './label.jsx';
 
-// Export select components
-export { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+export {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from './select.jsx';

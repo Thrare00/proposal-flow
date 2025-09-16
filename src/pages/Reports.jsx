@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui';
+import { Button } from '../components/ui/index.js';
 import { format } from 'date-fns';
 import { ExternalLink, Loader2, FolderOpen } from 'lucide-react';
-import HealthPanel from '../components/HealthPanel';
-import { getReports } from '@/lib/api';
+import HealthPanel from '../components/HealthPanel.jsx';
+import { getReports } from '../lib/api.js';
 
 export default function Reports() {
   const [reports, setReports] = useState([]);

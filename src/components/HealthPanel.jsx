@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getHealth } from "@/lib/api";
+import { getHealth } from "../lib/api.js";
 
 export default function HealthPanel(){
   const [rows, setRows] = useState([]);
