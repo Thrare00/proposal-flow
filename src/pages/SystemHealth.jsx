@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getHealth, getCadence } from "../lib/api.js";
 import { toast } from "react-toastify";
 import { RefreshCw, AlertCircle, CheckCircle, Clock, Zap, Calendar, AlertTriangle } from "lucide-react";

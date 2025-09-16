@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function UrgencyBadge({ urgency }) {
   const urgencyColors = {
     critical: 'bg-red-100 text-red-800',

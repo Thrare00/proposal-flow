@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { 
   Plus, 
@@ -21,13 +22,41 @@ import { URGENCY_LEVELS } from '../types/index.js';
 const STATUS_OPTIONS = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'];
 
 const Dashboard = () => {
-  const { proposals } = useProposalContext();
+  const { proposals, isLoading, error } = useProposalContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [urgencyFilter, setUrgencyFilter] = useState('all');
 
+  // Handle loading and error states
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border-l-4 border-red-400 p-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <p className="text-sm text-red-700">
+              Failed to load proposals. Please try again later.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Statistics
-  const totalProposals = proposals.length;
+  const totalProposals = proposals?.length || 0;
   const overdueProposals = proposals.filter((p) => 
     isOverdue(p.dueDate) && p.status !== 'submitted'
   ).length;
@@ -39,26 +68,36 @@ const Dashboard = () => {
     p.status === 'submitted'
   ).length;
   
-  // Filter and search proposals
+  // Filter and search proposals with optimizations
   const filteredProposals = useMemo(() => {
-    const urgencyLevels = Object.keys(URGENCY_LEVELS);
+    if (!proposals || !Array.isArray(proposals)) return [];
+    
+    const searchTermLower = searchTerm.toLowerCase();
+    const hasSearchTerm = searchTerm.trim() !== '';
+    const hasStatusFilter = statusFilter !== 'all';
+    const hasUrgencyFilter = urgencyFilter !== 'all';
+    
     return proposals
       .filter((proposal) => {
-        // Search term
-        if (searchTerm && !proposal.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            !proposal.agency.toLowerCase().includes(searchTerm.toLowerCase())) {
+        // Search term (optimized to run only when needed)
+        if (hasSearchTerm) {
+          const titleMatch = proposal.title?.toLowerCase().includes(searchTermLower);
+          const agencyMatch = proposal.agency?.toLowerCase().includes(searchTermLower);
+          if (!titleMatch && !agencyMatch) return false;
+        }
+          
+        // Status filter (skip if 'all' is selected)
+        if (hasStatusFilter && proposal.status !== statusFilter) {
           return false;
         }
         
-        // Status filter
-        if (statusFilter !== 'all' && proposal.status !== statusFilter) {
-          return false;
+        // Urgency filter (skip if 'all' is selected)
+        if (hasUrgencyFilter) {
+          const urgency = getUrgencyLevel(proposal.dueDate);
+          if (urgency !== urgencyFilter) return false;
         }
         
-        // Urgency filter
-        if (urgencyFilter === 'all') return true;
-        const urgency = getUrgencyLevel(proposal.dueDate);
-        return urgency === urgencyFilter;
+        return true;
       })
       .sort((a, b) => {
         // Sort by due date (ascending)
@@ -147,8 +186,9 @@ const Dashboard = () => {
       <div className="bg-white rounded-lg shadow-card p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
+            <label htmlFor="proposal-search" className="sr-only">Search proposals</label>
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search size={18} className="text-gray-400" />
+              <Search size={18} className="text-gray-400" aria-hidden="true" />
             </div>
             <input
               id="proposal-search"
@@ -163,6 +203,7 @@ const Dashboard = () => {
           
           <div className="flex flex-wrap gap-4">
             <div>
+              <label htmlFor="proposal-status-filter" className="sr-only">Filter by status</label>
               <select
                 id="proposal-status-filter"
                 name="proposal-status-filter"
@@ -181,7 +222,9 @@ const Dashboard = () => {
             </div>
             
             <div>
+              <label htmlFor="proposal-urgency-filter" className="sr-only">Filter by urgency</label>
               <select
+                id="proposal-urgency-filter"
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
                 className="form-select"
@@ -292,4 +335,12 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+// Add PropTypes validation
+Dashboard.propTypes = {
+  // Add any props if the component receives any
+};
+
+// Memoize the component to prevent unnecessary re-renders
+const MemoizedDashboard = React.memo(Dashboard);
+
+export default MemoizedDashboard;

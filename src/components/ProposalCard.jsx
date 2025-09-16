@@ -1,4 +1,6 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { 
   Calendar, 
   Building, 
@@ -11,43 +13,74 @@ import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../util
 import { getStatusName, getStatusColor } from '../utils/statusUtils.js';
 import { format } from 'date-fns';
 
-const ProposalCard = ({ proposal, showActions = true }) => {
-  const urgencyLevel = getUrgencyLevel(proposal.dueDate);
+const ProposalCard = ({ proposal = {}, showActions = true }) => {
+  // Safely handle missing or malformed proposal data
+  if (!proposal || typeof proposal !== 'object') {
+    return (
+      <div className="card border-l-4 border-l-gray-300 p-4">
+        <div className="text-gray-500">Invalid proposal data</div>
+      </div>
+    );
+  }
+
+  const { 
+    id, 
+    title = 'Untitled Proposal', 
+    agency = 'No Agency', 
+    dueDate, 
+    status = 'drafting',
+    tasks = [] 
+  } = proposal;
+
+  const urgencyLevel = getUrgencyLevel(dueDate);
   const urgencyColorClass = getUrgencyColor(urgencyLevel);
-  const statusColorClass = getStatusColor(proposal.status);
-  const isTasksCompleted = proposal.tasks.length > 0 && 
-    proposal.tasks.every(task => task.completed);
+  const statusColorClass = getStatusColor(status);
+  const isTasksCompleted = tasks.length > 0 && tasks.every(task => task?.completed);
   
-  const totalTasks = proposal.tasks.length;
-  const completedTasks = proposal.tasks.filter(task => task.completed).length;
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(task => task?.completed).length;
   const taskCompletionPercentage = totalTasks > 0 
     ? Math.round((completedTasks / totalTasks) * 100) 
     : 0;
+    
+  const isOverdueDueDate = isOverdue(dueDate);
   
   return (
-    <div className={`card border-l-4 ${
-      isOverdue(proposal.dueDate) ? 'border-l-error-500' : 
-      urgencyLevel === 'critical' ? 'border-l-error-500' :
-      urgencyLevel === 'high' ? 'border-l-warning-500' :
-      urgencyLevel === 'medium' ? 'border-l-accent-500' :
-      'border-l-success-500'
-    } hover:shadow-md transition-all`}>
+    <div 
+      className={`card border-l-4 ${
+        isOverdueDueDate ? 'border-l-error-500' : 
+        urgencyLevel === 'critical' ? 'border-l-error-500' :
+        urgencyLevel === 'high' ? 'border-l-warning-500' :
+        urgencyLevel === 'medium' ? 'border-l-accent-500' :
+        'border-l-success-500'
+      } hover:shadow-md transition-all`}
+      aria-labelledby={`proposal-${id}-title`}
+    >
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-xl font-semibold line-clamp-1">{proposal.title}</h3>
-        <span className={`badge ${statusColorClass}`}>
-          {getStatusName(proposal.status)}
+        <h3 id={`proposal-${id}-title`} className="text-xl font-semibold line-clamp-1">
+          {title}
+        </h3>
+        <span 
+          className={`badge ${statusColorClass}`}
+          aria-label={`Status: ${getStatusName(status)}`}
+        >
+          {getStatusName(status)}
         </span>
       </div>
       
       <div className="space-y-2 mb-4">
         <div className="flex items-center text-gray-600">
-          <Building size={16} className="mr-2" />
-          <span className="text-sm">{proposal.agency}</span>
+          <Building size={16} className="mr-2" aria-hidden="true" />
+          <span className="text-sm">{agency}</span>
         </div>
         
         <div className="flex items-center">
-          <Calendar size={16} className={`mr-2 ${isOverdue(proposal.dueDate) ? 'text-error-500' : 'text-gray-600'}`} />
-          <span className={`text-sm ${isOverdue(proposal.dueDate) ? 'text-error-600 font-medium' : 'text-gray-600'}`}>
+          <Calendar 
+            size={16} 
+            className={`mr-2 ${isOverdueDueDate ? 'text-error-500' : 'text-gray-600'}`} 
+            aria-hidden="true" 
+          />
+          <span className={`text-sm ${isOverdueDueDate ? 'text-error-600 font-medium' : 'text-gray-600'}`}>
             {isOverdue(proposal.dueDate) ? 'Overdue: ' : 'Due: '}
             {formatDate(proposal.dueDate)}
             {isOverdue(proposal.dueDate) && (
@@ -130,4 +163,31 @@ const ProposalCard = ({ proposal, showActions = true }) => {
   );
 };
 
-export default ProposalCard;
+ProposalCard.propTypes = {
+  proposal: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string,
+    agency: PropTypes.string,
+    dueDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+    status: PropTypes.string,
+    tasks: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      title: PropTypes.string,
+      completed: PropTypes.bool
+    }))
+  }),
+  showActions: PropTypes.bool
+};
+
+ProposalCard.defaultProps = {
+  proposal: {
+    id: '',
+    title: 'Untitled Proposal',
+    agency: 'No Agency',
+    status: 'drafting',
+    tasks: []
+  },
+  showActions: true
+};
+
+export default React.memo(ProposalCard);
