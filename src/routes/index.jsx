@@ -204,8 +204,8 @@ const routes = [
   },
 ];
 
-// Create router with base path
-const BASE_PATH = '/proposal-flow';
+// Create router with base path derived from Vite base URL
+const BASE_PATH = (import.meta.env.BASE_URL || '/proposal-flow/').replace(/\/$/, '');
 
 export const router = createBrowserRouter(routes, {
   basename: BASE_PATH,

@@ -1,12 +1,12 @@
 import { useLoaderData, useNavigation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardHeader } from '../../components/ui/Card.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { ProposalStatusBadge } from '../../components/ProposalStatusBadge.jsx';
-import { UrgencyBadge } from '../../components/UrgencyBadge.jsx';
-import LoadingSpinner from '../../components/LoadingSpinner.jsx';
-import { formatDate } from '../../utils/dateUtils.js';
+import { Card, CardContent, CardHeader } from '../components/ui/card.jsx';
+import Button from '../components/ui/button.jsx';
+import { ProposalStatusBadge } from '../components/ProposalStatusBadge.jsx';
+import { UrgencyBadge } from '../components/UrgencyBadge.jsx';
+import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import { formatDate } from '../utils/dateUtils.js';
 
 /**
  * Displays a list of proposals with filtering and sorting capabilities

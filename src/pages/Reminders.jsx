@@ -690,7 +690,13 @@ const Reminders = () => {
         icon: CheckCircle
       }
     }
-  ];
+  ], [
+    overdueTasks.length,
+    todayTasks.length,
+    upcomingTasks.length,
+    dueProposals.length,
+    completedTasks.length
+  ]);
 
   // Render tab navigation with enhanced accessibility and tooltips
   const renderTabNavigation = () => {
@@ -1115,7 +1121,7 @@ const Reminders = () => {
                   >
                     <X className="h-4 w-4 text-gray-400 hover:text-gray-500" />
                   </button>
-                )}
+                ) : null}
               </div>
             </div>
             

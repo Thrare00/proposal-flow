@@ -5,6 +5,7 @@ import {
   Edit, 
   Trash2, 
   FileText, 
+  FilePieChart,
   Plus, 
   ChevronRight, 
   ChevronLeft, 
@@ -47,20 +48,20 @@ import {
 import { generateUUID } from '../utils/uuid.js';
 import { formatFileSize } from '../utils/formatUtils.js';
 import { useToast } from '../hooks/useToast.js';
-import { Button } from '../components/ui/Button.jsx';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card.jsx';
-import { Badge } from '../components/ui/Badge.jsx';
-import { Separator } from '../components/ui/Separator.jsx';
-import { Skeleton } from '../components/ui/Skeleton.jsx';
-import { Checkbox } from '../components/ui/Checkbox.jsx';
-import { Avatar, AvatarFallback } from '../components/ui/Avatar.jsx';
+import Button from '../components/ui/button.jsx';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card.jsx';
+import { Badge } from '../components/ui/badge.jsx';
+import { Separator } from '../components/ui/separator.jsx';
+import { Skeleton } from '../components/ui/skeleton.jsx';
+import { Checkbox } from '../components/ui/checkbox.jsx';
+import { Avatar, AvatarFallback } from '../components/ui/avatar.jsx';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from '../components/ui/DropdownMenu.jsx';
+} from '../components/ui/dropdownmenu.jsx';
 import TaskCard from '../components/TaskCard.jsx';
 import TaskForm from '../components/TaskForm.jsx';
 
@@ -93,29 +94,6 @@ const ProposalDetails = () => {
   const proposal = id ? getProposal(id) : undefined;
   
   // Calculate task statistics - defined later in the file
-    if (!fileType) return <File size={20} className="text-gray-400" />;
-    
-    const type = fileType.split('/')[0];
-    const extension = fileType.split('/').pop();
-    
-    const iconProps = { className: 'h-5 w-5 text-gray-400' };
-    
-    switch (type) {
-      case 'image':
-        return <FileImage {...iconProps} />;
-      case 'video':
-        return <FileVideo {...iconProps} />;
-      case 'audio':
-        return <FileAudio {...iconProps} />;
-      case 'application':
-        if (['pdf'].includes(extension)) return <FileText {...iconProps} />;
-        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension)) return <FileArchive {...iconProps} />;
-        if (['xls', 'xlsx', 'csv'].includes(extension)) return <FileSpreadsheet {...iconProps} />;
-        return <FileCode {...iconProps} />;
-      default:
-        return <File {...iconProps} />;
-    }
-  };
   
   // Check if there's a task to edit from the query parameter
   useEffect(() => {
@@ -257,14 +235,12 @@ const ProposalDetails = () => {
     }
   }, [proposal.id, proposal.status, updateProposalStatus, addToast]);
   
-  // Function declarations moved to their respective sections
+  // Utility: return an icon for a given MIME type/extension
+  const getFileIcon = (fileType) => {
     if (!fileType) return <File className="h-5 w-5 text-gray-400" />;
-    
     const type = fileType.split('/')[0];
     const extension = fileType.split('/').pop();
-    
     const iconProps = { className: 'h-5 w-5 text-gray-400' };
-    
     switch (type) {
       case 'image':
         return <FileImage {...iconProps} />;

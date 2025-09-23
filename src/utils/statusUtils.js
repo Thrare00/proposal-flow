@@ -1,3 +1,13 @@
+// Canonical ordered status options for UI progress indicators
+export const STATUS_OPTIONS = [
+  { value: 'intake', name: 'Intake' },
+  { value: 'outline', name: 'Outline' },
+  { value: 'drafting', name: 'Drafting' },
+  { value: 'internal_review', name: 'Internal Review' },
+  { value: 'final_review', name: 'Final Review' },
+  { value: 'submitted', name: 'Submitted' },
+];
+
 export const getStatusName = (status) => {
     switch (status) {
         case 'intake': return 'Intake';

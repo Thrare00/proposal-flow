@@ -112,8 +112,8 @@ app.all(`${BASE_PATH}/api/*`, (req, res) => {
   });
 });
 
-// Serve static files from the React app under the base path
-app.use(express.static(path.join(__dirname, 'dist'), {
+// Serve static files from the React app (without base path)
+app.use(express.static(path.join(__dirname, 'docs'), {
   maxAge: '1y',
   etag: true,
   lastModified: true,
@@ -122,6 +122,13 @@ app.use(express.static(path.join(__dirname, 'dist'), {
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
   }
+}));
+
+// Serve static files under the base path as well
+app.use(BASE_PATH, express.static(path.join(__dirname, 'docs'), {
+  maxAge: '1y',
+  etag: true,
+  lastModified: true,
 }));
 
 // API routes should be before the catch-all route
@@ -136,13 +143,18 @@ app.get('/', (req, res) => {
 });
 
 // Serve the SPA for all other routes under the base path
-app.get(`${BASE_PATH}/*`, (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
+app.get([`${BASE_PATH}`, `${BASE_PATH}/*`], (req, res) => {
+  res.sendFile(path.join(__dirname, 'docs', 'index.html'), (err) => {
     if (err) {
       console.error('Error sending file:', err);
       res.status(500).send('Error loading application');
     }
   });
+});
+
+// Catch-all route for any other requests (needs to be after all other routes)
+app.get('*', (req, res) => {
+  res.redirect(BASE_PATH + req.path);
 });
 
 // Error handling middleware

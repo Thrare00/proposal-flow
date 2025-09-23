@@ -1,6 +1,20 @@
-const GAS = import.meta.env.VITE_GAS_URL;
-const HEALTH = import.meta.env.VITE_HEALTH_URL || GAS;
+// Prefer Cloudflare Worker proxy if configured
+const GAS_PROXY = import.meta.env.VITE_GAS_PROXY;
+const GAS = GAS_PROXY || import.meta.env.VITE_GAS_URL;
+const HEALTH = import.meta.env.VITE_HEALTH_URL || GAS_PROXY || import.meta.env.VITE_GAS_URL;
 const FOLDER = import.meta.env.VITE_REPORTS_FOLDER_ID;
+
+// One-time runtime logging to verify endpoints in the deployed bundle
+if (typeof window !== 'undefined' && !window.__PF_ENDPOINTS_LOGGED__) {
+  window.__PF_ENDPOINTS_LOGGED__ = true;
+  // eslint-disable-next-line no-console
+  console.log('[PF] Endpoints:', {
+    GAS_PROXY: import.meta.env.VITE_GAS_PROXY || null,
+    GAS_RESOLVED: GAS,
+    HEALTH_RESOLVED: HEALTH,
+    QUEUE_URL: (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_QUEUE_URL || null)),
+  });
+}
 
 async function j(url, opt) { 
   const r = await fetch(url, {

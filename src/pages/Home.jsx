@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const proposals = localStorage.getItem('proposals');
     if (proposals) {
-      navigate('/proposal-flow/dashboard');
+      navigate('/dashboard');
     }
   }, [navigate]);
 
@@ -37,14 +37,14 @@ const Home = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/proposal-flow/dashboard')}
+              onClick={() => navigate('/dashboard')}
               className="btn btn-primary px-8 py-3 text-lg flex items-center space-x-2"
             >
               <Sparkles size={18} className="animate-pulse" />
               <span>Get Started</span>
             </button>
             <button
-              onClick={() => navigate('/proposal-flow/dashboard/guide')}
+              onClick={() => navigate('/guide')}
               className="btn btn-secondary px-8 py-3 text-lg"
             >
               View Guide

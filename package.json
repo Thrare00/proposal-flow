@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --strictPort --port 3012",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-404.js",
     "preview": "vite preview --port 5010",
     "deploy": "npm run build && git add docs && git commit -m \"Deploy: refresh docs\" || echo \"no changes\" && git push origin main",
+    "start": "node server.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

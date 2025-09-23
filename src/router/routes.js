@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import LoadingSpinner from '../components/ui/loading-spinner.jsx';
 
@@ -26,10 +26,23 @@ const LazyComponent = ({ component: Component }) => (
   </Suspense>
 );
 
+// Create a wrapper component that handles the base path
+const BasePathWrapper = ({ children }) => {
+  const location = useLocation();
+  const basePath = process.env.VITE_BASE_URL || '/proposal-flow';
+  
+  // Redirect to include base path if not present
+  if (!location.pathname.startsWith(basePath)) {
+    return <Navigate to={`${basePath}${location.pathname}`} replace />;
+  }
+  
+  return children;
+};
+
 const routes = [
   {
     path: '/',
-    element: <LazyComponent component={Layout} />,
+    element: <BasePathWrapper><LazyComponent component={Layout} /></BasePathWrapper>,
     errorElement: <LazyComponent component={Error404} />,
     children: [
       {

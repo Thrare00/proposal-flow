@@ -8,7 +8,10 @@ function getEnvVar(name, defaultValue = '') {
   return defaultValue;
 }
 
-const QUEUE_URL = getEnvVar('VITE_QUEUE_URL') || getEnvVar('VITE_ENQUEUE_ENDPOINT');
+// Prefer explicit queue URL; fall back to GAS proxy; then legacy enqueue endpoint
+const QUEUE_URL = getEnvVar('VITE_QUEUE_URL')
+  || getEnvVar('VITE_GAS_PROXY')
+  || getEnvVar('VITE_ENQUEUE_ENDPOINT');
 const QUEUE_TOKEN = getEnvVar('VITE_QUEUE_TOKEN');
 
 export async function enqueue(jobOrArray) {

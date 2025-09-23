@@ -17,6 +17,7 @@ const ConfirmDialog = ({ isOpen, onConfirm, onCancel, title, message, confirmTex
       if (e.key === 'Enter' && e.ctrlKey) onConfirm();
     };
     
+    
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onConfirm, onCancel]);
@@ -471,6 +472,8 @@ export default function CadenceSettings() {
               <span>Save Settings <span className="text-xs opacity-70">(Ctrl+Enter)</span></span>
             )}
           </button>
+        </div>
+        {/* Close any remaining section wrapper inside the form */}
         </div>
       </form>
       
