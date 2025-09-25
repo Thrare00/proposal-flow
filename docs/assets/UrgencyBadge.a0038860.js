@@ -1,0 +1,2 @@
+import{j as r}from"./main.e194e0a1.js";import"./react-vendor.36470f4f.js";function l({urgency:e}){const t={critical:"bg-red-100 text-red-800",high:"bg-orange-100 text-orange-800",medium:"bg-yellow-100 text-yellow-800",low:"bg-green-100 text-green-800"};return r.jsx("span",{className:`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${t[e]}`,children:e.replace("_"," ")})}export{l as U};
+//# sourceMappingURL=UrgencyBadge.a0038860.js.map
