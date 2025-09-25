@@ -1,2 +1,0 @@
-import{j as e}from"./main.77bf0b99.js";import"./react-vendor.36470f4f.js";function o({className:r="",children:s,...a}){return e.jsx("div",{className:`rounded-xl border shadow-sm bg-white ${r}`,...a,children:s})}function d({className:r="",children:s,...a}){return e.jsx("div",{className:`p-4 border-b ${r}`,...a,children:s})}function i({className:r="",children:s,...a}){return e.jsx("div",{className:`p-4 ${r}`,...a,children:s})}export{o as C,d as a,i as b};
-//# sourceMappingURL=card.4474f4bc.js.map
