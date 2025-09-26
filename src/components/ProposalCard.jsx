@@ -179,15 +179,6 @@ ProposalCard.propTypes = {
   showActions: PropTypes.bool
 };
 
-ProposalCard.defaultProps = {
-  proposal: {
-    id: '',
-    title: 'Untitled Proposal',
-    agency: 'No Agency',
-    status: 'drafting',
-    tasks: []
-  },
-  showActions: true
-};
+// defaultProps removed; using default parameters in the function signature
 
 export default React.memo(ProposalCard);

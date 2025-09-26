@@ -293,6 +293,32 @@ const Dashboard = () => {
               <p className="text-sm text-gray-500">Generate and view reports</p>
             </div>
           </Link>
+
+          <Link 
+            to="/settings?tab=cadence"
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex items-center space-x-4"
+          >
+            <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
+              <Clock className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">Cadence</h3>
+              <p className="text-sm text-gray-500">Adjust follow-up and reminder cadence</p>
+            </div>
+          </Link>
+
+          <Link 
+            to="/settings?tab=health"
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex items-center space-x-4"
+          >
+            <div className="p-3 bg-teal-100 rounded-full text-teal-600">
+              <CheckCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">System Health</h3>
+              <p className="text-sm text-gray-500">Check API connectivity and status</p>
+            </div>
+          </Link>
         </div>
       </div>
 

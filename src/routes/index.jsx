@@ -29,6 +29,11 @@ const MarketResearch = lazy(() => import('../pages/MarketResearch'));
 const CadenceSettings = lazy(() => import('../pages/CadenceSettings'));
 const Directories = lazy(() => import('../pages/Directories'));
 const SystemHealth = lazy(() => import('../pages/SystemHealth'));
+const SettingsTabs = lazy(() => import('../pages/SettingsTabs'));
+const CeoActions = lazy(() => import('../pages/CeoActions'));
+const CeoActionsTabs = lazy(() => import('../pages/CeoActionsTabs'));
+const FlowBoardTabs = lazy(() => import('../pages/FlowBoardTabs'));
+const ProposalsTabs = lazy(() => import('../pages/ProposalsTabs'));
 
 // Guides & Help
 const AIAgentGuide = lazy(() => import('../pages/AIAgentGuide'));
@@ -85,26 +90,23 @@ const routes = [
         element: React.createElement(LazyComponent, { component: LandingPage }),
       },
 
-      // Proposal Management
+      // Proposals (tabbed)
       {
         path: 'proposals',
+        element: React.createElement(LazyComponent, { component: ProposalsTabs }),
+      },
+      // Legacy proposal subroutes (avoid 404s on old links)
+      { path: 'proposals/new', element: React.createElement(LazyComponent, { component: ProposalForm }) },
+      { path: 'proposals/:id', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
+      { path: 'proposals/edit/:id', element: React.createElement(LazyComponent, { component: ProposalForm }) },
+      // Legacy proposal routes (kept for back-compat)
+      {
+        path: 'proposals/legacy',
         children: [
-          {
-            index: true,
-            element: React.createElement(LazyComponent, { component: ProposalList }),
-          },
-          {
-            path: 'new',
-            element: React.createElement(LazyComponent, { component: ProposalForm }),
-          },
-          {
-            path: ':id',
-            element: React.createElement(LazyComponent, { component: ProposalDetails }),
-          },
-          {
-            path: 'edit/:id',
-            element: React.createElement(LazyComponent, { component: ProposalForm }),
-          },
+          { index: true, element: React.createElement(LazyComponent, { component: ProposalList }) },
+          { path: 'new', element: React.createElement(LazyComponent, { component: ProposalForm }) },
+          { path: ':id', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
+          { path: 'edit/:id', element: React.createElement(LazyComponent, { component: ProposalForm }) },
         ],
       },
 
@@ -134,23 +136,33 @@ const routes = [
         element: React.createElement(LazyComponent, { component: MarketResearch }),
       },
 
+      // Top-level utility pages
+      {
+        path: 'directories',
+        element: React.createElement(LazyComponent, { component: Directories }),
+      },
+      {
+        path: 'ceo-actions',
+        element: React.createElement(LazyComponent, { component: CeoActionsTabs }),
+      },
+
       // Settings & Configuration
       {
         path: 'settings',
-        children: [
-          {
-            path: 'cadence',
-            element: React.createElement(LazyComponent, { component: CadenceSettings }),
-          },
-          {
-            path: 'directories',
-            element: React.createElement(LazyComponent, { component: Directories }),
-          },
-          {
-            path: 'system-health',
-            element: React.createElement(LazyComponent, { component: SystemHealth }),
-          },
-        ],
+        element: React.createElement(LazyComponent, { component: SettingsTabs }),
+      },
+      // Keep legacy nested settings routes working
+      {
+        path: 'settings/cadence',
+        element: React.createElement(LazyComponent, { component: CadenceSettings }),
+      },
+      {
+        path: 'settings/directories',
+        element: React.createElement(LazyComponent, { component: Directories }),
+      },
+      {
+        path: 'settings/system-health',
+        element: React.createElement(LazyComponent, { component: SystemHealth }),
       },
 
       // Guides & Help

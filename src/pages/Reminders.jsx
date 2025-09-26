@@ -58,6 +58,7 @@ import { getUrgencyLevel } from '../utils/statusUtils.js';
 // Import components directly
 import TaskCard from '../components/TaskCard.jsx';
 import ProposalCard from '../components/ProposalCard.jsx';
+import LoadingSpinner from '../components/LoadingSpinner.jsx';
 
 // Skeleton loading components
 const TaskSkeleton = () => (
@@ -622,81 +623,6 @@ const Reminders = () => {
       </div>
     )
   };
-  
-  // Tab configuration with enhanced accessibility and visual feedback
-  const tabs = useMemo(() => [
-    { 
-      id: 'overdue', 
-      label: 'Overdue', 
-      icon: AlertTriangle, 
-      count: overdueTasks.length, 
-      badgeClass: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200',
-      description: 'Tasks and proposals that are past their due date',
-      emptyState: {
-        title: 'No overdue items',
-        description: 'Great job! You\'re all caught up with your tasks and proposals.',
-        icon: CheckCircle
-      }
-    },
-    { 
-      id: 'today', 
-      label: 'Today', 
-      icon: Clock, 
-      count: todayTasks.length, 
-      badgeClass: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200',
-      description: 'Tasks and proposals due today',
-      emptyState: {
-        title: 'Nothing due today',
-        description: 'No tasks or proposals are due today. Enjoy your day!',
-        icon: CheckCircle
-      }
-    },
-    { 
-      id: 'upcoming', 
-      label: 'Upcoming', 
-      icon: Calendar, 
-      count: upcomingTasks.length, 
-      badgeClass: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200',
-      description: 'Tasks and proposals due in the next 7 days',
-      emptyState: {
-        title: 'No upcoming items',
-        description: 'You have no tasks or proposals due in the next 7 days.',
-        icon: Calendar
-      }
-    },
-    { 
-      id: 'proposals', 
-      label: 'Proposals Due', 
-      icon: FileText, 
-      count: dueProposals.length, 
-      badgeClass: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300',
-      description: 'Proposals with approaching deadlines',
-      emptyState: {
-        title: 'No proposals due soon',
-        description: 'You have no proposals with approaching deadlines.',
-        icon: FileText
-      }
-    },
-    { 
-      id: 'completed', 
-      label: 'Completed', 
-      icon: CheckCircle,
-      count: completedTasks.length, 
-      badgeClass: 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200',
-      description: 'Recently completed tasks and proposals',
-      emptyState: {
-        title: 'No completed items',
-        description: 'Completed tasks and proposals will appear here.',
-        icon: CheckCircle
-      }
-    }
-  ], [
-    overdueTasks.length,
-    todayTasks.length,
-    upcomingTasks.length,
-    dueProposals.length,
-    completedTasks.length
-  ]);
 
   // Render tab navigation with enhanced accessibility and tooltips
   const renderTabNavigation = () => {

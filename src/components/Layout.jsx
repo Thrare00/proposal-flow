@@ -1,14 +1,8 @@
 import { 
   LayoutDashboard, 
-  CalendarDays, 
   LayoutGrid, 
   Menu,
   ChevronLeft,
-  Plus,
-  BookOpen,
-  FileSearch,
-  Clipboard,
-  TestTube2,
   Activity
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
@@ -21,14 +15,8 @@ import AutomationConsole from './AutomationConsole';
 const navigationItems = [
   { to: '/', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
   { to: 'flowboard', icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-  { to: 'calendar', icon: <CalendarDays size={18} />, label: 'Calendar' },
-  { to: 'reports', icon: <Clipboard size={18} />, label: 'Reports' },
-  { to: 'cadence', icon: <CalendarDays size={18} />, label: 'Cadence Settings' },
-  { to: 'health', icon: <Activity size={18} />, label: 'System Health' },
-  { to: 'guide', icon: <BookOpen size={18} />, label: 'Guide' },
-  { to: 'reminders', icon: <Clipboard size={18} />, label: 'Reminders' },
-  { to: 'proposals/new', icon: <Plus size={18} />, label: 'New Proposal' },
-  { to: 'sow-analyzer', icon: <FileSearch size={18} />, label: 'SOW Analyzer' },
+  { to: 'ceo-actions', icon: <Activity size={18} />, label: 'CEO Actions' },
+  { to: 'proposals', icon: <LayoutGrid size={18} />, label: 'Proposals' },
 ];
 
 const Layout = ({ children }) => {
@@ -83,15 +71,7 @@ const Layout = ({ children }) => {
 
       <main className="flex-1 pt-16">
         <div className="ml-64 md:ml-64">
-          <div className="flex justify-end mb-6 p-4">
-            <NavLink 
-              to="proposals/new" 
-              className="btn btn-primary bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-900 dark:hover:bg-primary-800"
-            >
-              <Plus size={18} />
-              <span>New Proposal</span>
-            </NavLink>
-          </div>
+          <div className="flex justify-end mb-6 p-4"></div>
           <div className="p-4">
             <Outlet />
             {children}

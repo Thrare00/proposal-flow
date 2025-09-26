@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/proposal-flow/" />
+    <!-- Base href removed; router basename and Vite asset paths handle base in GH Pages -->
     <title>Proposal Flow</title>
     <meta http-equiv="Content-Security-Policy"
       content="
@@ -13,7 +13,7 @@
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: https:;
         font-src 'self' data:;
-        connect-src 'self' https://script.google.com https://script.googleapis.com https://*.googleusercontent.com http://127.0.0.1:1605/;
+        connect-src 'self' https://proposal-flow.rareearthcontracting.workers.dev https://script.google.com https://script.googleapis.com https://*.googleusercontent.com http://127.0.0.1:1605/;
         frame-src 'self' https://script.google.com https://docs.google.com;
         object-src 'none';
         base-uri 'self';
@@ -21,7 +21,6 @@
         worker-src 'self' blob:;
         media-src 'self';
       ">
-    <base href="/" />
     <meta name="theme-color" content="#1E40AF" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1D4ED8" media="(prefers-color-scheme: dark)" />
   </head>

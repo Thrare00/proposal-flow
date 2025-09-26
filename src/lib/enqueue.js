@@ -101,8 +101,10 @@ export async function checkConnectivity() {
   }
 
   try {
-    const response = await fetch(QUEUE_URL, {
-      method: 'HEAD',
+    const healthUrl = `${QUEUE_URL}?fn=getHealth`;
+    const response = await fetch(healthUrl, {
+      method: 'GET',
+      mode: 'cors',
       headers: QUEUE_TOKEN ? { 'X-Queue-Token': QUEUE_TOKEN } : {}
     });
 
