@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Fragment, useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -22,13 +22,8 @@ import {
   FileCode,
   FileAudio,
   FileVideo,
-  File,
-  MoreHorizontal,
-  Check,
-  User,
-  Calendar
+  File
 } from 'lucide-react';
-import PropTypes from 'prop-types';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
 import { 
   getStatusName, 
@@ -40,7 +35,6 @@ import {
 import { 
   formatDate, 
   getUrgencyLevel, 
-  getUrgencyColor, 
   getUrgencyBorderColor,
   isOverdue,
   getDaysUntilDue
@@ -49,19 +43,10 @@ import { generateUUID } from '../utils/uuid.js';
 import { formatFileSize } from '../utils/formatUtils.js';
 import { useToast } from '../hooks/useToast.js';
 import Button from '../components/ui/button.jsx';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card.jsx';
+import { Card, CardContent, CardHeader } from '../components/ui/card.jsx';
 import { Badge } from '../components/ui/badge.jsx';
 import { Separator } from '../components/ui/separator.jsx';
 import { Skeleton } from '../components/ui/skeleton.jsx';
-import { Checkbox } from '../components/ui/checkbox.jsx';
-import { Avatar, AvatarFallback } from '../components/ui/avatar.jsx';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '../components/ui/dropdownmenu.jsx';
 import TaskCard from '../components/TaskCard.jsx';
 import TaskForm from '../components/TaskForm.jsx';
 
@@ -153,55 +138,11 @@ const ProposalDetails = () => {
     }
   }, [proposal, isLoading, isProposalLoading, id, navigate, addToast]);
   
-  // Show loading state
-  if (isLoading || isProposalLoading) {
-    return (
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="space-y-6">
-          <Skeleton className="h-8 w-48" />
-          <div className="space-y-4">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-64 w-full" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  // Show error state
-  if (error || proposalError) {
-    return (
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="bg-error-50 border-l-4 border-error-400 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertCircle className="h-5 w-5 text-error-400" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-error-700">
-                {error || proposalError || 'An unknown error occurred'}
-              </p>
-            </div>
-          </div>
-        </div>
-        <Button onClick={() => window.location.reload()} variant="outline">
-          Try Again
-        </Button>
-      </div>
-    );
-  }
-  
-  if (!proposal) {
-    return null; // Should be caught by the redirect effect
-  }
-  
-  const urgencyLevel = getUrgencyLevel(proposal.dueDate);
-  const urgencyColorClass = getUrgencyColor(urgencyLevel);
+  const urgencyLevel = getUrgencyLevel(proposal?.dueDate);
   const urgencyBorderClass = getUrgencyBorderColor(urgencyLevel);
-  const statusColorClass = getStatusColor(proposal.status);
-  const daysUntilDue = getDaysUntilDue(proposal.dueDate);
-  const isProposalOverdue = isOverdue(proposal.dueDate);
+  const statusColorClass = getStatusColor(proposal?.status);
+  const daysUntilDue = getDaysUntilDue(proposal?.dueDate);
+  const isProposalOverdue = isOverdue(proposal?.dueDate);
   
   const handleStatusChange = useCallback(async (direction) => {
     try {
@@ -233,7 +174,7 @@ const ProposalDetails = () => {
       setIsSubmitting(false);
       setEditingTaskId(undefined);
     }
-  }, [proposal.id, proposal.status, updateProposalStatus, addToast]);
+  }, [proposal?.id, proposal?.status, updateProposalStatus, addToast]);
   
   // Utility: return an icon for a given MIME type/extension
   const getFileIcon = (fileType) => {
@@ -413,35 +354,6 @@ const ProposalDetails = () => {
     }
   };
   
-  // Toggle task completion status
-  const handleTaskToggle = async (taskId, completed) => {
-    try {
-      const updatedTasks = proposal.tasks.map(task => 
-        task.id === taskId ? { ...task, completed } : task
-      );
-      
-      await updateProposal(proposal.id, {
-        tasks: updatedTasks
-      });
-      
-      const task = proposal.tasks.find(t => t.id === taskId);
-      if (task) {
-        addToast({
-          title: `Task ${completed ? 'completed' : 'marked incomplete'}`,
-          description: `"${task.title}" has been ${completed ? 'completed' : 'marked as incomplete'}`,
-          variant: 'default'
-        });
-      }
-    } catch (err) {
-      console.error('Error updating task status:', err);
-      addToast({
-        title: 'Update failed',
-        description: 'Failed to update task status. Please try again.',
-        variant: 'destructive'
-      });
-    }
-  };
-  
   // Task form handlers - defined later in the file
 
   // Sort tasks - incomplete first (ordered by due date), then completed
@@ -464,7 +376,7 @@ const ProposalDetails = () => {
       
       return dateA.getTime() - dateB.getTime();
     });
-  }, [proposal.tasks]);
+  }, [proposal?.tasks]);
   
   // Calculate task completion stats
   const taskStats = useMemo(() => {
@@ -475,13 +387,23 @@ const ProposalDetails = () => {
     const percent = Math.round((completed / total) * 100) || 0;
     
     return { total, completed, percent };
-  }, [proposal.tasks]);
+  }, [proposal?.tasks]);
   
   // Determine if the proposal is in a final state
   const isFinalState = useMemo(() => {
     const finalStatuses = ['submitted', 'awarded', 'rejected', 'withdrawn'];
     return finalStatuses.includes(proposal.status);
-  }, [proposal.status]);
+  }, [proposal?.status]);
+
+  const openTaskForm = () => {
+    setEditingTaskId(undefined);
+    setShowTaskForm(true);
+  };
+
+  const closeTaskForm = () => {
+    setEditingTaskId(undefined);
+    setShowTaskForm(false);
+  };
 
   // Format due date with relative time
   const formatDueDate = (dateString) => {
@@ -500,6 +422,49 @@ const ProposalDetails = () => {
     
     return formatDate(dateString, 'MMM d, yyyy');
   };
+
+  // Show loading state
+  if (isLoading || isProposalLoading) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-48" />
+          <div className="space-y-4">
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-64 w-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Show error state
+  if (error || proposalError) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <div className="bg-error-50 border-l-4 border-error-400 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertCircle className="h-5 w-5 text-error-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-error-700">
+                {error || proposalError || 'An unknown error occurred'}
+              </p>
+            </div>
+          </div>
+        </div>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Try Again
+        </Button>
+      </div>
+    );
+  }
+  
+  if (!proposal) {
+    return null; // Should be caught by the redirect effect
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -674,7 +639,7 @@ const ProposalDetails = () => {
                 {/* Status progress indicator */}
                 <div className="hidden md:flex items-center ml-6">
                   {STATUS_OPTIONS.map((status, index) => (
-                    <React.Fragment key={status.value}>
+                    <Fragment key={status.value}>
                       {index > 0 && (
                         <div className={`h-0.5 w-8 ${
                           index <= STATUS_OPTIONS.findIndex(s => s.value === proposal.status) 
@@ -695,7 +660,7 @@ const ProposalDetails = () => {
                           <span className="text-xs font-medium">{index + 1}</span>
                         )}
                       </div>
-                    </React.Fragment>
+                    </Fragment>
                   ))}
                 </div>
               </div>
@@ -856,7 +821,7 @@ const ProposalDetails = () => {
                 )}
               </div>
             </div>
-            <Button onClick={addTask} className="mt-2 sm:mt-0">
+            <Button onClick={openTaskForm} className="mt-2 sm:mt-0">
               <Plus size={16} className="mr-2" />
               Add Task
             </Button>
@@ -894,7 +859,7 @@ const ProposalDetails = () => {
               <p className="text-sm text-gray-500 mb-4">
                 Add tasks to keep track of what needs to be done for this proposal
               </p>
-              <Button onClick={addTask}>
+              <Button onClick={openTaskForm}>
                 <Plus size={16} className="mr-2" />
                 Add your first task
               </Button>
@@ -907,8 +872,10 @@ const ProposalDetails = () => {
       {showTaskForm && (
         <TaskForm 
           proposalId={proposal.id} 
-          taskId={editingTaskId}
+          editingTaskId={editingTaskId}
           onClose={closeTaskForm} 
+          onTaskSaved={closeTaskForm}
+          onDeleteTask={handleDeleteTask}
         />
       )}
     </div>

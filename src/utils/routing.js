@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const ROUTES = {
   ROOT: '/',
@@ -20,20 +20,22 @@ export const ROUTES = {
   SETTINGS: '/dashboard/settings'
 };
 
+const getRoutePrefix = (pathname = '') => {
+  const isGitHubPages = pathname.startsWith('/proposal-flow');
+  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+
+  return isGitHubPages ? '/proposal-flow' : isDev ? '' : '/dashboard';
+};
+
 export const useRoutePrefix = () => {
   const location = useLocation();
-  const isGitHubPages = location.pathname.startsWith('/proposal-flow');
-  const isDev = window.location.hostname === 'localhost';
-  
-  return isGitHubPages 
-    ? '/proposal-flow'
-    : isDev 
-    ? ''
-    : '/dashboard';
+  return getRoutePrefix(location.pathname);
 };
 
 export const getRoutePath = (path, params = {}) => {
-  const prefix = useRoutePrefix();
+  const prefix = getRoutePrefix(
+    typeof window !== 'undefined' ? window.location.pathname : ''
+  );
   let route = `${prefix}${path}`;
   
   // Replace parameter placeholders

@@ -5,12 +5,9 @@ import {
   Save, 
   Calendar, 
   User, 
-  Clock,
+  Check,
   AlertCircle,
-  AlertTriangle,
-  CheckCircle2,
   ChevronDown,
-  Plus,
   Trash2
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
@@ -69,7 +66,7 @@ const validateForm = (formData) => {
   return errors;
 };
 
-const TaskForm = ({ onClose, proposalId, editingTaskId, onTaskSaved }) => {
+const TaskForm = ({ onClose, proposalId, editingTaskId, onTaskSaved, onDeleteTask }) => {
   const { addTask, updateTask, getTask, generateUUID } = useProposalContext();
   const [formData, setFormData] = useState({
     id: '',
@@ -232,9 +229,9 @@ const TaskForm = ({ onClose, proposalId, editingTaskId, onTaskSaved }) => {
       };
 
       if (editingTaskId && updateTask) {
-        await updateTask(taskData);
+        await updateTask(proposalId, editingTaskId, taskData);
       } else if (addTask) {
-        await addTask(taskData);
+        await addTask(proposalId, taskData);
       }
       
       // Notify parent component that task was saved
@@ -746,6 +743,8 @@ const TaskForm = ({ onClose, proposalId, editingTaskId, onTaskSaved }) => {
                 <button
                   type="button"
                   onClick={async () => {
+                    if (!onDeleteTask) return;
+
                     if (window.confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
                       try {
                         setIsSubmitting(true);

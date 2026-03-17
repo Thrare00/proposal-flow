@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { UrgencyBadge } from './UrgencyBadge.jsx';
 import { formatDate, isOverdue } from '../utils/dateUtils.js';
-import { format } from 'date-fns';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
 
 const TaskCard = ({ task, showProposalLink, onEdit, onDelete }) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
 
 export const NotificationService = () => {
@@ -28,7 +28,7 @@ export const NotificationService = () => {
           }
 
           if (timeDiff < 60000 && !localStorage.getItem(`notified-${event.id}`)) {
-            const notification = new Notification(`Upcoming Deadline: ${event.title}`, {
+            new Notification(`Upcoming Deadline: ${event.title}`, {
               body: event.description || 'Custom event deadline approaching.',
               icon: '/favicon.ico',
               tag: event.id

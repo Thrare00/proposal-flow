@@ -6,8 +6,6 @@ import { createPortal } from "react-dom";
 
 // Confirmation Dialog Component
 const ConfirmDialog = ({ isOpen, onConfirm, onCancel, title, message, confirmText = "Confirm", cancelText = "Cancel" }) => {
-  if (!isOpen) return null;
-  
   const dialogRef = useRef(null);
   
   // Close on Escape key
@@ -29,6 +27,8 @@ const ConfirmDialog = ({ isOpen, onConfirm, onCancel, title, message, confirmTex
       if (focusable.length > 0) focusable[0].focus();
     }
   }, [isOpen]);
+
+  if (!isOpen) return null;
   
   return createPortal(
     <div 
@@ -226,6 +226,19 @@ export default function CadenceSettings() {
     setCustomTz(value);
     if (value) {
       setTz(value);
+    }
+  };
+
+  const handleFormKeyDown = (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      handleSubmit(e);
+    }
+  };
+
+  const handleDayKeyDown = (day, e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      toggleDay(day);
     }
   };
 

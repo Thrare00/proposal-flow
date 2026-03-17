@@ -11,8 +11,6 @@ import {
 } from 'lucide-react';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils.js';
 import { getStatusName, getStatusColor } from '../utils/statusUtils.js';
-import { format } from 'date-fns';
-
 const ProposalCard = ({ proposal = {}, showActions = true }) => {
   // Safely handle missing or malformed proposal data
   if (!proposal || typeof proposal !== 'object') {

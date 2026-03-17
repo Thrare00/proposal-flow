@@ -69,6 +69,27 @@ const AIAgentGuide = () => {
       )
     },
     {
+      id: 'solicitations-proposal-sme',
+      title: 'Solicitations-Proposal SME',
+      icon: <Brain className="w-5 h-5 text-indigo-500" />,
+      content: (
+        <div className="prose dark:prose-invert max-w-none">
+          <h4>What this specialist owns:</h4>
+          <ul>
+            <li>Solicitation intake and opportunity triage</li>
+            <li>Compliance matrix creation from sections, clauses, and attachments</li>
+            <li>Proposal response strategy, win themes, and evaluation alignment</li>
+            <li>Hand-off of technical implementation work to the right coding or research sub-agent</li>
+          </ul>
+          <p>
+            Use this SME when the workflow needs a specialist that can interpret a solicitation,
+            convert it into an actionable proposal plan, and coordinate the rest of the system
+            without losing compliance context.
+          </p>
+        </div>
+      )
+    },
+    {
       id: 'data',
       title: 'Data Management',
       icon: <Database className="w-5 h-5 text-yellow-500" />,

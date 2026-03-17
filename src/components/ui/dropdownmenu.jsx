@@ -1,5 +1,3 @@
-import React, { useState, useRef, useEffect } from 'react';
-
 export function DropdownMenu({ children }) {
   return <div className="relative inline-block text-left">{children}</div>;
 }

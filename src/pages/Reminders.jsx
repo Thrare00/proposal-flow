@@ -469,15 +469,6 @@ const Reminders = () => {
     }
   }, [allTasks, proposals]);
   
-  // Show loading state
-  if (isLoading || isProcessing) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner text="Loading reminders..." />
-      </div>
-    );
-  }
-  
   // Memoize the render functions for VirtualList
   const renderTaskItem = useCallback((task) => (
     <div key={task.id} className="mb-2">
@@ -974,6 +965,15 @@ const Reminders = () => {
       </div>
     );
   };
+
+  // Show loading state after hooks are declared
+  if (isLoading || isProcessing) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner text="Loading reminders..." />
+      </div>
+    );
+  }
 
   // Show error state if there's an error
   if (error || localError) {

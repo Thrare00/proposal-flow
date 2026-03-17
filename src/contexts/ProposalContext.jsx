@@ -333,6 +333,7 @@ export const ProposalProvider = ({ children }) => {
         updateProposal,
         deleteProposal,
         getProposal,
+        updateTaskStatus,
         updateProposalStatus,
         addTask,
         updateTask,
