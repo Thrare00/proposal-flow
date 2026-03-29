@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2, AlertTriangle, X, Check } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
+import { normalizeProposalType } from '../../shared/proposalNormalization.js';
 
 // Confirmation Dialog Component
 const ConfirmationDialog = ({ 
@@ -108,7 +109,7 @@ const ProposalForm = () => {
       : '',
     status: existingProposal?.status || 'intake',
     notes: existingProposal?.notes || '',
-    type: existingProposal?.type || 'federal'
+    type: normalizeProposalType(existingProposal?.type) || 'federal'
   });
   
   const [errors, setErrors] = useState({});
@@ -179,7 +180,7 @@ const ProposalForm = () => {
         agency: formData.agency.trim(),
         dueDate: new Date(`${formData.dueDate}T12:00:00`).toISOString(),
         status: formData.status,
-        type: formData.type,
+        type: normalizeProposalType(formData.type),
         notes: formData.notes.trim(),
       };
       
@@ -352,10 +353,15 @@ const ProposalForm = () => {
                 aria-label="Select proposal status"
               >
                 <option value="intake">Intake</option>
-                <option value="in_progress">In Progress</option>
+                <option value="qualification">Qualification</option>
+                <option value="pre_solicitation">Pre-Solicitation Brief</option>
+                <option value="research">Research</option>
+                <option value="technical_compliance">Technical / Compliance</option>
+                <option value="pricing_packaging">Pricing / Packaging</option>
+                <option value="drafting">Claude Drafting</option>
+                <option value="review">ChatGPT Review</option>
+                <option value="google_docs_final">Google Docs Final</option>
                 <option value="submitted">Submitted</option>
-                <option value="awarded">Awarded</option>
-                <option value="not_awarded">Not Awarded</option>
               </select>
             </div>
             
@@ -372,8 +378,7 @@ const ProposalForm = () => {
                 aria-label="Select proposal type"
               >
                 <option value="federal">Federal</option>
-                <option value="state">State</option>
-                <option value="local">Local</option>
+                <option value="state_local">State / Local</option>
                 <option value="commercial">Commercial</option>
               </select>
             </div>

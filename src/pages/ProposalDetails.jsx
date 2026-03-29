@@ -25,6 +25,7 @@ import {
   File
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
+import { enqueue } from '../lib/enqueue.js';
 import { 
   getStatusName, 
   getStatusColor, 
@@ -322,6 +323,28 @@ const ProposalDetails = () => {
     setEditingTaskId(taskId);
     setShowTaskForm(true);
   };
+
+  const runAutomationAction = useCallback(async (action) => {
+    try {
+      setIsSubmitting(true);
+      await enqueue({ action, payload: { proposalId: proposal.id } });
+      await context.fetchProposals();
+      addToast({
+        title: 'Automation queued',
+        description: `${action} has been queued for this proposal.`,
+        variant: 'default',
+      });
+    } catch (err) {
+      console.error(`Failed to queue ${action}:`, err);
+      addToast({
+        title: 'Automation failed',
+        description: err.message || `Failed to queue ${action}.`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [addToast, context, proposal?.id]);
 
   const handleDeleteTask = async (taskId) => {
     const taskToDelete = proposal.tasks?.find(t => t.id === taskId);
@@ -696,6 +719,64 @@ const ProposalDetails = () => {
             </div>
           </div>
         </div>
+      </Card>
+
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold">Automation Pipeline</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Pre-solicitation operations from intake through Google Docs finalization
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => runAutomationAction('upload_solicitation_documents')} disabled={isSubmitting}>
+                Attach Solicitation Docs
+              </Button>
+              <Button variant="outline" onClick={() => runAutomationAction('proposal_overview')} disabled={isSubmitting}>
+                Generate Overview
+              </Button>
+              <Button onClick={() => runAutomationAction('build_proposal_draft')} disabled={isSubmitting}>
+                Build Proposal Draft
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-md border p-4">
+              <div className="text-sm text-gray-500">Overview</div>
+              <div className="font-medium">{proposal.metadata?.draftOverviewStatus || 'pending'}</div>
+            </div>
+            <div className="rounded-md border p-4">
+              <div className="text-sm text-gray-500">Proposal Draft</div>
+              <div className="font-medium">{proposal.metadata?.proposalDraftStatus || 'pending'}</div>
+            </div>
+            <div className="rounded-md border p-4">
+              <div className="text-sm text-gray-500">Fit Score</div>
+              <div className="font-medium">{proposal.metadata?.fitScore ?? 'n/a'}</div>
+            </div>
+          </div>
+
+          {proposal.metadata?.workflowSteps?.length ? (
+            <div className="space-y-3">
+              {proposal.metadata.workflowSteps.map((step) => (
+                <div key={step.id} className="flex items-start justify-between rounded-md border p-3">
+                  <div>
+                    <div className="font-medium text-gray-900">{step.label}</div>
+                    <div className="text-sm text-gray-500">{step.stage}</div>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {formatDate(step.timestamp, 'N/A')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">No workflow steps recorded yet.</p>
+          )}
+        </CardContent>
       </Card>
       
       {/* Files section */}
