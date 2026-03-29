@@ -1,0 +1,1357 @@
+{
+  "proposals": [
+    {
+      "id": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+      "title": "EPA Environmental Support Services BPA — Small Business Set-Aside",
+      "agency": "Environmental Protection Agency",
+      "dueDate": "2026-05-02T17:00:00Z",
+      "status": "outline",
+      "notes": "",
+      "solicitationText": "",
+      "source": "automation",
+      "type": "federal",
+      "createdAt": "2026-03-26T04:06:27.330Z",
+      "updatedAt": "2026-03-26T04:06:28.897Z",
+      "tasks": [
+        {
+          "id": "task-fc2b265f-c58d-4989-aa79-3b29713c8127",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-26T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-376358df-b56d-4096-b88e-9e55dad46abc",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-9de71eb3-773c-412a-b0d3-5fd2b54c3746",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-ae5c2e4d-771e-4239-a56e-fa9c245b01e7",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-28T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-eaaaadbe-f585-42f3-a9f0-7772f1e56bfd",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-29T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-072bb1da-5eb7-41b8-aae7-6a42aec5e068",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-30T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-58555a7b-cd75-432b-9ad9-36cb81e4ba0d",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-31T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-5fbd9f22-fe7e-4205-89af-891a97f8a52d",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-01T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-f7d4614a-4e38-4b26-93d5-a76742f1e5c3",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-02T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-f84e5d0e-626e-4dfc-a610-fc17f36c8b73",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-03T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-9be8709c-bccc-40db-828b-b44b4c19aab8",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-04T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-3e86af01-d29f-47b9-9c90-98cc71475186",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-05T04:06:27.330Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.330Z"
+        },
+        {
+          "id": "task-bf824a71-25c9-414d-9516-19234c3fb0a0",
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "title": "Review generated draft overview",
+          "owner": "Morpheus",
+          "dueDate": "2026-05-02T17:00:00Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:28.897Z"
+        }
+      ],
+      "files": [],
+      "metadata": {
+        "solicitationNumber": "EPA-2026-ENV-BPA",
+        "sourceType": "solicitation",
+        "draftOverviewStatus": "completed",
+        "proposalDraftStatus": "pending",
+        "workflowSteps": [
+          {
+            "id": "step-0216d2eb-5f02-47a2-a53b-dd9adf65e50f",
+            "timestamp": "2026-03-26T04:06:28.898Z",
+            "status": "completed",
+            "stage": "outline",
+            "label": "Draft overview generated from solicitation context"
+          },
+          {
+            "id": "step-2592b647-7f81-40f4-8517-6802024eea9c",
+            "timestamp": "2026-03-26T04:06:27.330Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Intake pipeline started — task checklist generated"
+          },
+          {
+            "stage": "intake",
+            "label": "Solicitation ingested",
+            "status": "completed",
+            "timestamp": "2026-03-26T04:06:27.330Z"
+          }
+        ],
+        "draftOverview": {
+          "generatedAt": "2026-03-26T04:06:28.897Z",
+          "summary": "Draft overview for EPA Environmental Support Services BPA — Small Business Set-Aside",
+          "objectives": [
+            "Clarify win themes",
+            "Outline delivery approach",
+            "Capture risks and mitigations"
+          ],
+          "guideAlignment": [
+            "Mirror solicitation evaluation criteria",
+            "Use agency language directly in section headings",
+            "Track compliance checks before final review"
+          ]
+        }
+      }
+    },
+    {
+      "id": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+      "title": "Forsyth County Exterior Pressure Washing and Facility Maintenance",
+      "agency": "Forsyth County",
+      "dueDate": "2026-04-25T17:00:00Z",
+      "status": "outline",
+      "notes": "",
+      "solicitationText": "",
+      "source": "automation",
+      "type": "state_local",
+      "createdAt": "2026-03-26T04:06:27.097Z",
+      "updatedAt": "2026-03-26T04:06:27.238Z",
+      "tasks": [
+        {
+          "id": "task-058b9079-9efe-4955-8bcd-0c1e52d2bac9",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-26T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-97ab318a-8c26-4767-b286-f31633c72fd9",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-c8c0fa2c-34c3-4af4-bdff-714fcaaeb8dc",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-d69252cc-07d8-4182-b426-2edc0d5a5c49",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-28T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-e33f3b40-b5dc-4593-9143-7f4148a0ba2c",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-29T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-9cfd1f65-cf0a-4934-a0af-3a266df0f14e",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-30T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-db152457-0a69-49b8-bd9f-4dd55beaf43f",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-31T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-62548538-688c-4462-93fd-0bb9ba7ff0f8",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-01T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-cc44d033-eae0-432d-9eeb-a32182f3a508",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-02T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-dbd9dc3c-b1d8-44f8-a1fb-b7a753a3ae88",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-03T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-988c5f65-2857-45ce-9c9b-78c4afa6806e",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-04T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-26a82845-de5e-4b36-bf12-c9a678e5b38b",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-05T04:06:27.096Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.096Z"
+        },
+        {
+          "id": "task-2046403d-5fb5-4f81-95ab-e66727f4d549",
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "title": "Review generated draft overview",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-25T17:00:00Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:27.238Z"
+        }
+      ],
+      "files": [],
+      "metadata": {
+        "solicitationNumber": "RFP-2026-FAC-003",
+        "sourceType": "solicitation",
+        "draftOverviewStatus": "completed",
+        "proposalDraftStatus": "pending",
+        "workflowSteps": [
+          {
+            "id": "step-a656d129-865e-4e52-a872-e0e994ac4b6b",
+            "timestamp": "2026-03-26T04:06:27.238Z",
+            "status": "completed",
+            "stage": "outline",
+            "label": "Draft overview generated from solicitation context"
+          },
+          {
+            "id": "step-9e2be4fc-04c6-4592-9bd2-17989d0c0021",
+            "timestamp": "2026-03-26T04:06:27.097Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Intake pipeline started — task checklist generated"
+          },
+          {
+            "stage": "intake",
+            "label": "Solicitation ingested",
+            "status": "completed",
+            "timestamp": "2026-03-26T04:06:27.097Z"
+          }
+        ],
+        "draftOverview": {
+          "generatedAt": "2026-03-26T04:06:27.238Z",
+          "summary": "Draft overview for Forsyth County Exterior Pressure Washing and Facility Maintenance",
+          "objectives": [
+            "Clarify win themes",
+            "Outline delivery approach",
+            "Capture risks and mitigations"
+          ],
+          "guideAlignment": [
+            "Mirror solicitation evaluation criteria",
+            "Use agency language directly in section headings",
+            "Track compliance checks before final review"
+          ]
+        }
+      }
+    },
+    {
+      "id": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+      "title": "DeKalb County Grounds Maintenance and Debris Removal Services",
+      "agency": "DeKalb County Procurement",
+      "dueDate": "2026-04-18T17:00:00Z",
+      "status": "outline",
+      "notes": "",
+      "solicitationText": "",
+      "source": "automation",
+      "type": "state_local",
+      "createdAt": "2026-03-26T04:06:26.811Z",
+      "updatedAt": "2026-03-26T04:06:26.991Z",
+      "tasks": [
+        {
+          "id": "task-6e33ee52-6862-441e-af06-dfae1da51233",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-26T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-8394d586-0737-4bce-abd3-12a74105b9d6",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-0c72f726-580c-4e4f-a48d-c8517b1a5321",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-3e9c13a6-1ae5-49ad-9baf-c37c4652836d",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-28T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-921e7301-ee63-42b1-9827-465f8539b75d",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-29T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-7e87b2cd-dbd9-4d86-976a-b116ef7debbe",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-30T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-241dd0ec-3829-4477-bf95-01e254571751",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-31T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-09c78255-e7a0-479d-a31c-12ff9041e943",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-01T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-1c5399bc-77c5-470d-824c-10901b1e1132",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-02T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-c3083f13-7d44-4f0e-8b57-96bdb9e22079",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-03T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-c9fa0b34-2691-400a-9437-8749ada944f8",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-04T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-f3bf49f8-8b07-469f-a16b-97644ccc3187",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-05T04:06:26.810Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.810Z"
+        },
+        {
+          "id": "task-74f202f7-8445-4d69-a922-19a5e06e8921",
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "title": "Review generated draft overview",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-18T17:00:00Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T04:06:26.991Z"
+        }
+      ],
+      "files": [],
+      "metadata": {
+        "solicitationNumber": "RFQ-2026-GROUNDS-001",
+        "sourceType": "solicitation",
+        "draftOverviewStatus": "completed",
+        "proposalDraftStatus": "pending",
+        "workflowSteps": [
+          {
+            "id": "step-25b3bf0d-3206-4f62-a809-747eb39e92d6",
+            "timestamp": "2026-03-26T04:06:26.992Z",
+            "status": "completed",
+            "stage": "outline",
+            "label": "Draft overview generated from solicitation context"
+          },
+          {
+            "id": "step-7e74cf09-05ea-4fb3-a330-54cd21c7c601",
+            "timestamp": "2026-03-26T04:06:26.813Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Intake pipeline started — task checklist generated"
+          },
+          {
+            "stage": "intake",
+            "label": "Solicitation ingested",
+            "status": "completed",
+            "timestamp": "2026-03-26T04:06:26.811Z"
+          }
+        ],
+        "draftOverview": {
+          "generatedAt": "2026-03-26T04:06:26.991Z",
+          "summary": "Draft overview for DeKalb County Grounds Maintenance and Debris Removal Services",
+          "objectives": [
+            "Clarify win themes",
+            "Outline delivery approach",
+            "Capture risks and mitigations"
+          ],
+          "guideAlignment": [
+            "Mirror solicitation evaluation criteria",
+            "Use agency language directly in section headings",
+            "Track compliance checks before final review"
+          ]
+        }
+      }
+    },
+    {
+      "id": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+      "title": "DeKalb Grounds Maintenance Services",
+      "agency": "DeKalb County",
+      "dueDate": "2026-04-15T17:00:00Z",
+      "status": "outline",
+      "notes": "",
+      "solicitationText": "",
+      "source": "automation",
+      "type": "state_local",
+      "createdAt": "2026-03-26T03:57:55.475Z",
+      "updatedAt": "2026-03-26T03:57:58.543Z",
+      "tasks": [
+        {
+          "id": "task-e393675b-6ba7-47b0-8806-054203d43b06",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-26T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-c3eaedfb-f856-4867-bcb9-200f3bc28db8",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-85c9c9c8-c88c-4e74-a865-03c756cf5459",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-27T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-107504e6-42c5-4554-b37e-77952541f6a1",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-28T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-dbb08615-4654-4ac8-ac53-2aad06bdaab9",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-29T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-5304f323-ae78-4e16-8d1a-de446a5ef59e",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-30T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-6af3174d-e98e-4d72-9dcf-ca1945e5a9dd",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-03-31T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-d855b729-6ea4-4e8e-bcb1-2a8fdb493be6",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-01T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-0abb465a-9e8c-43b8-b819-bec32e9fcd68",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-02T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-19d51a03-2af2-43d3-989b-f93f7a01b423",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-03T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-f0aed732-5465-4804-9b07-1326bbaab3be",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-04T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-32497c33-479c-409e-aaae-ef52aa11a4a7",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-05T03:57:55.473Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:55.473Z"
+        },
+        {
+          "id": "task-a94eb241-48a0-42fc-9dfb-4f2b50de7c6f",
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "title": "Review generated draft overview",
+          "owner": "Morpheus",
+          "dueDate": "2026-04-15T17:00:00Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "createdAt": "2026-03-26T03:57:58.543Z"
+        }
+      ],
+      "files": [],
+      "metadata": {
+        "solicitationNumber": "",
+        "sourceType": "solicitation",
+        "draftOverviewStatus": "completed",
+        "proposalDraftStatus": "pending",
+        "workflowSteps": [
+          {
+            "id": "step-5a9744f8-fdac-47ae-81aa-395098d8cb3c",
+            "timestamp": "2026-03-26T03:57:58.544Z",
+            "status": "completed",
+            "stage": "outline",
+            "label": "Draft overview generated from solicitation context"
+          },
+          {
+            "id": "step-1c736c69-b0fa-4997-8720-b5c9be405b97",
+            "timestamp": "2026-03-26T03:57:55.476Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Intake pipeline started — task checklist generated"
+          },
+          {
+            "stage": "intake",
+            "label": "Solicitation ingested",
+            "status": "completed",
+            "timestamp": "2026-03-26T03:57:55.475Z"
+          }
+        ],
+        "draftOverview": {
+          "generatedAt": "2026-03-26T03:57:58.543Z",
+          "summary": "Draft overview for DeKalb Grounds Maintenance Services",
+          "objectives": [
+            "Clarify win themes",
+            "Outline delivery approach",
+            "Capture risks and mitigations"
+          ],
+          "guideAlignment": [
+            "Mirror solicitation evaluation criteria",
+            "Use agency language directly in section headings",
+            "Track compliance checks before final review"
+          ]
+        }
+      }
+    }
+  ],
+  "calendarEvents": [],
+  "directories": [],
+  "reports": [
+    {
+      "id": "report-7775fb59-0c58-488c-8aa1-d7228b530987",
+      "name": "Weekly Report - Mar 28, 2026",
+      "mimeType": "application/json",
+      "updatedTime": "2026-03-29T02:29:20.970Z",
+      "createdTime": "2026-03-29T02:29:20.970Z",
+      "webViewLink": "#",
+      "body": "Weekly pipeline count: 4\nActive opportunities: 4\nOpen proposals: 4\nFederal opportunities: 1\nState/local opportunities: 3\nReports generated because Friday weekly cadence was blocked by MON/WED-only cadence settings; logic patched so Friday weekly reports are now independent of daily cadence days.",
+      "kind": "weekly"
+    },
+    {
+      "id": "report-d8da9a32-eee1-4726-b143-cc85fb230b23",
+      "name": "Daily Report - Mar 25, 2026",
+      "mimeType": "application/json",
+      "updatedTime": "2026-03-26T03:55:21.670Z",
+      "createdTime": "2026-03-26T03:55:21.670Z",
+      "webViewLink": "#",
+      "body": "Open proposals: 1\nSubmitted proposals: 0\nOutstanding reminders: 0",
+      "kind": "daily"
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+      "title": "EPA Environmental Support Services BPA — Small Business Set-Aside",
+      "agency": "Environmental Protection Agency",
+      "url": "https://sam.gov",
+      "stage": "intake",
+      "createdAt": "2026-03-26T04:06:27.330Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    },
+    {
+      "id": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+      "title": "Forsyth County Exterior Pressure Washing and Facility Maintenance",
+      "agency": "Forsyth County",
+      "url": "https://forsythco.bonfirehub.com/",
+      "stage": "intake",
+      "createdAt": "2026-03-26T04:06:27.097Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    },
+    {
+      "id": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+      "title": "DeKalb County Grounds Maintenance and Debris Removal Services",
+      "agency": "DeKalb County Procurement",
+      "url": "https://dekalbcountyga.gov/procurement",
+      "stage": "intake",
+      "createdAt": "2026-03-26T04:06:26.811Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    },
+    {
+      "id": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+      "title": "DeKalb Grounds Maintenance Services",
+      "agency": "DeKalb County",
+      "url": "",
+      "stage": "intake",
+      "createdAt": "2026-03-26T03:57:55.475Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job-43b5434c-a266-4d80-9803-9502b2dc3ba4",
+      "action": "post_weekly_report",
+      "payload": {
+        "lines": [
+          "Weekly pipeline count: 4",
+          "Active opportunities: 4",
+          "Open proposals: 4",
+          "Federal opportunities: 1",
+          "State/local opportunities: 3",
+          "Reports generated because Friday weekly cadence was blocked by MON/WED-only cadence settings; logic patched so Friday weekly reports are now independent of daily cadence days."
+        ]
+      },
+      "status": "completed",
+      "createdAt": "2026-03-29T02:29:20.911Z",
+      "startedAt": "2026-03-29T02:29:20.946Z",
+      "processedAt": "2026-03-29T02:29:20.968Z",
+      "result": {
+        "ok": true,
+        "message": "Weekly report posted",
+        "updates": {
+          "reportId": "report-7775fb59-0c58-488c-8aa1-d7228b530987"
+        }
+      }
+    },
+    {
+      "id": "job-64099d59-5d74-4837-93cc-d21b86a1a746",
+      "action": "run_intake_pipeline",
+      "payload": {
+        "title": "EPA Environmental Support Services BPA — Small Business Set-Aside",
+        "agency": "Environmental Protection Agency",
+        "dueDate": "2026-05-02T17:00:00Z",
+        "solicitationNumber": "EPA-2026-ENV-BPA",
+        "type": "federal",
+        "sourceUrl": "https://sam.gov"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:27.167Z",
+      "startedAt": "2026-03-26T04:06:27.311Z",
+      "processedAt": "2026-03-26T04:06:27.330Z",
+      "result": {
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued",
+        "updates": {
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be",
+          "taskCount": 12
+        }
+      }
+    },
+    {
+      "id": "job-a67c139f-aad7-4811-ae0b-4009e4e84d69",
+      "action": "run_intake_pipeline",
+      "payload": {
+        "title": "Forsyth County Exterior Pressure Washing and Facility Maintenance",
+        "agency": "Forsyth County",
+        "dueDate": "2026-04-25T17:00:00Z",
+        "solicitationNumber": "RFP-2026-FAC-003",
+        "type": "state_local",
+        "sourceUrl": "https://forsythco.bonfirehub.com/"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:26.900Z",
+      "startedAt": "2026-03-26T04:06:27.057Z",
+      "processedAt": "2026-03-26T04:06:27.096Z",
+      "result": {
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued",
+        "updates": {
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56",
+          "taskCount": 12
+        }
+      }
+    },
+    {
+      "id": "job-4c9b2add-5d20-4348-9e86-f6c189b0e290",
+      "action": "run_intake_pipeline",
+      "payload": {
+        "title": "DeKalb County Grounds Maintenance and Debris Removal Services",
+        "agency": "DeKalb County Procurement",
+        "dueDate": "2026-04-18T17:00:00Z",
+        "solicitationNumber": "RFQ-2026-GROUNDS-001",
+        "type": "state_local",
+        "sourceUrl": "https://dekalbcountyga.gov/procurement"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:26.740Z",
+      "startedAt": "2026-03-26T04:06:26.773Z",
+      "processedAt": "2026-03-26T04:06:26.810Z",
+      "result": {
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued",
+        "updates": {
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df",
+          "taskCount": 12
+        }
+      }
+    },
+    {
+      "id": "job-a7fe134e-bd2f-436a-b775-5409668c4eba",
+      "action": "run_intake_pipeline",
+      "payload": {
+        "title": "DeKalb Grounds Maintenance Services",
+        "agency": "DeKalb County",
+        "dueDate": "2026-04-15T17:00:00Z",
+        "type": "state_local"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T03:57:55.413Z",
+      "startedAt": "2026-03-26T03:57:55.432Z",
+      "processedAt": "2026-03-26T03:57:55.473Z",
+      "result": {
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued",
+        "updates": {
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d",
+          "taskCount": 12
+        }
+      }
+    },
+    {
+      "id": "job-a900ad0c-6e4e-4e55-a9a2-cafd9c32fa11",
+      "action": "run_intake_pipeline",
+      "payload": {
+        "title": "TEST — DeKalb Grounds Maintenance",
+        "agency": "DeKalb County",
+        "dueDate": "2026-04-15T17:00:00Z",
+        "type": "state_local"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T03:55:25.034Z",
+      "startedAt": "2026-03-26T03:55:25.051Z",
+      "processedAt": "2026-03-26T03:55:25.087Z",
+      "result": {
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued",
+        "updates": {
+          "proposalId": "proposal-41fc7ded-3e6b-4708-ae79-d57ce066e85d",
+          "taskCount": 12
+        }
+      }
+    },
+    {
+      "id": "job-e8afea69-5247-4bee-97ce-d4c07a9e5cac",
+      "action": "post_daily_report",
+      "payload": {},
+      "status": "completed",
+      "createdAt": "2026-03-26T03:55:21.591Z",
+      "startedAt": "2026-03-26T03:55:21.606Z",
+      "processedAt": "2026-03-26T03:55:21.666Z",
+      "result": {
+        "ok": true,
+        "message": "Daily report posted",
+        "updates": {
+          "reportId": "report-d8da9a32-eee1-4726-b143-cc85fb230b23"
+        }
+      }
+    },
+    {
+      "id": "job-a2419f58-e292-4eef-82ca-a38a78d61c71",
+      "action": "proposal_overview",
+      "payload": {
+        "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T03:57:55.473Z",
+      "startedAt": "2026-03-26T03:57:58.528Z",
+      "processedAt": "2026-03-26T03:57:58.543Z",
+      "result": {
+        "ok": true,
+        "message": "Draft overview generated",
+        "updates": {
+          "proposalId": "proposal-04c7a27b-cf3d-41be-990e-08b6281cd16d"
+        }
+      }
+    },
+    {
+      "id": "job-a9b1b08a-140e-4dce-8093-ed9b792821cc",
+      "action": "proposal_overview",
+      "payload": {
+        "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:26.810Z",
+      "startedAt": "2026-03-26T04:06:26.951Z",
+      "processedAt": "2026-03-26T04:06:26.991Z",
+      "result": {
+        "ok": true,
+        "message": "Draft overview generated",
+        "updates": {
+          "proposalId": "proposal-87e1930b-ba1e-44e1-bf19-1d299afff9df"
+        }
+      }
+    },
+    {
+      "id": "job-a2671590-05b8-4b62-8e8b-471308dc24c2",
+      "action": "proposal_overview",
+      "payload": {
+        "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:27.096Z",
+      "startedAt": "2026-03-26T04:06:27.200Z",
+      "processedAt": "2026-03-26T04:06:27.238Z",
+      "result": {
+        "ok": true,
+        "message": "Draft overview generated",
+        "updates": {
+          "proposalId": "proposal-3d8f50aa-8ae3-468c-b0ef-6e9ee2e39f56"
+        }
+      }
+    },
+    {
+      "id": "job-c1f3f515-4710-4671-938a-372aec4f1de6",
+      "action": "proposal_overview",
+      "payload": {
+        "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-26T04:06:27.330Z",
+      "startedAt": "2026-03-26T04:06:28.858Z",
+      "processedAt": "2026-03-26T04:06:28.897Z",
+      "result": {
+        "ok": true,
+        "message": "Draft overview generated",
+        "updates": {
+          "proposalId": "proposal-2fbf75b5-e6e7-4830-84a1-ff9aba26b2be"
+        }
+      }
+    }
+  ],
+  "health": {
+    "events": [
+      {
+        "id": "d95b9bdb-346e-4ba6-9a90-11af503d0ba3",
+        "timestamp": "2026-03-29T02:29:20.968Z",
+        "action": "post_weekly_report",
+        "jobId": "job-43b5434c-a266-4d80-9803-9502b2dc3ba4",
+        "ok": true,
+        "message": "Weekly report posted"
+      },
+      {
+        "id": "3d084fc6-2a5a-494d-a6a0-363bf981f6b9",
+        "timestamp": "2026-03-26T04:06:28.897Z",
+        "action": "proposal_overview",
+        "jobId": "job-c1f3f515-4710-4671-938a-372aec4f1de6",
+        "ok": true,
+        "message": "Draft overview generated"
+      },
+      {
+        "id": "25e1f75e-b70d-4bc8-94bd-20293232a301",
+        "timestamp": "2026-03-26T04:06:27.330Z",
+        "action": "run_intake_pipeline",
+        "jobId": "job-64099d59-5d74-4837-93cc-d21b86a1a746",
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued"
+      },
+      {
+        "id": "13ca67b7-1331-4c0c-bb86-15f76cd0bc2d",
+        "timestamp": "2026-03-26T04:06:27.238Z",
+        "action": "proposal_overview",
+        "jobId": "job-a2671590-05b8-4b62-8e8b-471308dc24c2",
+        "ok": true,
+        "message": "Draft overview generated"
+      },
+      {
+        "id": "5607f025-b214-4a5c-9acc-1c52a56fe934",
+        "timestamp": "2026-03-26T04:06:27.096Z",
+        "action": "run_intake_pipeline",
+        "jobId": "job-a67c139f-aad7-4811-ae0b-4009e4e84d69",
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued"
+      },
+      {
+        "id": "0fb9efa7-2d5d-4fc8-b417-149538d54b29",
+        "timestamp": "2026-03-26T04:06:26.991Z",
+        "action": "proposal_overview",
+        "jobId": "job-a9b1b08a-140e-4dce-8093-ed9b792821cc",
+        "ok": true,
+        "message": "Draft overview generated"
+      },
+      {
+        "id": "e83d81d3-18bf-41df-a0d9-7ec48e762518",
+        "timestamp": "2026-03-26T04:06:26.810Z",
+        "action": "run_intake_pipeline",
+        "jobId": "job-4c9b2add-5d20-4348-9e86-f6c189b0e290",
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued"
+      },
+      {
+        "id": "62855efd-bba1-42ed-af25-05f55b4a9859",
+        "timestamp": "2026-03-26T03:57:58.543Z",
+        "action": "proposal_overview",
+        "jobId": "job-a2419f58-e292-4eef-82ca-a38a78d61c71",
+        "ok": true,
+        "message": "Draft overview generated"
+      },
+      {
+        "id": "1bb1a051-efc0-4f9d-accd-31c2e14763bc",
+        "timestamp": "2026-03-26T03:57:55.473Z",
+        "action": "run_intake_pipeline",
+        "jobId": "job-a7fe134e-bd2f-436a-b775-5409668c4eba",
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued"
+      },
+      {
+        "id": "59901487-653d-4fb3-8e01-c2db28b8e0e1",
+        "timestamp": "2026-03-26T03:55:25.087Z",
+        "action": "run_intake_pipeline",
+        "jobId": "job-a900ad0c-6e4e-4e55-a9a2-cafd9c32fa11",
+        "ok": true,
+        "message": "Intake pipeline started — 12 tasks generated, overview queued"
+      },
+      {
+        "id": "7164e395-b5a5-4250-8e58-389dae60a2c5",
+        "timestamp": "2026-03-26T03:55:21.666Z",
+        "action": "post_daily_report",
+        "jobId": "job-e8afea69-5247-4bee-97ce-d4c07a9e5cac",
+        "ok": true,
+        "message": "Daily report posted"
+      }
+    ],
+    "last_processed": {
+      "timestamp": "2026-03-29T02:29:20.968Z",
+      "action": "post_weekly_report",
+      "success": true,
+      "jobId": "job-43b5434c-a266-4d80-9803-9502b2dc3ba4",
+      "message": "Weekly report posted"
+    }
+  },
+  "cadence": {
+    "days": [
+      "MON",
+      "WED"
+    ],
+    "time": "09:00",
+    "tz": "America/New_York",
+    "enabled": true
+  },
+  "artifacts": [],
+  "settings": {
+    "companyName": "Rare Earth Ltd",
+    "ownerName": "Eric White",
+    "ownerEmail": "admin@thrarecontracting.com"
+  },
+  "businessProfile": {
+    "companyName": "Rare Earth Ltd",
+    "focusAreas": [
+      "environmental remediation",
+      "recycling",
+      "training support",
+      "construction support",
+      "staffing",
+      "facilities support"
+    ],
+    "keywords": [
+      "training",
+      "environmental",
+      "recycling",
+      "construction",
+      "staff augmentation",
+      "operations support",
+      "grounds maintenance",
+      "facility support"
+    ],
+    "targetAgencies": [
+      "Department of Defense",
+      "Department of Energy",
+      "Environmental Protection Agency",
+      "GSA",
+      "City of Atlanta"
+    ]
+  },
+  "watchers": {
+    "portals": [
+      {
+        "id": "portal-sam",
+        "name": "SAM.gov",
+        "url": "https://sam.gov",
+        "enabled": true,
+        "cadence": "daily",
+        "tags": [
+          "federal",
+          "solicitations"
+        ],
+        "sampleOpportunities": [
+          {
+            "title": "Environmental Services Support BPA",
+            "agency": "Environmental Protection Agency",
+            "summary": "Support environmental compliance, recycling, and field operations.",
+            "dueDateOffsetDays": 18,
+            "documents": [
+              "rfp.pdf",
+              "pricing-sheet.xlsx"
+            ]
+          },
+          {
+            "title": "Training Delivery and Program Support",
+            "agency": "Department of Defense",
+            "summary": "Provide curriculum delivery, logistics coordination, and staff augmentation.",
+            "dueDateOffsetDays": 12,
+            "documents": [
+              "solicitation.pdf",
+              "attachments.zip"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "portal-bidnet",
+        "name": "BidNet Direct",
+        "url": "https://www.bidnetdirect.com/",
+        "enabled": true,
+        "cadence": "daily",
+        "tags": [
+          "state_local",
+          "municipal"
+        ],
+        "sampleOpportunities": [
+          {
+            "title": "Municipal Recycling and Disposal Services",
+            "agency": "City Procurement Office",
+            "summary": "Operate recycling pickup, reporting, and compliance management.",
+            "dueDateOffsetDays": 21,
+            "documents": [
+              "itb.pdf"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "portal-bonfire",
+        "name": "Bonfire (Forsyth)",
+        "url": "https://forsythco.bonfirehub.com/",
+        "enabled": true,
+        "cadence": "weekly",
+        "tags": [
+          "county",
+          "services"
+        ],
+        "sampleOpportunities": [
+          {
+            "title": "Facilities and Grounds Support Services",
+            "agency": "Forsyth County",
+            "summary": "Provide grounds maintenance, facilities support, and incident response.",
+            "dueDateOffsetDays": 16,
+            "documents": [
+              "rfq.pdf",
+              "scope.docx"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
