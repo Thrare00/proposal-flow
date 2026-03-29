@@ -809,6 +809,16 @@
   "directories": [],
   "reports": [
     {
+      "id": "report-bf9625ff-0245-43b0-91a8-c9fda68b42ad",
+      "name": "Weekly Report - Mar 29, 2026",
+      "mimeType": "application/json",
+      "updatedTime": "2026-03-29T05:42:00.880Z",
+      "createdTime": "2026-03-29T05:42:00.880Z",
+      "webViewLink": "#",
+      "body": "Weekly pipeline count: 4\nActive opportunities: 4\nDirectory records: 0",
+      "kind": "weekly"
+    },
+    {
       "id": "report-7775fb59-0c58-488c-8aa1-d7228b530987",
       "name": "Weekly Report - Mar 28, 2026",
       "mimeType": "application/json",
@@ -900,6 +910,22 @@
     }
   ],
   "jobs": [
+    {
+      "id": "job-7910d87a-ad1d-42b2-9b81-b346c1f4e150",
+      "action": "post_weekly_report",
+      "payload": {},
+      "status": "completed",
+      "createdAt": "2026-03-29T05:42:00.830Z",
+      "startedAt": "2026-03-29T05:42:00.853Z",
+      "processedAt": "2026-03-29T05:42:00.877Z",
+      "result": {
+        "ok": true,
+        "message": "Weekly report posted",
+        "updates": {
+          "reportId": "report-bf9625ff-0245-43b0-91a8-c9fda68b42ad"
+        }
+      }
+    },
     {
       "id": "job-43b5434c-a266-4d80-9803-9502b2dc3ba4",
       "action": "post_weekly_report",
@@ -1133,6 +1159,14 @@
   "health": {
     "events": [
       {
+        "id": "8cd53794-3444-426e-89da-a26c921f038a",
+        "timestamp": "2026-03-29T05:42:00.877Z",
+        "action": "post_weekly_report",
+        "jobId": "job-7910d87a-ad1d-42b2-9b81-b346c1f4e150",
+        "ok": true,
+        "message": "Weekly report posted"
+      },
+      {
         "id": "d95b9bdb-346e-4ba6-9a90-11af503d0ba3",
         "timestamp": "2026-03-29T02:29:20.968Z",
         "action": "post_weekly_report",
@@ -1222,10 +1256,10 @@
       }
     ],
     "last_processed": {
-      "timestamp": "2026-03-29T02:29:20.968Z",
+      "timestamp": "2026-03-29T05:42:00.877Z",
       "action": "post_weekly_report",
       "success": true,
-      "jobId": "job-43b5434c-a266-4d80-9803-9502b2dc3ba4",
+      "jobId": "job-7910d87a-ad1d-42b2-9b81-b346c1f4e150",
       "message": "Weekly report posted"
     }
   },

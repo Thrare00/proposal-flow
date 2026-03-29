@@ -1,6 +1,6 @@
 import { createId, getDb, nowIso, updateDb, appendHealthEvent } from './automation-store.js';
 
-const STAGE_SEQUENCE = ['intake', 'outline', 'drafting', 'internal_review', 'final_review', 'submitted'];
+const STAGE_SEQUENCE = ['intake', 'qualification', 'pre_solicitation', 'research', 'technical_compliance', 'pricing_packaging', 'drafting', 'review', 'google_docs_final', 'submitted'];
 
 function nextStage(currentStage) {
   const currentIndex = STAGE_SEQUENCE.indexOf(currentStage);
@@ -437,7 +437,7 @@ function processJob(job) {
         proposal.updatedAt = timestamp;
         appendWorkflowStep(proposal, {
           stage: 'drafting',
-          label: 'Proposal draft generated from guide and overview',
+          label: 'Claude draft generated from guide, research, and pre-solicitation brief',
         });
         addTaskToProposal(proposal, {
           id: createId('task'),
@@ -722,11 +722,40 @@ function processJob(job) {
       }
 
       case 'post_weekly_report': {
-        const report = addReport(db, 'weekly', job.payload?.lines || [
-          `Weekly pipeline count: ${db.proposals.length}`,
-          `Active opportunities: ${db.opportunities.length}`,
+        const dueSoonThreshold = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
+        const proposals = Array.isArray(db.proposals) ? db.proposals : [];
+        const opportunities = Array.isArray(db.opportunities) ? db.opportunities : [];
+        const reports = Array.isArray(db.reports) ? db.reports : [];
+        const typeCounts = proposals.reduce((acc, proposal) => {
+          const key = proposal?.type || 'unknown';
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
+        const dueSoon = proposals.filter((proposal) => {
+          const due = proposal?.dueDate ? new Date(proposal.dueDate).getTime() : null;
+          return due && due >= Date.now() && due <= dueSoonThreshold;
+        });
+        const overdue = proposals.filter((proposal) => proposal?.dueDate && new Date(proposal.dueDate).getTime() < Date.now());
+        const stageCounts = proposals.reduce((acc, proposal) => {
+          const key = proposal?.status || 'unknown';
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
+        const lines = job.payload?.lines || [
+          `Weekly pipeline count: ${proposals.length}`,
+          `Active opportunities: ${opportunities.length}`,
+          `Federal opportunities: ${typeCounts.federal || 0}`,
+          `State/local opportunities: ${typeCounts.state_local || 0}`,
+          `Commercial opportunities: ${typeCounts.commercial || 0}`,
+          `Due within 7 days: ${dueSoon.length}`,
+          `Overdue items: ${overdue.length}`,
+          `Current drafting stage count: ${stageCounts.drafting || 0}`,
+          `Current review stage count: ${(stageCounts.review || 0) + (stageCounts.internal_review || 0)}`,
+          `Current Google Docs final stage count: ${(stageCounts.google_docs_final || 0) + (stageCounts.final_review || 0)}`,
+          `Reports on file: ${reports.length}`,
           `Directory records: ${db.directories.length}`,
-        ]);
+        ];
+        const report = addReport(db, 'weekly', lines);
         result = {
           ok: true,
           message: 'Weekly report posted',
@@ -844,6 +873,4 @@ export function runCadencePass() {
   // daily cadence selection. Otherwise a cadence like MON/WED can never emit a
   // Friday weekly report.
   if (dayCode === 'FRI' && shouldCreateCadenceReport(db, 'weekly')) {
-    enqueueJobs([{ action: 'post_weekly_report', payload: {} }]);
-  }
-}
+    enqueueJobs([{ action: 'post_weekly_report', 
