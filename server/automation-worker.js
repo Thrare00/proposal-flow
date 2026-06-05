@@ -197,6 +197,12 @@ function normalizeKey(value) {
   return (value || '').toString().trim().toLowerCase();
 }
 
+function extractSolicitationId(text) {
+  // Extract B-XXXX or W9XXXX style solicitation IDs from title strings
+  const match = (text || '').match(/\b([BW]\d*-?\d{3,}[A-Z]*\d*)\b/i);
+  return match ? match[1].toUpperCase() : '';
+}
+
 function findDuplicateProposal(db, payload = {}) {
   const solicitationNumber = normalizeKey(
     payload.solicitationNumber
@@ -207,6 +213,7 @@ function findDuplicateProposal(db, payload = {}) {
   const title = normalizeKey(payload.title || payload.solicitationTitle);
   const agency = normalizeKey(payload.agency);
   const sourceOpportunityId = payload.sourceOpportunityId || payload.opportunityId;
+  const incomingSolId = extractSolicitationId(payload.title || payload.solicitationTitle || '');
 
   return db.proposals.find((proposal) => {
     const meta = proposal.metadata || {};
@@ -218,6 +225,11 @@ function findDuplicateProposal(db, payload = {}) {
     }
     if (title && agency && normalizeKey(proposal.title) === title && normalizeKey(proposal.agency) === agency) {
       return true;
+    }
+    // Fuzzy match: if both titles contain the same solicitation ID (B-XXXX, W9XXXX)
+    if (incomingSolId && incomingSolId.length >= 5) {
+      const existingSolId = extractSolicitationId(proposal.title);
+      if (existingSolId === incomingSolId) return true;
     }
     return false;
   });
@@ -1723,6 +1735,21 @@ export function runHousekeepingPass() {
         seeded++;
       }
 
+      // Auto-close proposals whose notes indicate award to another vendor
+      const notesLower = (proposal.notes || '').toLowerCase();
+      if (proposal.status !== 'closed' && proposal.status !== 'submitted') {
+        const isAwarded = notesLower.includes('awarded to another') || notesLower.includes('award notice');
+        const isClosed = notesLower.includes('closed:') || notesLower.includes('removed from active');
+        if (isAwarded || isClosed) {
+          proposal.status = 'closed';
+          proposal.updatedAt = timestamp;
+          appendWorkflowStep(proposal, {
+            stage: 'closed',
+            label: 'Housekeeping: auto-closed (award notice detected in notes)',
+          });
+        }
+      }
+
       // Score/re-score proposals not yet scored with v2 algorithm
       proposal.metadata = proposal.metadata || {};
       if (proposal.metadata.fitAlgorithm !== 'v2') {
@@ -1736,6 +1763,39 @@ export function runHousekeepingPass() {
         proposal.metadata.fitAlgorithm = 'v2';
         scored++;
       }
+    }
+
+    // Dedup pass: merge proposals with matching solicitation IDs
+    const seen = new Map(); // solId -> first proposal index
+    const toRemove = new Set();
+    for (let i = 0; i < workingDb.proposals.length; i++) {
+      const p = workingDb.proposals[i];
+      if (p.status === 'closed') continue;
+      const solId = extractSolicitationId(p.title);
+      if (!solId || solId.length < 5) continue;
+      if (seen.has(solId)) {
+        const primaryIdx = seen.get(solId);
+        const primary = workingDb.proposals[primaryIdx];
+        // Merge: keep whichever has higher fitScore, append notes from other
+        if ((p.metadata?.fitScore || 0) > (primary.metadata?.fitScore || 0)) {
+          primary.metadata.fitScore = p.metadata.fitScore;
+          primary.metadata.fitDecision = p.metadata.fitDecision;
+          primary.metadata.fitReasons = p.metadata.fitReasons;
+          primary.metadata.fitAlgorithm = p.metadata.fitAlgorithm;
+        }
+        primary.notes = (primary.notes || '') + ` | Merged from duplicate: ${p.source || p.id}`;
+        primary.updatedAt = timestamp;
+        appendWorkflowStep(primary, {
+          stage: primary.status,
+          label: `Housekeeping: merged duplicate (${p.source || p.id})`,
+        });
+        toRemove.add(i);
+      } else {
+        seen.set(solId, i);
+      }
+    }
+    if (toRemove.size > 0) {
+      workingDb.proposals = workingDb.proposals.filter((_, i) => !toRemove.has(i));
     }
 
     return workingDb;

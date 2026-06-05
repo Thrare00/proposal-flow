@@ -22,9 +22,15 @@ const PROPOSAL_STATUS_MAP = Object.freeze({
   review: 'review',
   google_docs_final: 'google_docs_final',
   submitted: 'submitted',
+  closed: 'closed',
   outline: 'pre_solicitation',
   internal_review: 'review',
   final_review: 'google_docs_final',
+  // Canonical workflow stage IDs (shared/proposalWorkflow.js)
+  ingestion: 'intake',
+  compliance: 'technical_compliance',
+  strategy: 'pre_solicitation',
+  red_team: 'review',
 });
 
 const DEFAULT_PRE_SOLICITATION = Object.freeze({

@@ -2125,7 +2125,7 @@
       "type": "federal",
       "solicitationNumber": "GPR-32855",
       "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77021-NONST-2026-000000183&sourceSystemType=gpr20",
-      "notes": "Auto-imported by Morpheus. Score: 80/100. Pursue.",
+      "notes": "Auto-imported by Morpheus. Score: 80/100. Pursue. | Merged from duplicate: gwinnett-bonfirehub",
       "solicitationText": "Solicitation: GPR-32855\nAgency: Georgia Procurement Registry\nNAICS: \nSet-aside: \nPosted: 2026-06-04\nLocation: National\n\n\nMorpheus Score: 80/100\nRecommendation: Pursue\nSAM Link: https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77021-NONST-2026-000000183&sourceSystemType=gpr20",
       "metadata": {
         "noticeId": "GPR-32855",
@@ -2139,6 +2139,13 @@
         "importedAt": "2026-06-04T16:13:20.857374",
         "importedBy": "morpheus-watch",
         "workflowSteps": [
+          {
+            "id": "step-714921e9-ad58-4582-9dab-349c03525b92",
+            "timestamp": "2026-06-05T23:35:19.415Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Housekeeping: merged duplicate (gwinnett-bonfirehub)"
+          },
           {
             "id": "step-1fc2cef7-6518-4571-8e64-dff4002fc8e4",
             "timestamp": "2026-06-05T14:08:10.232Z",
@@ -2233,7 +2240,7 @@
         "fitAlgorithm": "v2"
       },
       "createdAt": "2026-06-04T20:13:20.858Z",
-      "updatedAt": "2026-06-04T20:13:21.046Z",
+      "updatedAt": "2026-06-05T23:35:19.411Z",
       "tasks": [
         {
           "id": "task-12c74621-5a89-4316-822d-fdb80b10d712",
@@ -6352,1252 +6359,6 @@
       }
     },
     {
-      "id": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-      "title": "B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning",
-      "agency": "Gwinnett County Public Schools",
-      "solicitation_number": "B-2622LM",
-      "dueDate": "2026-06-08",
-      "status": "pre-solicitation",
-      "source": "gwinnett-bonfirehub",
-      "sourceUrl": "https://gwinnett.bonfirehub.com/opportunities/238246",
-      "naics": "561720",
-      "setAside": "",
-      "description": "On Demand Pressure Washing, Softwash & Window Cleaning for Gwinnett County Public Schools. IFB type. Intent to Bid Due: Jun 8, 2026. Direct-fit opportunity for Thrare Contracting core services.",
-      "scoring": {
-        "compliance_score": 0,
-        "persuasiveness_score": 0,
-        "specificity_score": 0,
-        "evidence_score": 0,
-        "risk_score": 100,
-        "draft_readiness_percent": 0,
-        "submission_readiness_percent": 20,
-        "unresolved_gap_count": 0,
-        "red_team_severity_count": {
-          "critical": 0,
-          "high": 0,
-          "medium": 0,
-          "low": 0
-        },
-        "total_score": 95,
-        "scope_fit": 100,
-        "geographic_fit": 100,
-        "timeline_fit": 80,
-        "competition_level": 90
-      },
-      "workflow": {
-        "currentStage": "compliance",
-        "updatedAt": "2026-06-05T15:06:41.011Z",
-        "modelRouting": {
-          "extraction": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "compliance": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "strategy": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "outline": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "pricing_strategy": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "technical_draft": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "executive_summary": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "rewrite_polish": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "ai_review": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "escalation_strategy": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "section_drafter": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "low_risk_bulk": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "red_team": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          },
-          "final_review": {
-            "provider": "minimax",
-            "model": "MiniMax-M2.5",
-            "lane": "default"
-          }
-        },
-        "stageGate": {
-          "blockedBy": [],
-          "canDraftWholeProposal": true
-        },
-        "stages": [
-          {
-            "stageId": "ingestion",
-            "label": "Ingestion",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:14:43.189Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "compliance",
-            "label": "Compliance",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:14:43.189Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "strategy",
-            "label": "Pre-solicitation",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:14:55.533Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "outline",
-            "label": "Outline",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:15:12.402Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "pricing_strategy",
-            "label": "Pricing Strategy",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:15:17.859Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "drafting",
-            "label": "Drafting",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T05:15:17.859Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "red_team",
-            "label": "AI Review",
-            "status": "completed",
-            "updatedAt": null,
-            "completedAt": "2026-06-05T14:33:42.672Z",
-            "blocker": ""
-          },
-          {
-            "stageId": "final_review",
-            "label": "Final Draft",
-            "status": "ready",
-            "updatedAt": null,
-            "completedAt": null,
-            "blocker": ""
-          }
-        ]
-      },
-      "complianceStatus": {
-        "completenessPercent": 0,
-        "unresolvedGapCount": 0,
-        "missingEvidenceCount": 0,
-        "disqualifyingOmissionCount": 0,
-        "criticalRequirementCount": 0,
-        "blockedRequirementCount": 0
-      },
-      "tasks": [
-        {
-          "id": "task-67a9c59a-53c1-4831-b04c-79b244caff39",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Review solicitation package and confirm due date",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-05T14:08:10.229Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "intake",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-9a795845-52e5-45d8-8243-e9c335a061c1",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Extract evaluation criteria and scoring weights",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-05T19:55:21.206Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "qualification",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-b7848921-3aff-4dfc-b557-11895cc468c2",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Build compliance matrix (requirements vs. sections)",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-05T19:55:21.206Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "technical_compliance",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-f2f71dab-6942-45c5-addb-d56ae2831f04",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Identify win themes and differentiators",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-06T01:42:32.183Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "research",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-f6b07be6-bbe1-4b35-8585-7d73a864a7f6",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Draft Executive Summary",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-06T07:29:43.160Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "drafting",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-968f1855-5048-44a3-9cee-93d95953edea",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Draft Technical Approach",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-06T13:16:54.137Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "drafting",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-9725b43b-7afc-4a45-8ed9-3e7e6f80d7a2",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Draft Management Plan",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-06T19:04:05.114Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "medium",
-          "stage": "drafting",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-41651636-f69c-4d3d-826f-a0334b0fecfb",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Draft Past Performance section",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-07T00:51:16.091Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "medium",
-          "stage": "drafting",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-7aa0808f-aea7-4049-ab79-7adb46adc7ea",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Draft Pricing Narrative",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-07T06:38:27.068Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "medium",
-          "stage": "pricing_strategy",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-4669ad88-f256-44df-8915-355f98195a22",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Internal review pass",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-07T12:25:38.045Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "review",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-e4ad60a2-034a-42ad-a502-0389b153b9f4",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Final review and format check",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-07T18:12:49.022Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "google_docs_final",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        },
-        {
-          "id": "task-a36763bd-ad1d-46c1-9452-7e8332376db2",
-          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
-          "title": "Submit by deadline",
-          "owner": "Morpheus",
-          "dueDate": "2026-06-08T00:00:00.000Z",
-          "completed": false,
-          "status": "pending",
-          "priority": "high",
-          "stage": "submitted",
-          "createdAt": "2026-06-05T14:08:10.229Z"
-        }
-      ],
-      "createdAt": "2026-06-03T16:17:29.856Z",
-      "updatedAt": "2026-06-05T15:06:55.807Z",
-      "notes": "",
-      "solicitationText": "",
-      "type": "federal",
-      "files": [
-        {
-          "id": "file-3eb26ccf-179b-4c86-8a59-4a017401916b",
-          "name": "1-B-2622LM On Demand Pressure Washing, Softwash Window Cleaning (Q-67EL).xlsx",
-          "filename": "1-B-2622LM On Demand Pressure Washing, Softwash Window Cleaning (Q-67EL).xlsx",
-          "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "size": 33761,
-          "createdAt": "2026-06-05T04:08:55.332Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/1-B-2622LM On Demand Pressure Washing, Softwash Window Cleaning (Q-67EL).xlsx",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/1-B-2622LM On Demand Pressure Washing, Softwash Window Cleaning (Q-67EL).xlsx",
-          "sha256": "18bba7e0445843dffa7a9e0a6ce529a53856f10e06090964ae28a32929ec9069",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-3eb26ccf-179b-4c86-8a59-4a017401916b-1-B-2622LM-On-Demand-Pressure-Washing-Softwash-Window-Cleaning-Q-67EL.xlsx",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-3eb26ccf-179b-4c86-8a59-4a017401916b-1-B-2622LM-On-Demand-Pressure-Washing-Softwash-Window-Cleaning-Q-67EL.xlsx",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-3eb26ccf-179b-4c86-8a59-4a017401916b"
-        },
-        {
-          "id": "file-fbcf61c1-c96f-44b9-973c-99fbb2e20f64",
-          "name": "2-Solicitation Instructions and Conditions Nov 2025.pdf",
-          "filename": "2-Solicitation Instructions and Conditions Nov 2025.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 547307,
-          "createdAt": "2026-06-05T04:08:55.339Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/2-Solicitation Instructions and Conditions Nov 2025.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/2-Solicitation Instructions and Conditions Nov 2025.pdf",
-          "sha256": "d16a7762e5ad8290ed6e9c3258bb1a6d4f4dff72279bb6ebf0b1cb4bcf01484f",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-fbcf61c1-c96f-44b9-973c-99fbb2e20f64-2-Solicitation-Instructions-and-Conditions-Nov-2025.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-fbcf61c1-c96f-44b9-973c-99fbb2e20f64-2-Solicitation-Instructions-and-Conditions-Nov-2025.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-fbcf61c1-c96f-44b9-973c-99fbb2e20f64"
-        },
-        {
-          "id": "file-d9fbea9f-808a-4384-9649-56f002680912",
-          "name": "3-Lobbying Certification.pdf",
-          "filename": "3-Lobbying Certification.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 435106,
-          "createdAt": "2026-06-05T04:08:55.346Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/3-Lobbying Certification.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/3-Lobbying Certification.pdf",
-          "sha256": "b7a7067a236bbca3e6d828cca87cb7f5d07600fdc4fa79db5d407ef2895cb5c5",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-d9fbea9f-808a-4384-9649-56f002680912-3-Lobbying-Certification.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-d9fbea9f-808a-4384-9649-56f002680912-3-Lobbying-Certification.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-d9fbea9f-808a-4384-9649-56f002680912"
-        },
-        {
-          "id": "file-6925e60c-7439-4cad-aef9-0a21abf83e95",
-          "name": "4-GCPS W-9 Substitute Supplier Info Forms 2024.pdf",
-          "filename": "4-GCPS W-9 Substitute Supplier Info Forms 2024.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 14240667,
-          "createdAt": "2026-06-05T04:08:55.432Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/4-GCPS W-9 Substitute Supplier Info Forms 2024.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/4-GCPS W-9 Substitute Supplier Info Forms 2024.pdf",
-          "sha256": "d036388cb3f3ebbc6df02591145a12970ca5cb47a645ce9b8fd61940b0d8b6d7",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-6925e60c-7439-4cad-aef9-0a21abf83e95-4-GCPS-W-9-Substitute-Supplier-Info-Forms-2024.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-6925e60c-7439-4cad-aef9-0a21abf83e95-4-GCPS-W-9-Substitute-Supplier-Info-Forms-2024.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-6925e60c-7439-4cad-aef9-0a21abf83e95"
-        },
-        {
-          "id": "file-783f7a96-30ba-4411-bd3a-7e8f8c96d037",
-          "name": "5-Euna Procurement (formerly Bonfire) Support Overview.pdf",
-          "filename": "5-Euna Procurement (formerly Bonfire) Support Overview.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 1085605,
-          "createdAt": "2026-06-05T04:08:55.442Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/5-Euna Procurement (formerly Bonfire) Support Overview.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/5-Euna Procurement (formerly Bonfire) Support Overview.pdf",
-          "sha256": "02fcea3e82d57c7ee46fbba06c41478b05112efd5147fa1deae270c8bebb37ac",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-783f7a96-30ba-4411-bd3a-7e8f8c96d037-5-Euna-Procurement-formerly-Bonfire-Support-Overview.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-783f7a96-30ba-4411-bd3a-7e8f8c96d037-5-Euna-Procurement-formerly-Bonfire-Support-Overview.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-783f7a96-30ba-4411-bd3a-7e8f8c96d037"
-        },
-        {
-          "id": "file-f27a3346-7306-4cf9-a6e9-28edf2232e25",
-          "name": "6-B-2622LM REVISED SOW  Bid Invitation  Requirements.pdf",
-          "filename": "6-B-2622LM REVISED SOW  Bid Invitation  Requirements.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 289379,
-          "createdAt": "2026-06-05T04:08:55.447Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/6-B-2622LM REVISED SOW  Bid Invitation  Requirements.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/6-B-2622LM REVISED SOW  Bid Invitation  Requirements.pdf",
-          "sha256": "eeba797d01ef8efc010d1d878cf5ed3a6f2abf5383ab46cc7f1634625d5f0aa5",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-f27a3346-7306-4cf9-a6e9-28edf2232e25-6-B-2622LM-REVISED-SOW-Bid-Invitation-Requirements.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-f27a3346-7306-4cf9-a6e9-28edf2232e25-6-B-2622LM-REVISED-SOW-Bid-Invitation-Requirements.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-f27a3346-7306-4cf9-a6e9-28edf2232e25"
-        },
-        {
-          "id": "file-5991413c-243c-4d72-9a1d-78da88b8e20c",
-          "name": "7-B-2622LM ADDENDUM 1.pdf",
-          "filename": "7-B-2622LM ADDENDUM 1.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 339333,
-          "createdAt": "2026-06-05T04:08:55.453Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/7-B-2622LM ADDENDUM 1.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/7-B-2622LM ADDENDUM 1.pdf",
-          "sha256": "789f7f8c004d238dc98518dee87034656a58129d3db2f1dc66adec6ea5b2aff5",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-5991413c-243c-4d72-9a1d-78da88b8e20c-7-B-2622LM-ADDENDUM-1.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-5991413c-243c-4d72-9a1d-78da88b8e20c-7-B-2622LM-ADDENDUM-1.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-5991413c-243c-4d72-9a1d-78da88b8e20c"
-        },
-        {
-          "id": "file-05ff75fa-d6a9-4ff4-a247-1148d0f4ca24",
-          "name": "8-ADDENDUM 2 QA.pdf",
-          "filename": "8-ADDENDUM 2 QA.pdf",
-          "type": "application/pdf",
-          "contentType": "application/pdf",
-          "size": 107857,
-          "createdAt": "2026-06-05T04:08:55.457Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/8-ADDENDUM 2 QA.pdf",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/8-ADDENDUM 2 QA.pdf",
-          "sha256": "cecbf3596733ebb8a8d92d54117171e295c624906c9a8bfab0d86b8239821a52",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-05ff75fa-d6a9-4ff4-a247-1148d0f4ca24-8-ADDENDUM-2-QA.pdf",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-05ff75fa-d6a9-4ff4-a247-1148d0f4ca24-8-ADDENDUM-2-QA.pdf",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-05ff75fa-d6a9-4ff4-a247-1148d0f4ca24"
-        },
-        {
-          "id": "file-e9e3cc95-047c-4db9-8aff-7e9c6db0fd35",
-          "name": "9-Response-Template-Q-69LR.xlsx",
-          "filename": "9-Response-Template-Q-69LR.xlsx",
-          "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "size": 33771,
-          "createdAt": "2026-06-05T04:08:55.461Z",
-          "status": "completed",
-          "source": "local-import",
-          "sourcePath": "/home/ericw/.openclaw/workspace/sam-downloads/b-2622lm-pressure-washing/9-Response-Template-Q-69LR.xlsx",
-          "relativeSourcePath": "sam-downloads/b-2622lm-pressure-washing/9-Response-Template-Q-69LR.xlsx",
-          "sha256": "79fb3739f6139631c69d331b9d525d16f73e0983b3ea12764fd8f00740c62c82",
-          "storagePath": "/mnt/c/Users/ericw/proposal-flow/proposal-flow/server/data/attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-e9e3cc95-047c-4db9-8aff-7e9c6db0fd35-9-Response-Template-Q-69LR.xlsx",
-          "storedRelativePath": "attachments/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/file-e9e3cc95-047c-4db9-8aff-7e9c6db0fd35-9-Response-Template-Q-69LR.xlsx",
-          "url": "/proposal-flow/api/proposals/proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce/files/file-e9e3cc95-047c-4db9-8aff-7e9c6db0fd35"
-        }
-      ],
-      "metadata": {
-        "workflowSteps": [
-          {
-            "id": "step-9bdf1ff6-ca4c-4d61-961d-8816cc91fcf5",
-            "timestamp": "2026-06-05T15:06:55.810Z",
-            "status": "completed",
-            "stage": "pre-solicitation",
-            "label": "Proposal moved to pre-solicitation — handoff: all outputs present"
-          },
-          {
-            "id": "step-fc267cb7-c15c-40b0-97ac-adb7bcd488ad",
-            "timestamp": "2026-06-05T14:34:58.173Z",
-            "status": "completed",
-            "stage": "final-draft",
-            "label": "Proposal moved to final-draft — handoff: all outputs present"
-          },
-          {
-            "id": "step-aea83a21-cfb8-4a72-80b5-017eeb089216",
-            "timestamp": "2026-06-05T14:33:43.164Z",
-            "status": "completed",
-            "stage": "final-draft",
-            "label": "Proposal moved to final-draft — handoff: all outputs present"
-          },
-          {
-            "id": "step-513ac4a0-d8f6-4cff-89c4-8e53c70a19c6",
-            "timestamp": "2026-06-05T14:08:10.233Z",
-            "status": "completed",
-            "stage": "intake",
-            "label": "Housekeeping: task checklist backfilled (12 tasks)"
-          },
-          {
-            "id": "step-64e85d2d-4fc0-40fd-acfe-da101390077f",
-            "timestamp": "2026-06-05T05:15:30.004Z",
-            "status": "completed",
-            "stage": "ai-review",
-            "label": "Proposal moved to ai-review"
-          },
-          {
-            "id": "step-17ecb435-a3af-4266-a085-7adc66f1b7a5",
-            "timestamp": "2026-06-05T05:15:14.997Z",
-            "status": "completed",
-            "stage": "rough-draft",
-            "label": "Proposal moved to rough-draft"
-          },
-          {
-            "id": "step-2aeb5b7d-d3d2-4e41-bd52-3b48a30f1215",
-            "timestamp": "2026-06-05T05:15:00.229Z",
-            "status": "completed",
-            "stage": "outline",
-            "label": "Proposal moved to outline"
-          },
-          {
-            "id": "step-57a4659b-32e9-4519-9497-467f49ac0e28",
-            "timestamp": "2026-06-05T05:15:00.023Z",
-            "status": "completed",
-            "stage": "pre-solicitation",
-            "label": "Proposal moved to pre-solicitation"
-          }
-        ],
-        "preSolicitation": {
-          "stage": "research",
-          "captureComplete": false,
-          "notes": "",
-          "subcontractingPosture": "Active subcontracting required to meet MBE/DBE participation goals. Identify certified subcontractors in the project area. Ensure subcontractor COIs and W-9s are current.",
-          "teamingPosture": "MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity.",
-          "pricingPosture": "Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).",
-          "riskNotes": [
-            "No critical risk items detected  - review solicitation manually"
-          ],
-          "positioningNotes": [
-            "Rare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 2 compliance requirements (1 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.",
-            "Scope aligns with Rare Earth core services  - strong position as prime.",
-            "MBE/DBE participation goal  - leverage Rare Earth MBE/DBE certification as competitive advantage.",
-            "Past performance: 4 contracts totaling $529,200+",
-            "Certifications: DBE, SBA, Minority-Owned Small Business",
-            "1 directly relevant contract(s): Facility & Grounds – Integrated Recycling & Sustainability in Facility Maintenance",
-            "No bonding requirement detected"
-          ],
-          "partnerDocumentsNeeded": [
-            "Teaming Contract",
-            "NDA",
-            "COI",
-            "W9"
-          ],
-          "actionItems": [
-            "Develop line-item pricing based on locations list from solicitation."
-          ],
-          "generatedAt": "2026-06-05T05:14:55.530Z"
-        },
-        "sourceType": "manual",
-        "submissionReview": {
-          "status": "pending",
-          "requestedAt": null,
-          "reviewedAt": null,
-          "reviewer": null,
-          "notes": "",
-          "checklist": {
-            "finalDraftReady": false,
-            "pricingReady": false,
-            "attachmentsReady": true,
-            "portalReady": false,
-            "approvedByEric": false
-          },
-          "history": []
-        },
-        "submissionReadiness": {
-          "reviewStatus": "pending",
-          "checklist": {
-            "finalDraftReady": false,
-            "pricingReady": false,
-            "attachmentsReady": true,
-            "portalReady": false,
-            "approvedByEric": false
-          },
-          "readinessPercent": 20,
-          "readyToSubmit": false,
-          "artifactSummary": {
-            "hasFinalDraft": false,
-            "hasDocx": false,
-            "hasPdf": false,
-            "hasPricingArtifact": false,
-            "attachmentCount": 9
-          }
-        },
-        "complianceMatrix": [
-          {
-            "requirement_id": "REQ-001",
-            "requirement_text": "Tax Form: W-9",
-            "proposal_section": "Mandatory Forms",
-            "status": "identified",
-            "risk_level": "high",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "attachment",
-            "mandatory": false
-          },
-          {
-            "requirement_id": "REQ-002",
-            "requirement_text": "MBE/DBE participation goal",
-            "proposal_section": "Certifications",
-            "status": "identified",
-            "risk_level": "medium",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "regulation",
-            "mandatory": false
-          },
-          {
-            "requirement_id": "REQ-004",
-            "requirement_text": "E-Verify Form: E-Verify Affidavit",
-            "proposal_section": "Mandatory Forms",
-            "status": "identified",
-            "risk_level": "high",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "regulation",
-            "mandatory": false
-          },
-          {
-            "requirement_id": "REQ-005",
-            "requirement_text": "Drug-Free Workplace: drug-free workplace",
-            "proposal_section": "Mandatory Forms",
-            "status": "identified",
-            "risk_level": "high",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "attachment",
-            "mandatory": false
-          },
-          {
-            "requirement_id": "REQ-006",
-            "requirement_text": "Prevailing Wage / Davis-Bacon Act compliance",
-            "proposal_section": "Labor",
-            "status": "identified",
-            "risk_level": "high",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "regulation",
-            "mandatory": false
-          },
-          {
-            "requirement_id": "REQ-007",
-            "requirement_text": "E-Verify enrollment required",
-            "proposal_section": "Labor",
-            "status": "identified",
-            "risk_level": "high",
-            "source": "ingest_deep",
-            "solicitation_section": "—",
-            "category": "regulation",
-            "mandatory": true
-          }
-        ],
-        "complianceLimits": [],
-        "executiveSummary": "Rare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 6 compliance requirements (5 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.",
-        "bidReadiness": {
-          "risks": [
-            "No critical risk items detected  - review solicitation manually"
-          ],
-          "strengths": [
-            "Scope aligns with Rare Earth core services (exterior/cleaning)",
-            "E-Verify already enrolled",
-            "No bonding requirement detected"
-          ],
-          "goNoGo": "CONDITIONAL_GO",
-          "goNoGoReason": "Scope matches core services  - verify insurance/bonding capacity"
-        },
-        "generatedArtifacts": [
-          {
-            "id": "artifact-27189976-04c2-4d4a-81f6-c7e4947282b8",
-            "type": "pre_solicitation",
-            "title": "Pre-Solicitation Brief",
-            "format": "markdown",
-            "content": "# Pre-Solicitation Brief  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T05:14:55.590Z (deterministic)_\n\n## Overview\nRare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 2 compliance requirements (1 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.\n\n## Bid Readiness\n**CONDITIONAL_GO**  - Scope matches core services  - verify insurance/bonding capacity\n\n## Subcontracting Posture\nActive subcontracting required to meet MBE/DBE participation goals. Identify certified subcontractors in the project area. Ensure subcontractor COIs and W-9s are current.\n\n## Teaming Posture\nMBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity.\n\n## Pricing Posture\nPrice competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n## Risk Notes\n- No critical risk items detected  - review solicitation manually\n\n## Positioning Notes\n- Rare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 2 compliance requirements (1 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.\n- Scope aligns with Rare Earth core services  - strong position as prime.\n- MBE/DBE participation goal  - leverage Rare Earth MBE/DBE certification as competitive advantage.\n- Past performance: 4 contracts totaling $529,200+\n- Certifications: DBE, SBA, Minority-Owned Small Business\n- 1 directly relevant contract(s): Facility & Grounds – Integrated Recycling & Sustainability in Facility Maintenance\n- No bonding requirement detected\n\n## Partner Documents Needed\n- Teaming Contract\n- NDA\n- COI\n- W9\n\n## Action Items\n1. Develop line-item pricing based on locations list from solicitation.\n",
-            "createdAt": "2026-06-05T05:14:55.590Z"
-          },
-          {
-            "id": "artifact-cd22b6aa-2a05-4d4d-ae3d-f9cac3fe8184",
-            "type": "outline",
-            "title": "Proposal Outline",
-            "format": "markdown",
-            "content": "# Proposal Outline  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T05:15:12.458Z (deterministic)_\n\n## Executive Summary\nThrare Contracting submits this proposal in response to Gwinnett County Public Schools's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified DBE/SBA/Minority-Owned Small Business, Thrare Contracting brings proven capability in the required services with $529,200+ in past contract value. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight  - Eric White, Owner/PM, serves as the single point of contact for all contract activities. We have identified 1 high/critical compliance requirements and address each directly in this proposal. Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n## Technical Approach\nThrare Contracting will execute all pressure washing services using a three-phase approach: pre-wash assessment (surface type, staining severity, access constraints), chemical application calibrated to substrate (concrete, masonry, membrane roofing), and high-pressure rinse with containment of wastewater per EPA stormwater guidelines. Scope includes Tax Form: W-9. MBE/DBE participation goal. All work follows OSHA 29 CFR 1926 safety standards with crew-specific JSA documentation. Equipment includes commercial-grade 4,000 PSI units, soft-wash systems for delicate surfaces, and surface cleaners for large-area efficiency.\n\n## Management Plan\nEric White, Owner/PM, serves as the single point of contact and Contractor Project Manager for all task orders. Weekly progress reports are submitted to the COR detailing completed tasks, upcoming schedule, and any issues. A change-control process handles scope modifications  - no work proceeds outside the PWS without written COR approval. MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity. Risk mitigation addresses: No critical risk items detected  - review solicitation manually.\n\n## Staffing and Key Personnel\nEric White, Owner/Project Manager (7+ years experience in facility services, recycling logistics, and project management) directs all operations and serves as the primary interface with the COR. Field crews consist of trained technicians with current OSHA 10-hour certifications and background checks where required. Staffing is scaled to the scope: Tax Form: W-9. MBE/DBE participation goal. All personnel are W-2 employees or vetted subcontractors with documented qualifications.\n\n## Past Performance\nRare Earth Ltd. holds 4 contracts totaling $529,200+. While no contracts are an exact scope match, the following demonstrate transferable capability in project execution, logistics, and facility services: **Recycled Gravel & Aggregate Supply**  - Fulton County Government – Department of Public Works, $231,200, Prime Contractor, 2025-03–2026-03. Delivered 3,600+ tons; 100% on-time delivery; GDOT Compliance. **Recycling & Sustainability Project Management – Advisory, Management, Logistics & Implementation**  - Project Management Portfolio, $198,000, Senior Project Manager, 2025-03–2026-03. Managed logistics for large recycling flows; Coordinated multi-partner teams; Implemented Sustainability and Recycling Goals. **Recycling & Waste Management – Sustainability and Circular Economy Services**  - CheckSammy, $50,000, Subcontractor, ongoing–ongoing. Diverted 100+ tons of waste; Supported ESG tracking; Furthered recycling efforts throughout processes.\n\n## Quality Control\nThrare Contracting implements a three-tier QC process: (1) pre-task planning with crew-specific checklists derived from the PWS, (2) in-progress inspection by the crew lead at defined checkpoints, and (3) post-task documentation including timestamped, GPS-tagged photos of completed work. Nonconformances trigger a corrective action cycle: identify deficiency → root cause → corrective action → COR notification → re-inspection within 24 hours. Customer satisfaction is verified through post-service follow-up.\n\n## Pricing Narrative\nPrice competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n",
-            "createdAt": "2026-06-05T05:15:12.458Z"
-          },
-          {
-            "id": "artifact-0be2c1d9-a69d-4473-b26e-904508e22a2f",
-            "type": "rough_draft",
-            "title": "Rough Draft",
-            "format": "markdown",
-            "content": "# Proposal Draft - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T05:15:17.856Z (deterministic)_\n\n**Offeror:** Rare Earth Ltd. | **UEI:** Z4WKS4UE8NJ6 | **CAGE:** 9JAV8\n**Certifications:** MBE, DBE, SDB | **Point of Contact:** Eric White, (678) 748-3578\n\n---\n\n## Executive Summary\n\nThrare Contracting submits this proposal in response to Gwinnett County Public Schools's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified DBE/SBA/Minority-Owned Small Business, Thrare Contracting brings proven capability in the required services with $529,200+ in past contract value. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight  - Eric White, Owner/PM, serves as the single point of contact for all contract activities. We have identified 1 high/critical compliance requirements and address each directly in this proposal. Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n---\n\n## Technical Approach\n\n### Methodology\n\nOur pressure washing methodology is structured around a three-phase execution model designed to ensure consistent, high-quality results across all surfaces specified in the solicitation (Tax Form: W-9. MBE/DBE participation goal).\n\n**Phase 1  - Pre-Wash Assessment:** Prior to mobilization, our crew lead conducts a surface-by-surface assessment documenting substrate type (concrete, brick, EIFS, membrane), staining severity (light/moderate/heavy), and access requirements. This assessment drives chemical selection, pressure settings, and time estimates. Photo documentation is captured at baseline for before/after comparison.\n\n**Phase 2  - Chemical Application & Wash:** We use sodium hypochlorite-based solutions for organic growth (mold, mildew, algae) and proprietary degreasers for petroleum staining. Soft-wash technique (under 500 PSI) is applied to painted surfaces, EIFS, and roofing membranes. Standard concrete and masonry receives 2,500–4,000 PSI treatment with appropriate tip selection. Surface cleaners are deployed for parking decks, sidewalks, and large slabs to ensure uniform cleaning and reduce cycle time by 40%.\n\n**Phase 3  - Rinse, Containment & Documentation:** Final rinse removes all chemical residue. Wastewater containment follows EPA stormwater BMPs  - we deploy berms and vacuum recovery on sensitive sites. Completion photos are timestamped and GPS-tagged. A punch-list walkthrough with the COR confirms acceptance before demobilization.\n\n**Compliance Notes:** Tax Form: W-9.\n\n**Equipment:** Commercial 4,000 PSI hot/cold units, 12V soft-wash systems, flat-surface cleaners, chemical injection systems, wastewater containment berms, and PPE per OSHA 1926.\n\n\n---\n\n## Management Plan\n\n### Project Governance\n\n**Contractor Project Manager:** Eric White, Owner of Thrare Contracting, serves as the primary point of contact and is authorized to make binding decisions on behalf of the company. Mr. White is directly reachable at (678) 748-3578 and admin@thrarecontracting.com.\n\n**Reporting Cadence:**\n- **Weekly:** Written progress report to COR  - tasks completed, tasks scheduled, issues/risks, resource utilization\n- **Monthly:** Invoice with supporting documentation (photos, timesheets, material receipts)\n- **Ad Hoc:** Immediate notification to COR for safety incidents, scope questions, or schedule impacts\n\n**Change Control:** All scope modifications require written COR approval before execution. Thrare Contracting maintains a change log documenting request date, description, cost impact, and approval status.\n\n**Communication Plan:** COR receives direct cell phone access to the PM for urgent matters. Non-urgent communication via email with 4-hour response commitment during business hours. Emergency response available 24/7.\n\n**Teaming:** MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity.\n\n**Risk Mitigation:** No critical risk items detected  - review solicitation manually.\n\n\n\n---\n\n## Staffing and Key Personnel\n\n### Team Structure\n\n| Role | Name/Assignment | Qualifications | Availability |\n|------|----------------|----------------|---------------|\n| Project Manager | Eric White (Owner) | 7+ years facility services, PM, recycling logistics | 100% dedicated |\n| Crew Lead | Assigned at NTP | OSHA 10-hr, equipment operation certified | Per task order |\n| Technician(s) | Assigned at NTP | Background-checked, task-trained | Per task order |\n\n**Key Personnel  - Eric White, Project Manager:**\nMr. White is the owner and sole decision-maker for Thrare Contracting He brings 7+ years of experience managing facility maintenance, recycling logistics, and multi-site service delivery. Relevant experience includes managing $529,200+ in contracts for Fulton County DPW, CheckSammy, and MCS Chainstore Maintenance. Mr. White holds direct relationships with teaming partners and subcontractors across Metro Atlanta.\n\n**Staffing Commitment:** Thrare Contracting commits to maintaining the crew size necessary to meet all SLA response times (24-hour emergency, 48-hour standard). Crew members receive task-specific training before deployment, including site-specific safety orientation, equipment operation, and chemical handling (where applicable).\n\n**Subcontractor Management:** When teaming partners are utilized, Thrare Contracting maintains prime contractor responsibility. All subcontractors are vetted for insurance, licensing, and relevant experience before deployment.\n\n\n---\n\n## Past Performance\n\nRare Earth Ltd. holds 4 contracts totaling $529,200+. While no contracts are an exact scope match, the following demonstrate transferable capability in project execution, logistics, and facility services: **Recycled Gravel & Aggregate Supply**  - Fulton County Government – Department of Public Works, $231,200, Prime Contractor, 2025-03–2026-03. Delivered 3,600+ tons; 100% on-time delivery; GDOT Compliance. **Recycling & Sustainability Project Management – Advisory, Management, Logistics & Implementation**  - Project Management Portfolio, $198,000, Senior Project Manager, 2025-03–2026-03. Managed logistics for large recycling flows; Coordinated multi-partner teams; Implemented Sustainability and Recycling Goals. **Recycling & Waste Management – Sustainability and Circular Economy Services**  - CheckSammy, $50,000, Subcontractor, ongoing–ongoing. Diverted 100+ tons of waste; Supported ESG tracking; Furthered recycling efforts throughout processes.\n\n---\n\n## Quality Control\n\n### QA/QC Framework\n\n**Tier 1  - Pre-Task Planning:**\n- PWS requirements mapped to crew-specific task checklists\n- Equipment pre-inspection and chemical inventory verification\n- Safety briefing and JSA (Job Safety Analysis) review\n- Baseline photo documentation before work begins\n\n**Tier 2  - In-Progress Inspection:**\n- Crew lead inspects work at defined checkpoints (e.g., after each area/zone completion)\n- Real-time quality issues are corrected before proceeding\n- Progress photos captured at each checkpoint\n\n**Tier 3  - Post-Task Documentation:**\n- Completion photos: timestamped, GPS-tagged, organized by area\n- Task checklist signed by crew lead\n- Submitted to COR within 24 hours of task completion\n\n**Corrective Action Process:**\n1. Deficiency identified (self-inspection or COR feedback)\n2. Root cause determined within 4 hours\n3. Corrective action executed within 24 hours\n4. COR notified with description, root cause, and resolution\n5. Re-inspection to confirm resolution\n6. Preventive measure added to crew checklist to prevent recurrence\n\n**Applicable Requirements:** Tax Form: W-9.\n\n\n---\n\n## Pricing Narrative\n\nPrice competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n---\n\n## Appendix: Compliance Traceability Matrix\n\n| REQ-ID | Requirement | Proposal Section | Risk | Status |\n|--------|-------------|-----------------|------|--------|\n| REQ-001 | Tax Form: W-9 | Mandatory Forms | high | identified |\n| REQ-002 | MBE/DBE participation goal | Certifications | medium | identified |",
-            "createdAt": "2026-06-05T05:15:17.912Z"
-          },
-          {
-            "id": "artifact-a15a9673-e0f3-4133-bf48-ebe86f951f44",
-            "type": "ai_review",
-            "title": "AI Review",
-            "format": "markdown",
-            "content": "# AI Review  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T14:34:53.174Z (deterministic)_\n\n**Compliance Score:** 50%\n\n## Review Summary\nDraft covers 7 sections against 2 compliance requirements. 1 high/critical risk items identified. 1 requirements lack outline coverage. Gaps remain  - address missing requirements before finalizing.\n\n## Missing Requirements\n- REQ-002: MBE/DBE participation goal (no matching outline section)\n\n## Weak Sections\n- Past Performance: no contracts in portfolio directly match the solicitation scope  - consider highlighting transferable experience.\n\n## Presentation Suggestions\n- Ensure each section explicitly references the requirement ID it addresses.\n- Prioritize 1 high/critical items in the executive summary.\n- Add a compliance traceability matrix as an appendix.\n\n## Stock Photo Suggestions\n- Team-at-work photo on the Staffing page\n- Equipment/tools shot on the Technical Approach page\n- Past-performance project photo on cover or executive summary\n\n",
-            "createdAt": "2026-06-05T14:34:53.174Z"
-          },
-          {
-            "id": "artifact-3dbf8c76-a5e6-49f9-afc3-1b74fd7feb14",
-            "type": "compliance_matrix",
-            "title": "Compliance Matrix",
-            "format": "markdown",
-            "content": "# Compliance Matrix  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n**Source:** deterministic | **Total Requirements:** 6 | **Mandatory:** 1\n\n## Executive Summary\nRare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 6 compliance requirements (5 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.\n\n## Bid Readiness Assessment\n**Recommendation: CONDITIONAL_GO**  - Scope matches core services  - verify insurance/bonding capacity\n\n### Top Risks\n- No critical risk items detected  - review solicitation manually\n\n### Strengths\n- Scope aligns with Rare Earth core services (exterior/cleaning)\n- E-Verify already enrolled\n- No bonding requirement detected\n\n**Page / character limit:** No explicit page/character limit found\n\n## Constraints & Limits\n_None detected._\n\n## Requirements by Category\n\n### 📎 Required Attachments & Submissions (2)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-001 | Tax Form: W-9 | Scored | high | identified |\n| REQ-005 | Drug-Free Workplace: drug-free workplace | Scored | high | identified |\n\n### ⚖️ Regulations & Compliance (4)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-002 | MBE/DBE participation goal | Scored | medium | identified |\n| REQ-004 | E-Verify Form: E-Verify Affidavit | Scored | high | identified |\n| REQ-006 | Prevailing Wage / Davis-Bacon Act compliance | Scored | high | identified |\n| REQ-007 | E-Verify enrollment required | **MANDATORY** | high | identified |\n",
-            "createdAt": "2026-06-05T15:06:41.030Z"
-          }
-        ],
-        "roughDraft": {
-          "draftText": "# Proposal Draft - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T05:15:17.856Z (deterministic)_\n\n**Offeror:** Rare Earth Ltd. | **UEI:** Z4WKS4UE8NJ6 | **CAGE:** 9JAV8\n**Certifications:** MBE, DBE, SDB | **Point of Contact:** Eric White, (678) 748-3578\n\n---\n\n## Executive Summary\n\nThrare Contracting submits this proposal in response to Gwinnett County Public Schools's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified DBE/SBA/Minority-Owned Small Business, Thrare Contracting brings proven capability in the required services with $529,200+ in past contract value. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight  - Eric White, Owner/PM, serves as the single point of contact for all contract activities. We have identified 1 high/critical compliance requirements and address each directly in this proposal. Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n---\n\n## Technical Approach\n\n### Methodology\n\nOur pressure washing methodology is structured around a three-phase execution model designed to ensure consistent, high-quality results across all surfaces specified in the solicitation (Tax Form: W-9. MBE/DBE participation goal).\n\n**Phase 1  - Pre-Wash Assessment:** Prior to mobilization, our crew lead conducts a surface-by-surface assessment documenting substrate type (concrete, brick, EIFS, membrane), staining severity (light/moderate/heavy), and access requirements. This assessment drives chemical selection, pressure settings, and time estimates. Photo documentation is captured at baseline for before/after comparison.\n\n**Phase 2  - Chemical Application & Wash:** We use sodium hypochlorite-based solutions for organic growth (mold, mildew, algae) and proprietary degreasers for petroleum staining. Soft-wash technique (under 500 PSI) is applied to painted surfaces, EIFS, and roofing membranes. Standard concrete and masonry receives 2,500–4,000 PSI treatment with appropriate tip selection. Surface cleaners are deployed for parking decks, sidewalks, and large slabs to ensure uniform cleaning and reduce cycle time by 40%.\n\n**Phase 3  - Rinse, Containment & Documentation:** Final rinse removes all chemical residue. Wastewater containment follows EPA stormwater BMPs  - we deploy berms and vacuum recovery on sensitive sites. Completion photos are timestamped and GPS-tagged. A punch-list walkthrough with the COR confirms acceptance before demobilization.\n\n**Compliance Notes:** Tax Form: W-9.\n\n**Equipment:** Commercial 4,000 PSI hot/cold units, 12V soft-wash systems, flat-surface cleaners, chemical injection systems, wastewater containment berms, and PPE per OSHA 1926.\n\n\n---\n\n## Management Plan\n\n### Project Governance\n\n**Contractor Project Manager:** Eric White, Owner of Thrare Contracting, serves as the primary point of contact and is authorized to make binding decisions on behalf of the company. Mr. White is directly reachable at (678) 748-3578 and admin@thrarecontracting.com.\n\n**Reporting Cadence:**\n- **Weekly:** Written progress report to COR  - tasks completed, tasks scheduled, issues/risks, resource utilization\n- **Monthly:** Invoice with supporting documentation (photos, timesheets, material receipts)\n- **Ad Hoc:** Immediate notification to COR for safety incidents, scope questions, or schedule impacts\n\n**Change Control:** All scope modifications require written COR approval before execution. Thrare Contracting maintains a change log documenting request date, description, cost impact, and approval status.\n\n**Communication Plan:** COR receives direct cell phone access to the PM for urgent matters. Non-urgent communication via email with 4-hour response commitment during business hours. Emergency response available 24/7.\n\n**Teaming:** MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity.\n\n**Risk Mitigation:** No critical risk items detected  - review solicitation manually.\n\n\n\n---\n\n## Staffing and Key Personnel\n\n### Team Structure\n\n| Role | Name/Assignment | Qualifications | Availability |\n|------|----------------|----------------|---------------|\n| Project Manager | Eric White (Owner) | 7+ years facility services, PM, recycling logistics | 100% dedicated |\n| Crew Lead | Assigned at NTP | OSHA 10-hr, equipment operation certified | Per task order |\n| Technician(s) | Assigned at NTP | Background-checked, task-trained | Per task order |\n\n**Key Personnel  - Eric White, Project Manager:**\nMr. White is the owner and sole decision-maker for Thrare Contracting He brings 7+ years of experience managing facility maintenance, recycling logistics, and multi-site service delivery. Relevant experience includes managing $529,200+ in contracts for Fulton County DPW, CheckSammy, and MCS Chainstore Maintenance. Mr. White holds direct relationships with teaming partners and subcontractors across Metro Atlanta.\n\n**Staffing Commitment:** Thrare Contracting commits to maintaining the crew size necessary to meet all SLA response times (24-hour emergency, 48-hour standard). Crew members receive task-specific training before deployment, including site-specific safety orientation, equipment operation, and chemical handling (where applicable).\n\n**Subcontractor Management:** When teaming partners are utilized, Thrare Contracting maintains prime contractor responsibility. All subcontractors are vetted for insurance, licensing, and relevant experience before deployment.\n\n\n---\n\n## Past Performance\n\nRare Earth Ltd. holds 4 contracts totaling $529,200+. While no contracts are an exact scope match, the following demonstrate transferable capability in project execution, logistics, and facility services: **Recycled Gravel & Aggregate Supply**  - Fulton County Government – Department of Public Works, $231,200, Prime Contractor, 2025-03–2026-03. Delivered 3,600+ tons; 100% on-time delivery; GDOT Compliance. **Recycling & Sustainability Project Management – Advisory, Management, Logistics & Implementation**  - Project Management Portfolio, $198,000, Senior Project Manager, 2025-03–2026-03. Managed logistics for large recycling flows; Coordinated multi-partner teams; Implemented Sustainability and Recycling Goals. **Recycling & Waste Management – Sustainability and Circular Economy Services**  - CheckSammy, $50,000, Subcontractor, ongoing–ongoing. Diverted 100+ tons of waste; Supported ESG tracking; Furthered recycling efforts throughout processes.\n\n---\n\n## Quality Control\n\n### QA/QC Framework\n\n**Tier 1  - Pre-Task Planning:**\n- PWS requirements mapped to crew-specific task checklists\n- Equipment pre-inspection and chemical inventory verification\n- Safety briefing and JSA (Job Safety Analysis) review\n- Baseline photo documentation before work begins\n\n**Tier 2  - In-Progress Inspection:**\n- Crew lead inspects work at defined checkpoints (e.g., after each area/zone completion)\n- Real-time quality issues are corrected before proceeding\n- Progress photos captured at each checkpoint\n\n**Tier 3  - Post-Task Documentation:**\n- Completion photos: timestamped, GPS-tagged, organized by area\n- Task checklist signed by crew lead\n- Submitted to COR within 24 hours of task completion\n\n**Corrective Action Process:**\n1. Deficiency identified (self-inspection or COR feedback)\n2. Root cause determined within 4 hours\n3. Corrective action executed within 24 hours\n4. COR notified with description, root cause, and resolution\n5. Re-inspection to confirm resolution\n6. Preventive measure added to crew checklist to prevent recurrence\n\n**Applicable Requirements:** Tax Form: W-9.\n\n\n---\n\n## Pricing Narrative\n\nPrice competitively as lowest responsive bidder (eRFQ/IFB evaluation).\n\n---\n\n## Appendix: Compliance Traceability Matrix\n\n| REQ-ID | Requirement | Proposal Section | Risk | Status |\n|--------|-------------|-----------------|------|--------|\n| REQ-001 | Tax Form: W-9 | Mandatory Forms | high | identified |\n| REQ-002 | MBE/DBE participation goal | Certifications | medium | identified |",
-          "generatedAt": "2026-06-05T05:15:17.859Z",
-          "source": "deterministic"
-        },
-        "captureTiming": {
-          "pursuitPosture": "either",
-          "pursuitBucket": "urgent",
-          "timingBucket": "this_week",
-          "daysOut": 2,
-          "intentToBidDate": "2026-05-24",
-          "teamingStartDate": "2026-04-08",
-          "primeOutreachStartDate": "2026-03-24",
-          "primeOutreachEndDate": "2026-04-23",
-          "recommendedWindow": {
-            "dueDate": "2026-06-07",
-            "intentToBidDate": "2026-05-24",
-            "teamingStartDate": "2026-04-08",
-            "primeOutreachStartDate": "2026-03-24",
-            "primeOutreachEndDate": "2026-04-23",
-            "bucket": "urgent",
-            "timingBucket": "this_week",
-            "daysOut": 2,
-            "pursuitPosture": "either",
-            "recommendation": "Treat as immediate response. Confirm bid posture and send outreach now."
-          }
-        },
-        "rapidResponse": {
-          "inquiryStatus": "none",
-          "acknowledgedAt": null,
-          "lastInboundAt": null,
-          "responseOwner": "",
-          "nextDraftType": "",
-          "notes": ""
-        },
-        "decisions": [],
-        "blockers": [],
-        "fitScore": 85,
-        "fitDecision": "recommended",
-        "fitReasons": [
-          "service:pressure wash",
-          "service:softwash",
-          "service:cleaning",
-          "service:window clean",
-          "geo:gwinnett"
-        ],
-        "fitAlgorithm": "v2",
-        "aiReview": {
-          "complianceScore": 50,
-          "missingRequirements": [
-            "REQ-002: MBE/DBE participation goal (no matching outline section)"
-          ],
-          "weakSections": [
-            "Past Performance: no contracts in portfolio directly match the solicitation scope  - consider highlighting transferable experience."
-          ],
-          "reviewSummary": "Draft covers 7 sections against 2 compliance requirements. 1 high/critical risk items identified. 1 requirements lack outline coverage. Gaps remain  - address missing requirements before finalizing.",
-          "presentationSuggestions": [
-            "Ensure each section explicitly references the requirement ID it addresses.",
-            "Prioritize 1 high/critical items in the executive summary.",
-            "Add a compliance traceability matrix as an appendix."
-          ],
-          "stockPhotoSuggestions": [
-            "Team-at-work photo on the Staffing page",
-            "Equipment/tools shot on the Technical Approach page",
-            "Past-performance project photo on cover or executive summary"
-          ],
-          "improvedDraft": "",
-          "generatedAt": "2026-06-05T14:34:53.157Z"
-        }
-      },
-      "opportunity": {
-        "sourceType": "manual",
-        "solicitationNumber": "",
-        "title": "B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning",
-        "buyer": "Gwinnett County Public Schools",
-        "sourceUrl": "https://gwinnett.bonfirehub.com/opportunities/238246",
-        "dueDate": "2026-06-08",
-        "setAside": "",
-        "contractType": "",
-        "estimatedValue": null,
-        "captureOwner": "Morpheus"
-      },
-      "solicitationDocuments": [],
-      "requirements": [],
-      "evaluationFactors": [],
-      "complianceMatrix": [
-        {
-          "requirement_id": "REQ-001",
-          "requirement_text": "Tax Form: W-9",
-          "proposal_section": "Mandatory Forms",
-          "status": "identified",
-          "risk_level": "high",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "attachment",
-          "mandatory": false
-        },
-        {
-          "requirement_id": "REQ-002",
-          "requirement_text": "MBE/DBE participation goal",
-          "proposal_section": "Certifications",
-          "status": "identified",
-          "risk_level": "medium",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "regulation",
-          "mandatory": false
-        },
-        {
-          "requirement_id": "REQ-004",
-          "requirement_text": "E-Verify Form: E-Verify Affidavit",
-          "proposal_section": "Mandatory Forms",
-          "status": "identified",
-          "risk_level": "high",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "regulation",
-          "mandatory": false
-        },
-        {
-          "requirement_id": "REQ-005",
-          "requirement_text": "Drug-Free Workplace: drug-free workplace",
-          "proposal_section": "Mandatory Forms",
-          "status": "identified",
-          "risk_level": "high",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "attachment",
-          "mandatory": false
-        },
-        {
-          "requirement_id": "REQ-006",
-          "requirement_text": "Prevailing Wage / Davis-Bacon Act compliance",
-          "proposal_section": "Labor",
-          "status": "identified",
-          "risk_level": "high",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "regulation",
-          "mandatory": false
-        },
-        {
-          "requirement_id": "REQ-007",
-          "requirement_text": "E-Verify enrollment required",
-          "proposal_section": "Labor",
-          "status": "identified",
-          "risk_level": "high",
-          "source": "ingest_deep",
-          "solicitation_section": "—",
-          "category": "regulation",
-          "mandatory": true
-        }
-      ],
-      "artifacts": [],
-      "pastPerformanceRecords": [],
-      "capabilityStatements": [],
-      "partnerProfiles": [],
-      "proposalSections": [
-        {
-          "id": "section-executive_summary-1",
-          "key": "executive_summary",
-          "title": "Executive Summary",
-          "purpose": "Capture the buyer need, your discriminators, and the overall value story.",
-          "evaluatorQuestion": "Why is this team the safest and strongest choice for award?",
-          "pageBudget": 2,
-          "owner": "capture_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-technical_approach-1",
-          "key": "technical_approach",
-          "title": "Technical Approach",
-          "purpose": "Explain how work will be performed in a compliant, low-risk way.",
-          "evaluatorQuestion": "Does the team clearly satisfy the technical requirements and execution risk?",
-          "pageBudget": 6,
-          "owner": "technical_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-management_plan-1",
-          "key": "management_plan",
-          "title": "Management Plan",
-          "purpose": "Show governance, staffing, communications, and quality controls.",
-          "evaluatorQuestion": "Can this team manage delivery, staffing, reporting, and coordination reliably?",
-          "pageBudget": 3,
-          "owner": "proposal_manager",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-staffing_key_personnel-1",
-          "key": "staffing_key_personnel",
-          "title": "Staffing and Key Personnel",
-          "purpose": "Prove the team has the right people, qualifications, and coverage.",
-          "evaluatorQuestion": "Are the proposed people and labor plan credible and qualified?",
-          "pageBudget": 2,
-          "owner": "hr_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-past_performance-1",
-          "key": "past_performance",
-          "title": "Past Performance",
-          "purpose": "Map relevant experience and evidence to contract needs.",
-          "evaluatorQuestion": "Has this team successfully delivered materially similar work before?",
-          "pageBudget": 3,
-          "owner": "past_performance_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-quality_control-1",
-          "key": "quality_control",
-          "title": "Quality Control",
-          "purpose": "Show how quality, compliance, safety, and corrective action are managed.",
-          "evaluatorQuestion": "Will the contractor consistently meet performance standards and documentation requirements?",
-          "pageBudget": 2,
-          "owner": "quality_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        },
-        {
-          "id": "section-pricing_narrative-1",
-          "key": "pricing_narrative",
-          "title": "Pricing Narrative",
-          "purpose": "Explain pricing logic, assumptions, and cost realism.",
-          "evaluatorQuestion": "Is the pricing understandable, justified, and aligned to the approach?",
-          "pageBudget": 2,
-          "owner": "pricing_lead",
-          "status": "not_started",
-          "readiness": "not_ready",
-          "draftText": "",
-          "summary": "",
-          "evidenceLinks": [],
-          "requirementIds": [],
-          "evaluationFactorIds": [],
-          "redTeamFindingIds": [],
-          "unresolvedPlaceholders": [],
-          "lastReviewedAt": null,
-          "modelUsed": null,
-          "scorecard": {
-            "compliance_score": 0,
-            "persuasiveness_score": 0,
-            "specificity_score": 0,
-            "evidence_score": 0,
-            "risk_score": 100
-          }
-        }
-      ],
-      "strategy": {
-        "winThemes": [],
-        "discriminators": [],
-        "evaluatorHotButtons": [],
-        "risks": [],
-        "executivePositioning": ""
-      },
-      "outline": {
-        "status": "not_started",
-        "notes": "",
-        "sections": [
-          {
-            "sectionKey": "executive_summary",
-            "title": "Executive Summary",
-            "purpose": "Concise overview of approach, qualifications, and value proposition.",
-            "evaluatorQuestion": "How does the offeror address Executive Summary?",
-            "paragraph": "Thrare Contracting submits this proposal in response to Gwinnett County Public Schools's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified DBE/SBA/Minority-Owned Small Business, Thrare Contracting brings proven capability in the required services with $529,200+ in past contract value. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight  - Eric White, Owner/PM, serves as the single point of contact for all contract activities. We have identified 1 high/critical compliance requirements and address each directly in this proposal. Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).",
-            "pageBudget": 0.2,
-            "notes": "Thrare Contracting submits this proposal in response to Gwinnett County Public Schools's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified DBE/SBA/Minority-Owned Small Business, Thrare Contracting brings proven capability in the required services with $529,200+ in past contract value. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight  - Eric White, Owner/PM, serves as the single point of contact for all contract activities. We have identified 1 high/critical compliance requirements and address each directly in this proposal. Price competitively as lowest responsive bidder (eRFQ/IFB evaluation)."
-          },
-          {
-            "sectionKey": "technical_approach",
-            "title": "Technical Approach",
-            "purpose": "Methodology, tools, and execution plan that satisfy the scope.",
-            "evaluatorQuestion": "How does the offeror address Technical Approach?",
-            "paragraph": "Thrare Contracting will execute all pressure washing services using a three-phase approach: pre-wash assessment (surface type, staining severity, access constraints), chemical application calibrated to substrate (concrete, masonry, membrane roofing), and high-pressure rinse with containment of wastewater per EPA stormwater guidelines. Scope includes Tax Form: W-9. MBE/DBE participation goal. All work follows OSHA 29 CFR 1926 safety standards with crew-specific JSA documentation. Equipment includes commercial-grade 4,000 PSI units, soft-wash systems for delicate surfaces, and surface cleaners for large-area efficiency.",
-            "pageBudget": 0.2,
-            "notes": "Thrare Contracting will execute all pressure washing services using a three-phase approach: pre-wash assessment (surface type, staining severity, access constraints), chemical application calibrated to substrate (concrete, masonry, membrane roofing), and high-pressure rinse with containment of wastewater per EPA stormwater guidelines. Scope includes Tax Form: W-9. MBE/DBE participation goal. All work follows OSHA 29 CFR 1926 safety standards with crew-specific JSA documentation. Equipment includes commercial-grade 4,000 PSI units, soft-wash systems for delicate surfaces, and surface cleaners for large-area efficiency."
-          },
-          {
-            "sectionKey": "management_plan",
-            "title": "Management Plan",
-            "purpose": "Project governance, communications cadence, and reporting.",
-            "evaluatorQuestion": "How does the offeror address Management Plan?",
-            "paragraph": "Eric White, Owner/PM, serves as the single point of contact and Contractor Project Manager for all task orders. Weekly progress reports are submitted to the COR detailing completed tasks, upcoming schedule, and any issues. A change-control process handles scope modifications  - no work proceeds outside the PWS without written COR approval. MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity. Risk mitigation addresses: No critical risk items detected  - review solicitation manually.",
-            "pageBudget": 0.2,
-            "notes": "Eric White, Owner/PM, serves as the single point of contact and Contractor Project Manager for all task orders. Weekly progress reports are submitted to the COR detailing completed tasks, upcoming schedule, and any issues. A change-control process handles scope modifications  - no work proceeds outside the PWS without written COR approval. MBE/DBE teaming advantage  - Rare Earth's minority certification adds value as either prime or team member. Consider joint venture if scope exceeds solo capacity. Risk mitigation addresses: No critical risk items detected  - review solicitation manually."
-          },
-          {
-            "sectionKey": "staffing",
-            "title": "Staffing and Key Personnel",
-            "purpose": "Team structure, key personnel credentials, and staffing commitments.",
-            "evaluatorQuestion": "How does the offeror address Staffing and Key Personnel?",
-            "paragraph": "Eric White, Owner/Project Manager (7+ years experience in facility services, recycling logistics, and project management) directs all operations and serves as the primary interface with the COR. Field crews consist of trained technicians with current OSHA 10-hour certifications and background checks where required. Staffing is scaled to the scope: Tax Form: W-9. MBE/DBE participation goal. All personnel are W-2 employees or vetted subcontractors with documented qualifications.",
-            "pageBudget": 0.2,
-            "notes": "Eric White, Owner/Project Manager (7+ years experience in facility services, recycling logistics, and project management) directs all operations and serves as the primary interface with the COR. Field crews consist of trained technicians with current OSHA 10-hour certifications and background checks where required. Staffing is scaled to the scope: Tax Form: W-9. MBE/DBE participation goal. All personnel are W-2 employees or vetted subcontractors with documented qualifications."
-          },
-          {
-            "sectionKey": "past_performance",
-            "title": "Past Performance",
-            "purpose": "Relevant recent contracts demonstrating comparable scope and outcomes.",
-            "evaluatorQuestion": "How does the offeror address Past Performance?",
-            "paragraph": "Rare Earth Ltd. holds 4 contracts totaling $529,200+. While no contracts are an exact scope match, the following demonstrate transferable capability in project execution, logistics, and facility services: **Recycled Gravel & Aggregate Supply**  - Fulton County Government – Department of Public Works, $231,200, Prime Contractor, 2025-03–2026-03. Delivered 3,600+ tons; 100% on-time delivery; GDOT Compliance. **Recycling & Sustainability Project Management – Advisory, Management, Logistics & Implementation**  - Project Management Portfolio, $198,000, Senior Project Manager, 2025-03–2026-03. Managed logistics for large recycling flows; Coordinated multi-partner teams; Implemented Sustainability and Recycling Goals. **Recycling & Waste Management – Sustainability and Circular Economy Services**  - CheckSammy, $50,000, Subcontractor, ongoing–ongoing. Diverted 100+ tons of waste; Supported ESG tracking; Furthered recycling efforts throughout processes.",
-            "pageBudget": 0.2,
-            "notes": "Rare Earth Ltd. holds 4 contracts totaling $529,200+. While no contracts are an exact scope match, the following demonstrate transferable capability in project execution, logistics, and facility services: **Recycled Gravel & Aggregate Supply**  - Fulton County Government – Department of Public Works, $231,200, Prime Contractor, 2025-03–2026-03. Delivered 3,600+ tons; 100% on-time delivery; GDOT Compliance. **Recycling & Sustainability Project Management – Advisory, Management, Logistics & Implementation**  - Project Management Portfolio, $198,000, Senior Project Manager, 2025-03–2026-03. Managed logistics for large recycling flows; Coordinated multi-partner teams; Implemented Sustainability and Recycling Goals. **Recycling & Waste Management – Sustainability and Circular Economy Services**  - CheckSammy, $50,000, Subcontractor, ongoing–ongoing. Diverted 100+ tons of waste; Supported ESG tracking; Furthered recycling efforts throughout processes."
-          },
-          {
-            "sectionKey": "quality_control",
-            "title": "Quality Control",
-            "purpose": "QA/QC framework, inspection checkpoints, and corrective action process.",
-            "evaluatorQuestion": "How does the offeror address Quality Control?",
-            "paragraph": "Thrare Contracting implements a three-tier QC process: (1) pre-task planning with crew-specific checklists derived from the PWS, (2) in-progress inspection by the crew lead at defined checkpoints, and (3) post-task documentation including timestamped, GPS-tagged photos of completed work. Nonconformances trigger a corrective action cycle: identify deficiency → root cause → corrective action → COR notification → re-inspection within 24 hours. Customer satisfaction is verified through post-service follow-up.",
-            "pageBudget": 0.2,
-            "notes": "Thrare Contracting implements a three-tier QC process: (1) pre-task planning with crew-specific checklists derived from the PWS, (2) in-progress inspection by the crew lead at defined checkpoints, and (3) post-task documentation including timestamped, GPS-tagged photos of completed work. Nonconformances trigger a corrective action cycle: identify deficiency → root cause → corrective action → COR notification → re-inspection within 24 hours. Customer satisfaction is verified through post-service follow-up."
-          },
-          {
-            "sectionKey": "pricing_narrative",
-            "title": "Pricing Narrative",
-            "purpose": "Pricing rationale, cost basis, and value case  - not the price itself.",
-            "evaluatorQuestion": "How does the offeror address Pricing Narrative?",
-            "paragraph": "Price competitively as lowest responsive bidder (eRFQ/IFB evaluation).",
-            "pageBudget": 0.2,
-            "notes": "Price competitively as lowest responsive bidder (eRFQ/IFB evaluation)."
-          }
-        ],
-        "generatedAt": "2026-06-05T05:15:12.402Z",
-        "totalPageBudget": 1.4
-      },
-      "redTeamFindings": [],
-      "submissionPackage": {
-        "attachments": [],
-        "pageCountLimit": null,
-        "pageCountActual": null,
-        "fontCompliance": "unknown",
-        "completenessStatus": "not_started",
-        "consistencyStatus": "not_started",
-        "submissionReadiness": "blocked",
-        "unresolvedRedFlags": [],
-        "finalChecks": {
-          "requirementCoverageCheck": "not_started",
-          "attachmentCompletenessCheck": "not_started",
-          "pageCountCheck": "not_started",
-          "consistencyCheck": "not_started",
-          "terminologyCheck": "not_started"
-        }
-      },
-      "pricingGovernance": {
-        "constraints": [],
-        "marginFloor": null,
-        "riskAdjustmentNotes": "",
-        "bondInsurance": {
-          "paymentBondRequired": false,
-          "performanceBondRequired": false,
-          "bondPercentage": null,
-          "insuranceMinimum": null,
-          "insuranceNotes": ""
-        },
-        "wageDetermination": {
-          "required": false,
-          "wageScheduleRef": "",
-          "notes": ""
-        },
-        "taxEscalation": {
-          "taxExempt": false,
-          "escalationClause": false,
-          "escalationCapPct": null,
-          "escalationNotes": ""
-        },
-        "assumptions": [],
-        "reviewStatus": "not_started",
-        "reviewedBy": "",
-        "reviewedAt": null,
-        "notes": ""
-      },
-      "stageHandoffs": [
-        {
-          "from": "intake",
-          "to": "final-draft",
-          "timestamp": "2026-06-05T14:33:43.164Z",
-          "outputsProduced": [],
-          "outputsMissing": [],
-          "outputsValid": true,
-          "nextStageExpects": [],
-          "signal": "clean"
-        },
-        {
-          "from": "pre_solicitation",
-          "to": "final-draft",
-          "timestamp": "2026-06-05T14:34:58.173Z",
-          "outputsProduced": [],
-          "outputsMissing": [],
-          "outputsValid": true,
-          "nextStageExpects": [],
-          "signal": "clean"
-        },
-        {
-          "from": "final-draft",
-          "to": "pre-solicitation",
-          "timestamp": "2026-06-05T15:06:55.810Z",
-          "outputsProduced": [],
-          "outputsMissing": [],
-          "outputsValid": true,
-          "nextStageExpects": [],
-          "signal": "clean"
-        }
-      ]
-    },
-    {
       "id": "proposal-51401a64-f405-40f0-930a-588baae4bc19",
       "title": "W9124M26RA007 – Grounds Maintenance Fort Stewart/HAAF",
       "agency": "MICC-Fort Stewart / Dept. of the Army",
@@ -8305,7 +7066,7 @@
       "title": "Janitorial Services, Avery Office and Engine Bay",
       "agency": "AGRICULTURE, DEPARTMENT OF",
       "dueDate": "2026-09-30",
-      "status": "intake",
+      "status": "closed",
       "outcomeStatus": "passed",
       "source": "sam-828e343d3ede4cf8bdd1b375f5c44df0",
       "type": "federal",
@@ -8333,6 +7094,13 @@
         "importedAt": "2026-05-20T07:00:48.597823",
         "importedBy": "morpheus-watch",
         "workflowSteps": [
+          {
+            "id": "step-3c8f6899-89a8-4bf2-87c3-1f8d7ea2c9c7",
+            "timestamp": "2026-06-05T23:35:19.415Z",
+            "status": "completed",
+            "stage": "closed",
+            "label": "Housekeeping: auto-closed (award notice detected in notes)"
+          },
           {
             "stage": "intake",
             "label": "Task checklist generated (12 tasks)",
@@ -8466,10 +7234,42 @@
           "service:janitorial",
           "agency:Environmental Protection Agency"
         ],
-        "fitAlgorithm": "v2"
+        "fitAlgorithm": "v2",
+        "captureTiming": {
+          "pursuitPosture": "either",
+          "pursuitBucket": "pre_position",
+          "timingBucket": "90_180",
+          "daysOut": 116,
+          "intentToBidDate": "2026-09-15",
+          "teamingStartDate": "2026-07-31",
+          "primeOutreachStartDate": "2026-07-16",
+          "primeOutreachEndDate": "2026-08-15",
+          "recommendedWindow": {
+            "dueDate": "2026-09-29",
+            "intentToBidDate": "2026-09-15",
+            "teamingStartDate": "2026-07-31",
+            "primeOutreachStartDate": "2026-07-16",
+            "primeOutreachEndDate": "2026-08-15",
+            "bucket": "pre_position",
+            "timingBucket": "90_180",
+            "daysOut": 116,
+            "pursuitPosture": "either",
+            "recommendation": "Use this window to shape teaming, intent, and customer touchpoints."
+          }
+        },
+        "rapidResponse": {
+          "inquiryStatus": "none",
+          "acknowledgedAt": null,
+          "lastInboundAt": null,
+          "responseOwner": "",
+          "nextDraftType": "",
+          "notes": ""
+        },
+        "decisions": [],
+        "blockers": []
       },
       "createdAt": "2026-05-20T11:00:48.601Z",
-      "updatedAt": "2026-05-26T19:33:25.507Z",
+      "updatedAt": "2026-06-05T23:35:19.411Z",
       "tasks": [
         {
           "id": "task-bbe3ee57-00",
@@ -8641,6 +7441,11 @@
             "model": "MiniMax-M2.5",
             "lane": "default"
           },
+          "pricing_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
           "technical_draft": {
             "provider": "minimax",
             "model": "MiniMax-M2.5",
@@ -8725,12 +7530,20 @@
             "blocker": "Missing prerequisite: strategy"
           },
           {
+            "stageId": "pricing_strategy",
+            "label": "Pricing Strategy",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: outline"
+          },
+          {
             "stageId": "drafting",
             "label": "Drafting",
             "status": "blocked",
             "updatedAt": null,
             "completedAt": null,
-            "blocker": "Missing prerequisite: outline"
+            "blocker": "Missing prerequisite: pricing_strategy"
           },
           {
             "stageId": "red_team",
@@ -9016,14 +7829,42 @@
           "low": 0
         }
       },
-      "twentyOpportunityId": "7bb4fc46-982f-4a7d-ba15-ae51f9ec07ba"
+      "twentyOpportunityId": "7bb4fc46-982f-4a7d-ba15-ae51f9ec07ba",
+      "pricingGovernance": {
+        "constraints": [],
+        "marginFloor": null,
+        "riskAdjustmentNotes": "",
+        "bondInsurance": {
+          "paymentBondRequired": false,
+          "performanceBondRequired": false,
+          "bondPercentage": null,
+          "insuranceMinimum": null,
+          "insuranceNotes": ""
+        },
+        "wageDetermination": {
+          "required": false,
+          "wageScheduleRef": "",
+          "notes": ""
+        },
+        "taxEscalation": {
+          "taxExempt": false,
+          "escalationClause": false,
+          "escalationCapPct": null,
+          "escalationNotes": ""
+        },
+        "assumptions": [],
+        "reviewStatus": "not_started",
+        "reviewedBy": "",
+        "reviewedAt": null,
+        "notes": ""
+      }
     },
     {
       "id": "proposal-524a7cad-3b80-490c-822d-f9f99cf7691c",
       "title": "Awarded Janitorial Services - Mercedes",
       "agency": "INTERNATIONAL BOUNDARY AND WATER COMMISSION: US-MEXICO",
       "dueDate": "2026-06-30",
-      "status": "intake",
+      "status": "closed",
       "outcomeStatus": "passed",
       "source": "sam-95dc5aea48704d6f8cbabe38ec6177fd",
       "type": "federal",
@@ -9051,6 +7892,13 @@
         "importedAt": "2026-05-20T07:00:48.580798",
         "importedBy": "morpheus-watch",
         "workflowSteps": [
+          {
+            "id": "step-9dc378a5-cb3c-42df-9ac0-eeb10ab7596d",
+            "timestamp": "2026-06-05T23:35:19.415Z",
+            "status": "completed",
+            "stage": "closed",
+            "label": "Housekeeping: auto-closed (award notice detected in notes)"
+          },
           {
             "stage": "intake",
             "label": "Task checklist generated (12 tasks)",
@@ -9187,10 +8035,42 @@
         "fitReasons": [
           "service:janitorial"
         ],
-        "fitAlgorithm": "v2"
+        "fitAlgorithm": "v2",
+        "captureTiming": {
+          "pursuitPosture": "either",
+          "pursuitBucket": "active",
+          "timingBucket": "30_days",
+          "daysOut": 24,
+          "intentToBidDate": "2026-06-15",
+          "teamingStartDate": "2026-04-30",
+          "primeOutreachStartDate": "2026-04-15",
+          "primeOutreachEndDate": "2026-05-15",
+          "recommendedWindow": {
+            "dueDate": "2026-06-29",
+            "intentToBidDate": "2026-06-15",
+            "teamingStartDate": "2026-04-30",
+            "primeOutreachStartDate": "2026-04-15",
+            "primeOutreachEndDate": "2026-05-15",
+            "bucket": "active",
+            "timingBucket": "30_days",
+            "daysOut": 24,
+            "pursuitPosture": "either",
+            "recommendation": "Work active capture, pricing, and partner follow-up this week."
+          }
+        },
+        "rapidResponse": {
+          "inquiryStatus": "none",
+          "acknowledgedAt": null,
+          "lastInboundAt": null,
+          "responseOwner": "",
+          "nextDraftType": "",
+          "notes": ""
+        },
+        "decisions": [],
+        "blockers": []
       },
       "createdAt": "2026-05-20T11:00:48.581Z",
-      "updatedAt": "2026-05-26T19:33:09.883Z",
+      "updatedAt": "2026-06-05T23:35:19.411Z",
       "tasks": [
         {
           "id": "task-9cf7691c-00",
@@ -9362,6 +8242,11 @@
             "model": "MiniMax-M2.5",
             "lane": "default"
           },
+          "pricing_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
           "technical_draft": {
             "provider": "minimax",
             "model": "MiniMax-M2.5",
@@ -9446,12 +8331,20 @@
             "blocker": "Missing prerequisite: strategy"
           },
           {
+            "stageId": "pricing_strategy",
+            "label": "Pricing Strategy",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: outline"
+          },
+          {
             "stageId": "drafting",
             "label": "Drafting",
             "status": "blocked",
             "updatedAt": null,
             "completedAt": null,
-            "blocker": "Missing prerequisite: outline"
+            "blocker": "Missing prerequisite: pricing_strategy"
           },
           {
             "stageId": "red_team",
@@ -9737,7 +8630,35 @@
           "low": 0
         }
       },
-      "twentyOpportunityId": "2e21b544-b38f-4b01-8285-5f034bd02234"
+      "twentyOpportunityId": "2e21b544-b38f-4b01-8285-5f034bd02234",
+      "pricingGovernance": {
+        "constraints": [],
+        "marginFloor": null,
+        "riskAdjustmentNotes": "",
+        "bondInsurance": {
+          "paymentBondRequired": false,
+          "performanceBondRequired": false,
+          "bondPercentage": null,
+          "insuranceMinimum": null,
+          "insuranceNotes": ""
+        },
+        "wageDetermination": {
+          "required": false,
+          "wageScheduleRef": "",
+          "notes": ""
+        },
+        "taxEscalation": {
+          "taxExempt": false,
+          "escalationClause": false,
+          "escalationCapPct": null,
+          "escalationNotes": ""
+        },
+        "assumptions": [],
+        "reviewStatus": "not_started",
+        "reviewedBy": "",
+        "reviewedAt": null,
+        "notes": ""
+      }
     },
     {
       "id": "proposal-fdce6422-cefd-4ed7-b7ff-f1c42121192b",
@@ -11460,7 +10381,7 @@
       "title": "Landscaping Services, Darrington Ranger Station",
       "agency": "AGRICULTURE, DEPARTMENT OF",
       "dueDate": "2026-09-30",
-      "status": "intake",
+      "status": "closed",
       "source": "sam-8ba3d7f120e64847820dd5a61e912b13",
       "type": "federal",
       "notes": "Auto-imported by Morpheus. Score: 82/100. Pursue. | CLOSED: Award Notice — already awarded to another vendor",
@@ -11484,6 +10405,13 @@
         "importedAt": "2026-04-30T07:00:26.298881",
         "importedBy": "morpheus-watch",
         "workflowSteps": [
+          {
+            "id": "step-7597559b-628b-4dc7-b4c0-7721313916f9",
+            "timestamp": "2026-06-05T23:35:19.415Z",
+            "status": "completed",
+            "stage": "closed",
+            "label": "Housekeeping: auto-closed (award notice detected in notes)"
+          },
           {
             "stage": "intake",
             "label": "Task checklist generated (12 tasks)",
@@ -11538,10 +10466,42 @@
           "service:landscap",
           "agency:Environmental Protection Agency"
         ],
-        "fitAlgorithm": "v2"
+        "fitAlgorithm": "v2",
+        "captureTiming": {
+          "pursuitPosture": "either",
+          "pursuitBucket": "pre_position",
+          "timingBucket": "90_180",
+          "daysOut": 116,
+          "intentToBidDate": "2026-09-15",
+          "teamingStartDate": "2026-07-31",
+          "primeOutreachStartDate": "2026-07-16",
+          "primeOutreachEndDate": "2026-08-15",
+          "recommendedWindow": {
+            "dueDate": "2026-09-29",
+            "intentToBidDate": "2026-09-15",
+            "teamingStartDate": "2026-07-31",
+            "primeOutreachStartDate": "2026-07-16",
+            "primeOutreachEndDate": "2026-08-15",
+            "bucket": "pre_position",
+            "timingBucket": "90_180",
+            "daysOut": 116,
+            "pursuitPosture": "either",
+            "recommendation": "Use this window to shape teaming, intent, and customer touchpoints."
+          }
+        },
+        "rapidResponse": {
+          "inquiryStatus": "none",
+          "acknowledgedAt": null,
+          "lastInboundAt": null,
+          "responseOwner": "",
+          "nextDraftType": "",
+          "notes": ""
+        },
+        "decisions": [],
+        "blockers": []
       },
       "createdAt": "2026-04-30T11:00:26.316Z",
-      "updatedAt": "2026-05-26T19:33:25.539Z",
+      "updatedAt": "2026-06-05T23:35:19.411Z",
       "tasks": [
         {
           "id": "task-34f921d7-00",
@@ -11713,6 +10673,11 @@
             "model": "MiniMax-M2.5",
             "lane": "default"
           },
+          "pricing_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
           "technical_draft": {
             "provider": "minimax",
             "model": "MiniMax-M2.5",
@@ -11797,12 +10762,20 @@
             "blocker": "Missing prerequisite: strategy"
           },
           {
+            "stageId": "pricing_strategy",
+            "label": "Pricing Strategy",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: outline"
+          },
+          {
             "stageId": "drafting",
             "label": "Drafting",
             "status": "blocked",
             "updatedAt": null,
             "completedAt": null,
-            "blocker": "Missing prerequisite: outline"
+            "blocker": "Missing prerequisite: pricing_strategy"
           },
           {
             "stageId": "red_team",
@@ -12091,7 +11064,35 @@
       "solicitationNumber": "1240BD26Q0040",
       "sourceUrl": "https://sam.gov/workspace/contract/opp/8ba3d7f120e64847820dd5a61e912b13/view",
       "twentyOpportunityId": "5a91b1e9-1bc9-47b8-8186-789c8bcff70a",
-      "outcomeStatus": "passed"
+      "outcomeStatus": "passed",
+      "pricingGovernance": {
+        "constraints": [],
+        "marginFloor": null,
+        "riskAdjustmentNotes": "",
+        "bondInsurance": {
+          "paymentBondRequired": false,
+          "performanceBondRequired": false,
+          "bondPercentage": null,
+          "insuranceMinimum": null,
+          "insuranceNotes": ""
+        },
+        "wageDetermination": {
+          "required": false,
+          "wageScheduleRef": "",
+          "notes": ""
+        },
+        "taxEscalation": {
+          "taxExempt": false,
+          "escalationClause": false,
+          "escalationCapPct": null,
+          "escalationNotes": ""
+        },
+        "assumptions": [],
+        "reviewStatus": "not_started",
+        "reviewedBy": "",
+        "reviewedAt": null,
+        "notes": ""
+      }
     }
   ],
   "calendarEvents": [],
@@ -12891,7 +11892,7 @@
       "id": "proposal-6ac6a13a-072c-41c6-b939-5f81bbe3ee57",
       "title": "Janitorial Services, Avery Office and Engine Bay",
       "agency": "AGRICULTURE, DEPARTMENT OF",
-      "url": "",
+      "url": "https://sam.gov/workspace/contract/opp/828e343d3ede4cf8bdd1b375f5c44df0/view",
       "stage": "intake",
       "createdAt": "2026-05-20T11:00:48.601Z",
       "metrics": {
@@ -12902,13 +11903,28 @@
         "LikelihoodOfAward": 60,
         "RelationshipLeverage": 40,
         "PastPerformanceMatch": 60
+      },
+      "dueDate": "2026-09-30",
+      "solicitationNumber": "1240BD26Q0036",
+      "source": "sam-828e343d3ede4cf8bdd1b375f5c44df0",
+      "sourceUrl": "https://sam.gov/workspace/contract/opp/828e343d3ede4cf8bdd1b375f5c44df0/view",
+      "pursuitPosture": "either",
+      "pursuitBucket": "pre_position",
+      "intentToBidDate": "2026-09-15",
+      "teamingStartDate": "2026-07-31",
+      "primeOutreachStartDate": "2026-07-16",
+      "primeOutreachEndDate": "2026-08-15",
+      "rapidResponse": {
+        "inquiryStatus": "none",
+        "acknowledgedAt": null,
+        "lastInboundAt": null
       }
     },
     {
       "id": "proposal-524a7cad-3b80-490c-822d-f9f99cf7691c",
       "title": "Awarded Janitorial Services - Mercedes",
       "agency": "INTERNATIONAL BOUNDARY AND WATER COMMISSION: US-MEXICO",
-      "url": "",
+      "url": "https://sam.gov/workspace/contract/opp/95dc5aea48704d6f8cbabe38ec6177fd/view",
       "stage": "intake",
       "createdAt": "2026-05-20T11:00:48.581Z",
       "metrics": {
@@ -12919,6 +11935,21 @@
         "LikelihoodOfAward": 60,
         "RelationshipLeverage": 40,
         "PastPerformanceMatch": 60
+      },
+      "dueDate": "2026-06-30",
+      "solicitationNumber": "FY26r3141015",
+      "source": "sam-95dc5aea48704d6f8cbabe38ec6177fd",
+      "sourceUrl": "https://sam.gov/workspace/contract/opp/95dc5aea48704d6f8cbabe38ec6177fd/view",
+      "pursuitPosture": "either",
+      "pursuitBucket": "active",
+      "intentToBidDate": "2026-06-15",
+      "teamingStartDate": "2026-04-30",
+      "primeOutreachStartDate": "2026-04-15",
+      "primeOutreachEndDate": "2026-05-15",
+      "rapidResponse": {
+        "inquiryStatus": "none",
+        "acknowledgedAt": null,
+        "lastInboundAt": null
       }
     },
     {
@@ -12942,7 +11973,7 @@
       "id": "proposal-b57ab406-773d-4386-9f28-8ae934f921d7",
       "title": "Landscaping Services, Darrington Ranger Station",
       "agency": "AGRICULTURE, DEPARTMENT OF",
-      "url": "",
+      "url": "https://sam.gov/workspace/contract/opp/8ba3d7f120e64847820dd5a61e912b13/view",
       "stage": "intake",
       "createdAt": "2026-04-30T11:00:26.316Z",
       "metrics": {
@@ -12953,6 +11984,21 @@
         "LikelihoodOfAward": 60,
         "RelationshipLeverage": 40,
         "PastPerformanceMatch": 60
+      },
+      "dueDate": "2026-09-30",
+      "solicitationNumber": "1240BD26Q0040",
+      "source": "sam-8ba3d7f120e64847820dd5a61e912b13",
+      "sourceUrl": "https://sam.gov/workspace/contract/opp/8ba3d7f120e64847820dd5a61e912b13/view",
+      "pursuitPosture": "either",
+      "pursuitBucket": "pre_position",
+      "intentToBidDate": "2026-09-15",
+      "teamingStartDate": "2026-07-31",
+      "primeOutreachStartDate": "2026-07-16",
+      "primeOutreachEndDate": "2026-08-15",
+      "rapidResponse": {
+        "inquiryStatus": "none",
+        "acknowledgedAt": null,
+        "lastInboundAt": null
       }
     }
   ],
