@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Secrets / tokens
+server/data/google-token.json
+server/google-auth.js

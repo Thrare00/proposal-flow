@@ -1,6 +1,1415 @@
 {
   "proposals": [
     {
+      "id": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+      "title": "PE-64750-NONST-2026-000000193\tBid Ref. #26-054 Janitorial Service (LEC)\tAlbany, City Of",
+      "agency": "Georgia Procurement Registry",
+      "dueDate": "2026-06-05T20:35:02.749Z",
+      "status": "intake",
+      "outcomeStatus": "active",
+      "source": "sam-GPR-39582",
+      "type": "federal",
+      "solicitationNumber": "GPR-39582",
+      "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+      "notes": "Auto-imported by Morpheus. Score: 80/100. Pursue.",
+      "solicitationText": "Solicitation: GPR-39582\nAgency: Georgia Procurement Registry\nNAICS: \nSet-aside: \nPosted: 2026-06-05\nLocation: National\n\n\nMorpheus Score: 80/100\nRecommendation: Pursue\nSAM Link: https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+      "metadata": {
+        "noticeId": "GPR-39582",
+        "solicitationNumber": "GPR-39582",
+        "naics": "",
+        "setAside": "",
+        "state": "",
+        "morpheusScore": 80,
+        "morpheusScores": {},
+        "samLink": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+        "importedAt": "2026-06-05T16:35:02.740970",
+        "importedBy": "morpheus-watch",
+        "workflowSteps": [
+          {
+            "id": "step-e6784812-db1f-4262-8ef1-915b3866f5f6",
+            "timestamp": "2026-06-05T20:35:02.992Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Housekeeping: task checklist backfilled (12 tasks)"
+          }
+        ],
+        "preSolicitation": {
+          "stage": "research",
+          "captureComplete": false,
+          "notes": ""
+        },
+        "sourceType": "solicitation",
+        "captureTiming": {
+          "pursuitPosture": "either",
+          "pursuitBucket": "urgent",
+          "timingBucket": "now",
+          "daysOut": 0,
+          "intentToBidDate": "2026-05-22",
+          "teamingStartDate": "2026-04-06",
+          "primeOutreachStartDate": "2026-03-22",
+          "primeOutreachEndDate": "2026-04-21",
+          "recommendedWindow": {
+            "dueDate": "2026-06-05",
+            "intentToBidDate": "2026-05-22",
+            "teamingStartDate": "2026-04-06",
+            "primeOutreachStartDate": "2026-03-22",
+            "primeOutreachEndDate": "2026-04-21",
+            "bucket": "urgent",
+            "timingBucket": "now",
+            "daysOut": 0,
+            "pursuitPosture": "either",
+            "recommendation": "Treat as immediate response. Confirm bid posture and send outreach now."
+          }
+        },
+        "rapidResponse": {
+          "inquiryStatus": "none",
+          "acknowledgedAt": null,
+          "lastInboundAt": null,
+          "responseOwner": "",
+          "nextDraftType": "",
+          "notes": ""
+        },
+        "decisions": [],
+        "blockers": [],
+        "submissionReview": {
+          "status": "pending",
+          "requestedAt": null,
+          "reviewedAt": null,
+          "reviewer": null,
+          "notes": "",
+          "checklist": {
+            "finalDraftReady": false,
+            "pricingReady": false,
+            "attachmentsReady": false,
+            "portalReady": false,
+            "approvedByEric": false
+          },
+          "history": []
+        },
+        "submissionReadiness": {
+          "reviewStatus": "pending",
+          "checklist": {
+            "finalDraftReady": false,
+            "pricingReady": false,
+            "attachmentsReady": false,
+            "portalReady": false,
+            "approvedByEric": false
+          },
+          "readinessPercent": 0,
+          "readyToSubmit": false,
+          "artifactSummary": {
+            "hasFinalDraft": false,
+            "hasDocx": false,
+            "hasPdf": false,
+            "hasPricingArtifact": false,
+            "attachmentCount": 0
+          }
+        },
+        "twentyOpportunityId": "f1c59fef-83a5-42b2-8a71-0dc05559f942",
+        "fitScore": 48,
+        "fitDecision": "review",
+        "fitReasons": [
+          "service:janitorial",
+          "geo:georgia"
+        ],
+        "fitAlgorithm": "v2"
+      },
+      "createdAt": "2026-06-05T20:35:02.742Z",
+      "updatedAt": "2026-06-05T20:35:02.885Z",
+      "tasks": [
+        {
+          "id": "task-58e14da9-30d6-4c93-a0d3-f272f3375f31",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "intake",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-3098767e-65d2-44a9-844c-adc3290b91a5",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "qualification",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-336ade47-4b56-438c-bbd8-3aaa4079745e",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "technical_compliance",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-b83fc259-5479-4836-9c1c-9fb042c72b46",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "research",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-4273f208-bd17-4214-9b58-7a525ddd7ad2",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-38b7f0c1-89a3-4807-8019-34e1b85c5550",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-763179ff-4f70-41d1-9f77-473477eba6dc",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-5799312b-e576-4e27-b381-e582f9fc1aed",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-71ebba45-571b-4eea-a067-d7a0450c2ae2",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "pricing_strategy",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-15beed5a-3dd1-4c37-9792-5f4d1642eb1c",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "review",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-6aef2b0c-98ab-4608-8708-494cb362b7e3",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "google_docs_final",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-95382d63-7fe5-46d6-82ec-f7dc288c5902",
+          "proposalId": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.749Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "submitted",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        }
+      ],
+      "files": [],
+      "workflow": {
+        "currentStage": "ingestion",
+        "updatedAt": "2026-06-05T20:35:02.749Z",
+        "modelRouting": {
+          "extraction": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "compliance": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "outline": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "pricing_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "technical_draft": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "executive_summary": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "rewrite_polish": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "ai_review": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "escalation_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "section_drafter": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "low_risk_bulk": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "red_team": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "final_review": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          }
+        },
+        "stageGate": {
+          "blockedBy": [],
+          "canDraftWholeProposal": false
+        },
+        "stages": [
+          {
+            "stageId": "ingestion",
+            "label": "Ingestion",
+            "status": "in_progress",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": ""
+          },
+          {
+            "stageId": "compliance",
+            "label": "Compliance",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: ingestion"
+          },
+          {
+            "stageId": "strategy",
+            "label": "Pre-solicitation",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: compliance"
+          },
+          {
+            "stageId": "outline",
+            "label": "Outline",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: strategy"
+          },
+          {
+            "stageId": "pricing_strategy",
+            "label": "Pricing Strategy",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: outline"
+          },
+          {
+            "stageId": "drafting",
+            "label": "Drafting",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: pricing_strategy"
+          },
+          {
+            "stageId": "red_team",
+            "label": "AI Review",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: drafting"
+          },
+          {
+            "stageId": "final_review",
+            "label": "Final Draft",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: red_team"
+          }
+        ]
+      },
+      "opportunity": {
+        "sourceType": "solicitation",
+        "solicitationNumber": "GPR-39582",
+        "title": "PE-64750-NONST-2026-000000193\tBid Ref. #26-054 Janitorial Service (LEC)\tAlbany, City Of",
+        "buyer": "Georgia Procurement Registry",
+        "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+        "dueDate": "2026-06-05T20:35:02.749Z",
+        "setAside": "",
+        "contractType": "",
+        "estimatedValue": null,
+        "captureOwner": "Morpheus"
+      },
+      "solicitationDocuments": [],
+      "requirements": [],
+      "evaluationFactors": [],
+      "complianceMatrix": [],
+      "pricingGovernance": {
+        "constraints": [],
+        "marginFloor": null,
+        "riskAdjustmentNotes": "",
+        "bondInsurance": {
+          "paymentBondRequired": false,
+          "performanceBondRequired": false,
+          "bondPercentage": null,
+          "insuranceMinimum": null,
+          "insuranceNotes": ""
+        },
+        "wageDetermination": {
+          "required": false,
+          "wageScheduleRef": "",
+          "notes": ""
+        },
+        "taxEscalation": {
+          "taxExempt": false,
+          "escalationClause": false,
+          "escalationCapPct": null,
+          "escalationNotes": ""
+        },
+        "assumptions": [],
+        "reviewStatus": "not_started",
+        "reviewedBy": "",
+        "reviewedAt": null,
+        "notes": ""
+      },
+      "artifacts": [],
+      "pastPerformanceRecords": [],
+      "capabilityStatements": [],
+      "partnerProfiles": [],
+      "proposalSections": [
+        {
+          "id": "section-executive_summary-1",
+          "key": "executive_summary",
+          "title": "Executive Summary",
+          "purpose": "Capture the buyer need, your discriminators, and the overall value story.",
+          "evaluatorQuestion": "Why is this team the safest and strongest choice for award?",
+          "pageBudget": 2,
+          "owner": "capture_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-technical_approach-1",
+          "key": "technical_approach",
+          "title": "Technical Approach",
+          "purpose": "Explain how work will be performed in a compliant, low-risk way.",
+          "evaluatorQuestion": "Does the team clearly satisfy the technical requirements and execution risk?",
+          "pageBudget": 6,
+          "owner": "technical_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-management_plan-1",
+          "key": "management_plan",
+          "title": "Management Plan",
+          "purpose": "Show governance, staffing, communications, and quality controls.",
+          "evaluatorQuestion": "Can this team manage delivery, staffing, reporting, and coordination reliably?",
+          "pageBudget": 3,
+          "owner": "proposal_manager",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-staffing_key_personnel-1",
+          "key": "staffing_key_personnel",
+          "title": "Staffing and Key Personnel",
+          "purpose": "Prove the team has the right people, qualifications, and coverage.",
+          "evaluatorQuestion": "Are the proposed people and labor plan credible and qualified?",
+          "pageBudget": 2,
+          "owner": "hr_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-past_performance-1",
+          "key": "past_performance",
+          "title": "Past Performance",
+          "purpose": "Map relevant experience and evidence to contract needs.",
+          "evaluatorQuestion": "Has this team successfully delivered materially similar work before?",
+          "pageBudget": 3,
+          "owner": "past_performance_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-quality_control-1",
+          "key": "quality_control",
+          "title": "Quality Control",
+          "purpose": "Show how quality, compliance, safety, and corrective action are managed.",
+          "evaluatorQuestion": "Will the contractor consistently meet performance standards and documentation requirements?",
+          "pageBudget": 2,
+          "owner": "quality_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-pricing_narrative-1",
+          "key": "pricing_narrative",
+          "title": "Pricing Narrative",
+          "purpose": "Explain pricing logic, assumptions, and cost realism.",
+          "evaluatorQuestion": "Is the pricing understandable, justified, and aligned to the approach?",
+          "pageBudget": 2,
+          "owner": "pricing_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        }
+      ],
+      "strategy": {
+        "winThemes": [],
+        "discriminators": [],
+        "evaluatorHotButtons": [],
+        "risks": [],
+        "executivePositioning": ""
+      },
+      "outline": {
+        "status": "not_started",
+        "notes": "",
+        "sections": [],
+        "generatedAt": null
+      },
+      "complianceStatus": {
+        "completenessPercent": 0,
+        "unresolvedGapCount": 0,
+        "missingEvidenceCount": 0,
+        "disqualifyingOmissionCount": 0,
+        "criticalRequirementCount": 0,
+        "blockedRequirementCount": 0
+      },
+      "redTeamFindings": [],
+      "submissionPackage": {
+        "attachments": [],
+        "pageCountLimit": null,
+        "pageCountActual": null,
+        "fontCompliance": "unknown",
+        "completenessStatus": "not_started",
+        "consistencyStatus": "not_started",
+        "submissionReadiness": "blocked",
+        "unresolvedRedFlags": [],
+        "finalChecks": {
+          "requirementCoverageCheck": "not_started",
+          "attachmentCompletenessCheck": "not_started",
+          "pageCountCheck": "not_started",
+          "consistencyCheck": "not_started",
+          "terminologyCheck": "not_started"
+        }
+      },
+      "scoring": {
+        "compliance_score": 0,
+        "persuasiveness_score": 0,
+        "specificity_score": 0,
+        "evidence_score": 0,
+        "risk_score": 100,
+        "draft_readiness_percent": 0,
+        "submission_readiness_percent": 20,
+        "unresolved_gap_count": 0,
+        "red_team_severity_count": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        }
+      },
+      "twentyOpportunityId": "f1c59fef-83a5-42b2-8a71-0dc05559f942"
+    },
+    {
+      "id": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+      "title": "PE-77030-NONST-2026-000000021\tFire Station #9-Demolition & New Exterior Metal Shell\tTroup County Board Of Commissioners",
+      "agency": "Georgia Procurement Registry",
+      "dueDate": "2026-06-05T20:35:02.722Z",
+      "status": "intake",
+      "outcomeStatus": "active",
+      "source": "sam-GPR-51350",
+      "type": "federal",
+      "solicitationNumber": "GPR-51350",
+      "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+      "notes": "Auto-imported by Morpheus. Score: 80/100. Pursue.",
+      "solicitationText": "Solicitation: GPR-51350\nAgency: Georgia Procurement Registry\nNAICS: \nSet-aside: \nPosted: 2026-06-05\nLocation: National\n\n\nMorpheus Score: 80/100\nRecommendation: Pursue\nSAM Link: https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+      "metadata": {
+        "noticeId": "GPR-51350",
+        "solicitationNumber": "GPR-51350",
+        "naics": "",
+        "setAside": "",
+        "state": "",
+        "morpheusScore": 80,
+        "morpheusScores": {},
+        "samLink": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+        "importedAt": "2026-06-05T16:35:02.719467",
+        "importedBy": "morpheus-watch",
+        "workflowSteps": [
+          {
+            "id": "step-412a2379-8c06-4e67-8d0b-2d6029069eb6",
+            "timestamp": "2026-06-05T20:35:02.993Z",
+            "status": "completed",
+            "stage": "intake",
+            "label": "Housekeeping: task checklist backfilled (12 tasks)"
+          }
+        ],
+        "preSolicitation": {
+          "stage": "research",
+          "captureComplete": false,
+          "notes": ""
+        },
+        "sourceType": "solicitation",
+        "captureTiming": {
+          "pursuitPosture": "either",
+          "pursuitBucket": "urgent",
+          "timingBucket": "now",
+          "daysOut": 0,
+          "intentToBidDate": "2026-05-22",
+          "teamingStartDate": "2026-04-06",
+          "primeOutreachStartDate": "2026-03-22",
+          "primeOutreachEndDate": "2026-04-21",
+          "recommendedWindow": {
+            "dueDate": "2026-06-05",
+            "intentToBidDate": "2026-05-22",
+            "teamingStartDate": "2026-04-06",
+            "primeOutreachStartDate": "2026-03-22",
+            "primeOutreachEndDate": "2026-04-21",
+            "bucket": "urgent",
+            "timingBucket": "now",
+            "daysOut": 0,
+            "pursuitPosture": "either",
+            "recommendation": "Treat as immediate response. Confirm bid posture and send outreach now."
+          }
+        },
+        "rapidResponse": {
+          "inquiryStatus": "none",
+          "acknowledgedAt": null,
+          "lastInboundAt": null,
+          "responseOwner": "",
+          "nextDraftType": "",
+          "notes": ""
+        },
+        "decisions": [],
+        "blockers": [],
+        "submissionReview": {
+          "status": "pending",
+          "requestedAt": null,
+          "reviewedAt": null,
+          "reviewer": null,
+          "notes": "",
+          "checklist": {
+            "finalDraftReady": false,
+            "pricingReady": false,
+            "attachmentsReady": false,
+            "portalReady": false,
+            "approvedByEric": false
+          },
+          "history": []
+        },
+        "submissionReadiness": {
+          "reviewStatus": "pending",
+          "checklist": {
+            "finalDraftReady": false,
+            "pricingReady": false,
+            "attachmentsReady": false,
+            "portalReady": false,
+            "approvedByEric": false
+          },
+          "readinessPercent": 0,
+          "readyToSubmit": false,
+          "artifactSummary": {
+            "hasFinalDraft": false,
+            "hasDocx": false,
+            "hasPdf": false,
+            "hasPricingArtifact": false,
+            "attachmentCount": 0
+          }
+        },
+        "twentyOpportunityId": "c4f7c974-bf3b-4648-a14e-24c8003c9b5f",
+        "fitScore": 33,
+        "fitDecision": "watch",
+        "fitReasons": [
+          "geo:georgia"
+        ],
+        "fitAlgorithm": "v2"
+      },
+      "createdAt": "2026-06-05T20:35:02.720Z",
+      "updatedAt": "2026-06-05T20:35:02.862Z",
+      "tasks": [
+        {
+          "id": "task-7500d733-b59c-4323-9aca-4170f6e50836",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Review solicitation package and confirm due date",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "intake",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-48c492e4-8e9d-44ff-bb80-109485fedc47",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Extract evaluation criteria and scoring weights",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "qualification",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-5fe654d6-e137-45cb-9fd5-edc746fca273",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Build compliance matrix (requirements vs. sections)",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "technical_compliance",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-b0011ab4-38e2-4076-8df1-c9a772778e78",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Identify win themes and differentiators",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "research",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-eae77958-88d3-4503-87df-7000536ad020",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Draft Executive Summary",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-9ea09eac-d8e3-44a1-a320-0ab30cc9c0d7",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Draft Technical Approach",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-2ab4543d-d451-440a-9429-a5e834ac0a15",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Draft Management Plan",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-6e41b4e9-35be-4b76-a6e9-44855fc76ed2",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Draft Past Performance section",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "drafting",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-ca7f161c-7779-4bfb-bf61-57386b1cbfd4",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Draft Pricing Narrative",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "medium",
+          "stage": "pricing_strategy",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-c06b549c-af92-4b50-b4d7-b7b725ac4f2b",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Internal review pass",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "review",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-015b4731-d960-4303-ad69-1a53c998de83",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Final review and format check",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "google_docs_final",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        },
+        {
+          "id": "task-d98a1864-e460-446e-8e8c-39175582bf31",
+          "proposalId": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+          "title": "Submit by deadline",
+          "owner": "Morpheus",
+          "dueDate": "2026-06-05T20:35:02.722Z",
+          "completed": false,
+          "status": "pending",
+          "priority": "high",
+          "stage": "submitted",
+          "createdAt": "2026-06-05T20:35:02.987Z"
+        }
+      ],
+      "files": [],
+      "workflow": {
+        "currentStage": "ingestion",
+        "updatedAt": "2026-06-05T20:35:02.722Z",
+        "modelRouting": {
+          "extraction": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "compliance": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "outline": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "pricing_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "technical_draft": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "executive_summary": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "rewrite_polish": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "ai_review": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "escalation_strategy": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "section_drafter": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "low_risk_bulk": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "red_team": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          },
+          "final_review": {
+            "provider": "minimax",
+            "model": "MiniMax-M2.5",
+            "lane": "default"
+          }
+        },
+        "stageGate": {
+          "blockedBy": [],
+          "canDraftWholeProposal": false
+        },
+        "stages": [
+          {
+            "stageId": "ingestion",
+            "label": "Ingestion",
+            "status": "in_progress",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": ""
+          },
+          {
+            "stageId": "compliance",
+            "label": "Compliance",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: ingestion"
+          },
+          {
+            "stageId": "strategy",
+            "label": "Pre-solicitation",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: compliance"
+          },
+          {
+            "stageId": "outline",
+            "label": "Outline",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: strategy"
+          },
+          {
+            "stageId": "pricing_strategy",
+            "label": "Pricing Strategy",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: outline"
+          },
+          {
+            "stageId": "drafting",
+            "label": "Drafting",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: pricing_strategy"
+          },
+          {
+            "stageId": "red_team",
+            "label": "AI Review",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: drafting"
+          },
+          {
+            "stageId": "final_review",
+            "label": "Final Draft",
+            "status": "blocked",
+            "updatedAt": null,
+            "completedAt": null,
+            "blocker": "Missing prerequisite: red_team"
+          }
+        ]
+      },
+      "opportunity": {
+        "sourceType": "solicitation",
+        "solicitationNumber": "GPR-51350",
+        "title": "PE-77030-NONST-2026-000000021\tFire Station #9-Demolition & New Exterior Metal Shell\tTroup County Board Of Commissioners",
+        "buyer": "Georgia Procurement Registry",
+        "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+        "dueDate": "2026-06-05T20:35:02.722Z",
+        "setAside": "",
+        "contractType": "",
+        "estimatedValue": null,
+        "captureOwner": "Morpheus"
+      },
+      "solicitationDocuments": [],
+      "requirements": [],
+      "evaluationFactors": [],
+      "complianceMatrix": [],
+      "pricingGovernance": {
+        "constraints": [],
+        "marginFloor": null,
+        "riskAdjustmentNotes": "",
+        "bondInsurance": {
+          "paymentBondRequired": false,
+          "performanceBondRequired": false,
+          "bondPercentage": null,
+          "insuranceMinimum": null,
+          "insuranceNotes": ""
+        },
+        "wageDetermination": {
+          "required": false,
+          "wageScheduleRef": "",
+          "notes": ""
+        },
+        "taxEscalation": {
+          "taxExempt": false,
+          "escalationClause": false,
+          "escalationCapPct": null,
+          "escalationNotes": ""
+        },
+        "assumptions": [],
+        "reviewStatus": "not_started",
+        "reviewedBy": "",
+        "reviewedAt": null,
+        "notes": ""
+      },
+      "artifacts": [],
+      "pastPerformanceRecords": [],
+      "capabilityStatements": [],
+      "partnerProfiles": [],
+      "proposalSections": [
+        {
+          "id": "section-executive_summary-1",
+          "key": "executive_summary",
+          "title": "Executive Summary",
+          "purpose": "Capture the buyer need, your discriminators, and the overall value story.",
+          "evaluatorQuestion": "Why is this team the safest and strongest choice for award?",
+          "pageBudget": 2,
+          "owner": "capture_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-technical_approach-1",
+          "key": "technical_approach",
+          "title": "Technical Approach",
+          "purpose": "Explain how work will be performed in a compliant, low-risk way.",
+          "evaluatorQuestion": "Does the team clearly satisfy the technical requirements and execution risk?",
+          "pageBudget": 6,
+          "owner": "technical_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-management_plan-1",
+          "key": "management_plan",
+          "title": "Management Plan",
+          "purpose": "Show governance, staffing, communications, and quality controls.",
+          "evaluatorQuestion": "Can this team manage delivery, staffing, reporting, and coordination reliably?",
+          "pageBudget": 3,
+          "owner": "proposal_manager",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-staffing_key_personnel-1",
+          "key": "staffing_key_personnel",
+          "title": "Staffing and Key Personnel",
+          "purpose": "Prove the team has the right people, qualifications, and coverage.",
+          "evaluatorQuestion": "Are the proposed people and labor plan credible and qualified?",
+          "pageBudget": 2,
+          "owner": "hr_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-past_performance-1",
+          "key": "past_performance",
+          "title": "Past Performance",
+          "purpose": "Map relevant experience and evidence to contract needs.",
+          "evaluatorQuestion": "Has this team successfully delivered materially similar work before?",
+          "pageBudget": 3,
+          "owner": "past_performance_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-quality_control-1",
+          "key": "quality_control",
+          "title": "Quality Control",
+          "purpose": "Show how quality, compliance, safety, and corrective action are managed.",
+          "evaluatorQuestion": "Will the contractor consistently meet performance standards and documentation requirements?",
+          "pageBudget": 2,
+          "owner": "quality_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        },
+        {
+          "id": "section-pricing_narrative-1",
+          "key": "pricing_narrative",
+          "title": "Pricing Narrative",
+          "purpose": "Explain pricing logic, assumptions, and cost realism.",
+          "evaluatorQuestion": "Is the pricing understandable, justified, and aligned to the approach?",
+          "pageBudget": 2,
+          "owner": "pricing_lead",
+          "status": "not_started",
+          "readiness": "not_ready",
+          "draftText": "",
+          "summary": "",
+          "evidenceLinks": [],
+          "requirementIds": [],
+          "evaluationFactorIds": [],
+          "redTeamFindingIds": [],
+          "unresolvedPlaceholders": [],
+          "lastReviewedAt": null,
+          "modelUsed": null,
+          "scorecard": {
+            "compliance_score": 0,
+            "persuasiveness_score": 0,
+            "specificity_score": 0,
+            "evidence_score": 0,
+            "risk_score": 100
+          }
+        }
+      ],
+      "strategy": {
+        "winThemes": [],
+        "discriminators": [],
+        "evaluatorHotButtons": [],
+        "risks": [],
+        "executivePositioning": ""
+      },
+      "outline": {
+        "status": "not_started",
+        "notes": "",
+        "sections": [],
+        "generatedAt": null
+      },
+      "complianceStatus": {
+        "completenessPercent": 0,
+        "unresolvedGapCount": 0,
+        "missingEvidenceCount": 0,
+        "disqualifyingOmissionCount": 0,
+        "criticalRequirementCount": 0,
+        "blockedRequirementCount": 0
+      },
+      "redTeamFindings": [],
+      "submissionPackage": {
+        "attachments": [],
+        "pageCountLimit": null,
+        "pageCountActual": null,
+        "fontCompliance": "unknown",
+        "completenessStatus": "not_started",
+        "consistencyStatus": "not_started",
+        "submissionReadiness": "blocked",
+        "unresolvedRedFlags": [],
+        "finalChecks": {
+          "requirementCoverageCheck": "not_started",
+          "attachmentCompletenessCheck": "not_started",
+          "pageCountCheck": "not_started",
+          "consistencyCheck": "not_started",
+          "terminologyCheck": "not_started"
+        }
+      },
+      "scoring": {
+        "compliance_score": 0,
+        "persuasiveness_score": 0,
+        "specificity_score": 0,
+        "evidence_score": 0,
+        "risk_score": 100,
+        "draft_readiness_percent": 0,
+        "submission_readiness_percent": 20,
+        "unresolved_gap_count": 0,
+        "red_team_severity_count": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        }
+      },
+      "twentyOpportunityId": "c4f7c974-bf3b-4648-a14e-24c8003c9b5f"
+    },
+    {
       "id": "proposal-e3d20f8b-2d44-494c-a2bd-6581cfdd9f22",
       "title": "PE-62551-NONST-2026-000000221\tBike Lane Striping - Event No. 12344\tSavannah, City Of",
       "agency": "Georgia Procurement Registry",
@@ -4948,7 +6357,7 @@
       "agency": "Gwinnett County Public Schools",
       "solicitation_number": "B-2622LM",
       "dueDate": "2026-06-08",
-      "status": "final-draft",
+      "status": "pre-solicitation",
       "source": "gwinnett-bonfirehub",
       "sourceUrl": "https://gwinnett.bonfirehub.com/opportunities/238246",
       "naics": "561720",
@@ -4976,8 +6385,8 @@
         "competition_level": 90
       },
       "workflow": {
-        "currentStage": "red_team",
-        "updatedAt": "2026-06-05T14:34:53.162Z",
+        "currentStage": "compliance",
+        "updatedAt": "2026-06-05T15:06:41.011Z",
         "modelRouting": {
           "extraction": {
             "provider": "minimax",
@@ -5276,7 +6685,7 @@
         }
       ],
       "createdAt": "2026-06-03T16:17:29.856Z",
-      "updatedAt": "2026-06-05T14:34:58.171Z",
+      "updatedAt": "2026-06-05T15:06:55.807Z",
       "notes": "",
       "solicitationText": "",
       "type": "federal",
@@ -5438,6 +6847,13 @@
       "metadata": {
         "workflowSteps": [
           {
+            "id": "step-9bdf1ff6-ca4c-4d61-961d-8816cc91fcf5",
+            "timestamp": "2026-06-05T15:06:55.810Z",
+            "status": "completed",
+            "stage": "pre-solicitation",
+            "label": "Proposal moved to pre-solicitation — handoff: all outputs present"
+          },
+          {
             "id": "step-fc267cb7-c15c-40b0-97ac-adb7bcd488ad",
             "timestamp": "2026-06-05T14:34:58.173Z",
             "status": "completed",
@@ -5574,30 +6990,67 @@
             "solicitation_section": "—",
             "category": "regulation",
             "mandatory": false
+          },
+          {
+            "requirement_id": "REQ-004",
+            "requirement_text": "E-Verify Form: E-Verify Affidavit",
+            "proposal_section": "Mandatory Forms",
+            "status": "identified",
+            "risk_level": "high",
+            "source": "ingest_deep",
+            "solicitation_section": "—",
+            "category": "regulation",
+            "mandatory": false
+          },
+          {
+            "requirement_id": "REQ-005",
+            "requirement_text": "Drug-Free Workplace: drug-free workplace",
+            "proposal_section": "Mandatory Forms",
+            "status": "identified",
+            "risk_level": "high",
+            "source": "ingest_deep",
+            "solicitation_section": "—",
+            "category": "attachment",
+            "mandatory": false
+          },
+          {
+            "requirement_id": "REQ-006",
+            "requirement_text": "Prevailing Wage / Davis-Bacon Act compliance",
+            "proposal_section": "Labor",
+            "status": "identified",
+            "risk_level": "high",
+            "source": "ingest_deep",
+            "solicitation_section": "—",
+            "category": "regulation",
+            "mandatory": false
+          },
+          {
+            "requirement_id": "REQ-007",
+            "requirement_text": "E-Verify enrollment required",
+            "proposal_section": "Labor",
+            "status": "identified",
+            "risk_level": "high",
+            "source": "ingest_deep",
+            "solicitation_section": "—",
+            "category": "regulation",
+            "mandatory": true
           }
         ],
         "complianceLimits": [],
-        "executiveSummary": "Rare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 2 compliance requirements (1 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.",
+        "executiveSummary": "Rare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 6 compliance requirements (5 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.",
         "bidReadiness": {
           "risks": [
             "No critical risk items detected  - review solicitation manually"
           ],
           "strengths": [
             "Scope aligns with Rare Earth core services (exterior/cleaning)",
+            "E-Verify already enrolled",
             "No bonding requirement detected"
           ],
           "goNoGo": "CONDITIONAL_GO",
           "goNoGoReason": "Scope matches core services  - verify insurance/bonding capacity"
         },
         "generatedArtifacts": [
-          {
-            "id": "artifact-3f531723-2099-4a7e-9e83-e400adbb9506",
-            "type": "compliance_matrix",
-            "title": "Compliance Matrix",
-            "format": "markdown",
-            "content": "# Compliance Matrix  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n**Source:** deterministic | **Total Requirements:** 2 | **Mandatory:** 0\n\n## Executive Summary\nRare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 2 compliance requirements (1 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.\n\n## Bid Readiness Assessment\n**Recommendation: CONDITIONAL_GO**  - Scope matches core services  - verify insurance/bonding capacity\n\n### Top Risks\n- No critical risk items detected  - review solicitation manually\n\n### Strengths\n- Scope aligns with Rare Earth core services (exterior/cleaning)\n- No bonding requirement detected\n\n**Page / character limit:** No explicit page/character limit found\n\n## Constraints & Limits\n_None detected._\n\n## Requirements by Category\n\n### 📎 Required Attachments & Submissions (1)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-001 | Tax Form: W-9 | Scored | high | identified |\n\n### ⚖️ Regulations & Compliance (1)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-002 | MBE/DBE participation goal | Scored | medium | identified |\n",
-            "createdAt": "2026-06-05T05:14:43.241Z"
-          },
           {
             "id": "artifact-27189976-04c2-4d4a-81f6-c7e4947282b8",
             "type": "pre_solicitation",
@@ -5629,6 +7082,14 @@
             "format": "markdown",
             "content": "# AI Review  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n_Generated: 2026-06-05T14:34:53.174Z (deterministic)_\n\n**Compliance Score:** 50%\n\n## Review Summary\nDraft covers 7 sections against 2 compliance requirements. 1 high/critical risk items identified. 1 requirements lack outline coverage. Gaps remain  - address missing requirements before finalizing.\n\n## Missing Requirements\n- REQ-002: MBE/DBE participation goal (no matching outline section)\n\n## Weak Sections\n- Past Performance: no contracts in portfolio directly match the solicitation scope  - consider highlighting transferable experience.\n\n## Presentation Suggestions\n- Ensure each section explicitly references the requirement ID it addresses.\n- Prioritize 1 high/critical items in the executive summary.\n- Add a compliance traceability matrix as an appendix.\n\n## Stock Photo Suggestions\n- Team-at-work photo on the Staffing page\n- Equipment/tools shot on the Technical Approach page\n- Past-performance project photo on cover or executive summary\n\n",
             "createdAt": "2026-06-05T14:34:53.174Z"
+          },
+          {
+            "id": "artifact-3dbf8c76-a5e6-49f9-afc3-1b74fd7feb14",
+            "type": "compliance_matrix",
+            "title": "Compliance Matrix",
+            "format": "markdown",
+            "content": "# Compliance Matrix  - B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning\n\n**Source:** deterministic | **Total Requirements:** 6 | **Mandatory:** 1\n\n## Executive Summary\nRare Earth Ltd. submits this proposal in response to PUBLIC SCHOOLSADDENDUM 2B-2622LM On Demand Pressure Washing, Softwash &Window Cle's requirement for B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning. As a certified MBE/DBE/SDB small business, Rare Earth brings proven capability in facility and grounds maintenance with $529,200+ in past contract value across government and commercial clients. Our approach emphasizes rapid mobilization, documented quality control, and direct owner oversight. Eric White, Owner/PM, serves as the single point of contact for all contract activities. This proposal addresses 6 compliance requirements (5 high-priority) and demonstrates full responsiveness to the solicitation's technical, staffing, and insurance requirements.\n\n## Bid Readiness Assessment\n**Recommendation: CONDITIONAL_GO**  - Scope matches core services  - verify insurance/bonding capacity\n\n### Top Risks\n- No critical risk items detected  - review solicitation manually\n\n### Strengths\n- Scope aligns with Rare Earth core services (exterior/cleaning)\n- E-Verify already enrolled\n- No bonding requirement detected\n\n**Page / character limit:** No explicit page/character limit found\n\n## Constraints & Limits\n_None detected._\n\n## Requirements by Category\n\n### 📎 Required Attachments & Submissions (2)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-001 | Tax Form: W-9 | Scored | high | identified |\n| REQ-005 | Drug-Free Workplace: drug-free workplace | Scored | high | identified |\n\n### ⚖️ Regulations & Compliance (4)\n\n| ID | Requirement | Type | Risk | Status |\n|---|---|---|---|---|\n| REQ-002 | MBE/DBE participation goal | Scored | medium | identified |\n| REQ-004 | E-Verify Form: E-Verify Affidavit | Scored | high | identified |\n| REQ-006 | Prevailing Wage / Davis-Bacon Act compliance | Scored | high | identified |\n| REQ-007 | E-Verify enrollment required | **MANDATORY** | high | identified |\n",
+            "createdAt": "2026-06-05T15:06:41.030Z"
           }
         ],
         "roughDraft": {
@@ -5718,36 +7179,70 @@
       "evaluationFactors": [],
       "complianceMatrix": [
         {
-          "id": "cm-1",
           "requirement_id": "REQ-001",
-          "source_section": "ingest_deep",
           "requirement_text": "Tax Form: W-9",
-          "requirement_type": "instruction",
-          "mandatory_or_scored": "mandatory",
           "proposal_section": "Mandatory Forms",
-          "action_required": "",
-          "evidence_needed": [],
-          "owner": "proposal_manager",
           "status": "identified",
           "risk_level": "high",
-          "notes": "",
-          "verified": false
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "attachment",
+          "mandatory": false
         },
         {
-          "id": "cm-2",
           "requirement_id": "REQ-002",
-          "source_section": "ingest_deep",
           "requirement_text": "MBE/DBE participation goal",
-          "requirement_type": "instruction",
-          "mandatory_or_scored": "mandatory",
           "proposal_section": "Certifications",
-          "action_required": "",
-          "evidence_needed": [],
-          "owner": "proposal_manager",
           "status": "identified",
           "risk_level": "medium",
-          "notes": "",
-          "verified": false
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "regulation",
+          "mandatory": false
+        },
+        {
+          "requirement_id": "REQ-004",
+          "requirement_text": "E-Verify Form: E-Verify Affidavit",
+          "proposal_section": "Mandatory Forms",
+          "status": "identified",
+          "risk_level": "high",
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "regulation",
+          "mandatory": false
+        },
+        {
+          "requirement_id": "REQ-005",
+          "requirement_text": "Drug-Free Workplace: drug-free workplace",
+          "proposal_section": "Mandatory Forms",
+          "status": "identified",
+          "risk_level": "high",
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "attachment",
+          "mandatory": false
+        },
+        {
+          "requirement_id": "REQ-006",
+          "requirement_text": "Prevailing Wage / Davis-Bacon Act compliance",
+          "proposal_section": "Labor",
+          "status": "identified",
+          "risk_level": "high",
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "regulation",
+          "mandatory": false
+        },
+        {
+          "requirement_id": "REQ-007",
+          "requirement_text": "E-Verify enrollment required",
+          "proposal_section": "Labor",
+          "status": "identified",
+          "risk_level": "high",
+          "source": "ingest_deep",
+          "solicitation_section": "—",
+          "category": "regulation",
+          "mandatory": true
         }
       ],
       "artifacts": [],
@@ -6084,6 +7579,16 @@
           "from": "pre_solicitation",
           "to": "final-draft",
           "timestamp": "2026-06-05T14:34:58.173Z",
+          "outputsProduced": [],
+          "outputsMissing": [],
+          "outputsValid": true,
+          "nextStageExpects": [],
+          "signal": "clean"
+        },
+        {
+          "from": "final-draft",
+          "to": "pre-solicitation",
+          "timestamp": "2026-06-05T15:06:55.810Z",
           "outputsProduced": [],
           "outputsMissing": [],
           "outputsValid": true,
@@ -11149,6 +12654,70 @@
   ],
   "opportunities": [
     {
+      "id": "proposal-36c07351-b757-41ca-9b7d-b1301e88fa09",
+      "title": "PE-64750-NONST-2026-000000193\tBid Ref. #26-054 Janitorial Service (LEC)\tAlbany, City Of",
+      "agency": "Georgia Procurement Registry",
+      "url": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+      "stage": "intake",
+      "dueDate": "2026-06-05T20:35:02.749Z",
+      "solicitationNumber": "GPR-39582",
+      "source": "sam-GPR-39582",
+      "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-64750-NONST-2026-000000193&sourceSystemType=gpr20",
+      "pursuitPosture": "either",
+      "pursuitBucket": "urgent",
+      "intentToBidDate": null,
+      "teamingStartDate": null,
+      "primeOutreachStartDate": null,
+      "primeOutreachEndDate": null,
+      "rapidResponse": {
+        "inquiryStatus": "none",
+        "acknowledgedAt": null,
+        "lastInboundAt": null
+      },
+      "createdAt": "2026-06-05T20:35:02.742Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    },
+    {
+      "id": "proposal-03b6243d-9302-449b-be97-093b9f3ab630",
+      "title": "PE-77030-NONST-2026-000000021\tFire Station #9-Demolition & New Exterior Metal Shell\tTroup County Board Of Commissioners",
+      "agency": "Georgia Procurement Registry",
+      "url": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+      "stage": "intake",
+      "dueDate": "2026-06-05T20:35:02.722Z",
+      "solicitationNumber": "GPR-51350",
+      "source": "sam-GPR-51350",
+      "sourceUrl": "https://ssl.doas.state.ga.us/gpr/eventDetails?eSourceNumber=PE-77030-NONST-2026-000000021&sourceSystemType=gpr20",
+      "pursuitPosture": "either",
+      "pursuitBucket": "urgent",
+      "intentToBidDate": null,
+      "teamingStartDate": null,
+      "primeOutreachStartDate": null,
+      "primeOutreachEndDate": null,
+      "rapidResponse": {
+        "inquiryStatus": "none",
+        "acknowledgedAt": null,
+        "lastInboundAt": null
+      },
+      "createdAt": "2026-06-05T20:35:02.720Z",
+      "metrics": {
+        "Profitability": 70,
+        "StrategicFit": 70,
+        "Competition": 50,
+        "SubcontractingPotential": 40,
+        "LikelihoodOfAward": 60,
+        "RelationshipLeverage": 40,
+        "PastPerformanceMatch": 60
+      }
+    },
+    {
       "id": "proposal-e3d20f8b-2d44-494c-a2bd-6581cfdd9f22",
       "title": "PE-62551-NONST-2026-000000221\tBike Lane Striping - Event No. 12344\tSavannah, City Of",
       "agency": "Georgia Procurement Registry",
@@ -11272,7 +12841,7 @@
       "title": "B-2622LM On Demand Pressure Washing, Softwash & Window Cleaning",
       "agency": "Gwinnett County Public Schools",
       "url": "https://gwinnett.bonfirehub.com/opportunities/238246",
-      "stage": "final-draft",
+      "stage": "pre-solicitation",
       "createdAt": "2026-06-03T16:17:29.856Z",
       "metrics": {
         "Profitability": 70,
@@ -11388,6 +12957,36 @@
     }
   ],
   "jobs": [
+    {
+      "id": "job-9c51d8dd-4fb4-4341-afbc-1fe9ea2d10e8",
+      "action": "run_stage",
+      "payload": {
+        "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
+        "stage": "pre-solicitation"
+      },
+      "status": "applied",
+      "createdAt": "2026-06-05T15:06:41.044Z",
+      "startedAt": "2026-06-05T15:06:55.795Z",
+      "processedAt": "2026-06-05T15:06:55.823Z",
+      "result": {
+        "ok": true,
+        "message": "Proposal stage updated to pre-solicitation (handoff: clean)",
+        "updates": {
+          "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
+          "stage": "pre-solicitation",
+          "handoff": {
+            "from": "final-draft",
+            "to": "pre-solicitation",
+            "timestamp": "2026-06-05T15:06:55.810Z",
+            "outputsProduced": [],
+            "outputsMissing": [],
+            "outputsValid": true,
+            "nextStageExpects": [],
+            "signal": "clean"
+          }
+        }
+      }
+    },
     {
       "id": "job-b95ff090-d9e1-4f21-acae-6cfdb5448114",
       "action": "run_stage",
@@ -13042,6 +14641,33 @@
   ],
   "health": {
     "events": [
+      {
+        "id": "cb83a107-161b-4aa0-895e-5e771961501f",
+        "timestamp": "2026-06-05T15:06:55.807Z",
+        "action": "run_stage",
+        "jobId": "job-9c51d8dd-4fb4-4341-afbc-1fe9ea2d10e8",
+        "status": "applied",
+        "ok": true,
+        "message": "Proposal stage updated to pre-solicitation (handoff: clean)",
+        "warningCount": 0,
+        "errorCount": 0,
+        "details": {
+          "updates": {
+            "proposalId": "proposal-54c9eb33-4d2a-46a5-be55-ef7143f089ce",
+            "stage": "pre-solicitation",
+            "handoff": {
+              "from": "final-draft",
+              "to": "pre-solicitation",
+              "timestamp": "2026-06-05T15:06:55.810Z",
+              "outputsProduced": [],
+              "outputsMissing": [],
+              "outputsValid": true,
+              "nextStageExpects": [],
+              "signal": "clean"
+            }
+          }
+        }
+      },
       {
         "id": "f77eb60f-4ff6-4c5f-84f9-895003500240",
         "timestamp": "2026-06-05T14:34:58.171Z",
@@ -16635,31 +18261,15 @@
             "followups": []
           }
         }
-      },
-      {
-        "id": "a7d2aab2-4cc0-4a9e-b0cf-95e6171b403a",
-        "timestamp": "2026-05-21T03:23:43.958Z",
-        "action": "run_followup_cadence",
-        "jobId": "job-af333630-352a-4f7b-a1a8-60d8a7ccc776",
-        "status": "applied",
-        "ok": true,
-        "message": "Follow-up cadence: no overdue actions found",
-        "warningCount": 0,
-        "errorCount": 0,
-        "details": {
-          "updates": {
-            "followups": []
-          }
-        }
       }
     ],
     "last_processed": {
-      "timestamp": "2026-06-05T14:34:58.171Z",
+      "timestamp": "2026-06-05T15:06:55.807Z",
       "action": "run_stage",
       "status": "applied",
       "success": true,
-      "jobId": "job-b95ff090-d9e1-4f21-acae-6cfdb5448114",
-      "message": "Proposal stage updated to final-draft (handoff: clean)",
+      "jobId": "job-9c51d8dd-4fb4-4341-afbc-1fe9ea2d10e8",
+      "message": "Proposal stage updated to pre-solicitation (handoff: clean)",
       "warningCount": 0,
       "errorCount": 0
     }
