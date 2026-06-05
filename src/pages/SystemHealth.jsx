@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { getHealth, getCadence } from "../lib/api.js";
+import { getHealth, getCadence, getJobs } from "../lib/api.js";
 import { toast } from "react-toastify";
-import { RefreshCw, AlertCircle, CheckCircle, Clock, Zap, Calendar, AlertTriangle } from "lucide-react";
+import { RefreshCw, AlertCircle, CheckCircle, Clock, Zap, Calendar, AlertTriangle, Play, Loader, XCircle, Pause } from "lucide-react";
 
 // Status indicators for different health states
 const StatusIndicator = ({ status, label }) => {
@@ -45,6 +45,8 @@ export default function SystemHealth() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [cadence, setCadence] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [jobsMeta, setJobsMeta] = useState({ total: 0, activeCount: 0, queuedCount: 0, processingCount: 0 });
   const [stats, setStats] = useState({
     total: 0,
     success: 0,
@@ -73,9 +75,10 @@ export default function SystemHealth() {
     setError(null);
     
     try {
-      const [healthData, cadenceData] = await Promise.all([
+      const [healthData, cadenceData, jobsData] = await Promise.all([
         getHealth(),
-        getCadence().catch(() => ({})) // Optional cadence data
+        getCadence().catch(() => ({})),
+        getJobs().catch(() => ({ jobs: [] })),
       ]);
 
       // Process health events
@@ -92,12 +95,21 @@ export default function SystemHealth() {
 
       setRows(events);
       setStats(calculateStats(events));
-      
+
+      // Jobs
+      setJobs(Array.isArray(jobsData?.jobs) ? jobsData.jobs : []);
+      setJobsMeta({
+        total: jobsData?.total || 0,
+        activeCount: jobsData?.activeCount || 0,
+        queuedCount: jobsData?.queuedCount || 0,
+        processingCount: jobsData?.processingCount || 0,
+      });
+
       // Set cadence if available
       if (cadenceData?.days || cadenceData?.time) {
         setCadence(cadenceData);
       }
-      
+
       setLastUpdated(new Date());
     } catch (e) {
       console.error('Failed to fetch health data:', e);
@@ -311,6 +323,102 @@ export default function SystemHealth() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Jobs Queue */}
+        <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
+          <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
+            <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
+              <div className="ml-4 mt-2">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Automation Jobs
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Recent build and execution jobs — {jobsMeta.total} total, {jobsMeta.activeCount} active
+                </p>
+              </div>
+              <div className="ml-4 mt-2 flex-shrink-0 flex gap-2">
+                {jobsMeta.processingCount > 0 && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <Loader className="w-3 h-3 mr-1 animate-spin" />
+                    {jobsMeta.processingCount} running
+                  </span>
+                )}
+                {jobsMeta.queuedCount > 0 && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <Pause className="w-3 h-3 mr-1" />
+                    {jobsMeta.queuedCount} queued
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Result</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {jobs.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">
+                      No jobs recorded yet
+                    </td>
+                  </tr>
+                ) : (
+                  jobs.map((job, idx) => {
+                    const statusBadge = {
+                      queued: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: <Clock className="w-3.5 h-3.5 mr-1" />, label: 'Queued' },
+                      processing: { bg: 'bg-blue-100', text: 'text-blue-800', icon: <Loader className="w-3.5 h-3.5 mr-1 animate-spin" />, label: 'Running' },
+                      applied: { bg: 'bg-green-100', text: 'text-green-800', icon: <CheckCircle className="w-3.5 h-3.5 mr-1" />, label: 'Applied' },
+                      applied_partial: { bg: 'bg-orange-100', text: 'text-orange-800', icon: <AlertTriangle className="w-3.5 h-3.5 mr-1" />, label: 'Partial' },
+                      failed: { bg: 'bg-red-100', text: 'text-red-800', icon: <XCircle className="w-3.5 h-3.5 mr-1" />, label: 'Failed' },
+                    }[job.status] || { bg: 'bg-gray-100', text: 'text-gray-800', icon: null, label: job.status };
+
+                    let duration = null;
+                    if (job.startedAt && job.processedAt) {
+                      const ms = new Date(job.processedAt) - new Date(job.startedAt);
+                      duration = ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
+                    } else if (job.startedAt && job.status === 'processing') {
+                      duration = 'running...';
+                    }
+
+                    const resultMsg = job.result?.message || job.error || '';
+
+                    return (
+                      <tr key={job.id || idx} className={`hover:bg-gray-50 ${job.status === 'processing' ? 'bg-blue-50/30' : ''}`}>
+                        <td className="px-6 py-3 whitespace-nowrap">
+                          <span className={`px-2 inline-flex items-center text-xs leading-5 font-semibold rounded-full ${statusBadge.bg} ${statusBadge.text}`}>
+                            {statusBadge.icon}
+                            {statusBadge.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-3 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{job.action}</div>
+                          <div className="text-xs text-gray-400 font-mono truncate max-w-[180px]">{job.id}</div>
+                        </td>
+                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {job.createdAt ? new Date(job.createdAt).toLocaleString() : '—'}
+                        </td>
+                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {duration || '—'}
+                        </td>
+                        <td className="px-6 py-3 text-sm text-gray-500 max-w-xs truncate" title={resultMsg}>
+                          {resultMsg || '—'}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
 

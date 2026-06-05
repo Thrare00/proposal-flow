@@ -1,147 +1,311 @@
-// Prefer Cloudflare Worker proxy if configured, but support automatic fallback to Apps Script
+import { buildApiUrl, isLocalRuntime } from './runtimeApi.js';
+
 const GAS_PROXY = import.meta.env.VITE_GAS_PROXY;
 const GAS_URL = import.meta.env.VITE_GAS_URL;
-const GAS = GAS_PROXY || GAS_URL;
 const HEALTH = import.meta.env.VITE_HEALTH_URL || GAS_PROXY || GAS_URL;
 const FOLDER = import.meta.env.VITE_REPORTS_FOLDER_ID;
+const QUEUE_TOKEN = import.meta.env.VITE_QUEUE_TOKEN || 'local-dev-token';
 
-// One-time runtime logging to verify endpoints in the deployed bundle
-if (typeof window !== 'undefined' && !window.__PF_ENDPOINTS_LOGGED__) {
-  window.__PF_ENDPOINTS_LOGGED__ = true;
-  // eslint-disable-next-line no-console
-  console.log('[PF] Endpoints:', {
-    GAS_PROXY: import.meta.env.VITE_GAS_PROXY || null,
-    GAS_URL: import.meta.env.VITE_GAS_URL || null,
-    GAS_RESOLVED: GAS,
-    HEALTH_RESOLVED: HEALTH,
-    QUEUE_URL: (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_QUEUE_URL || null)),
-  });
+function localAutomationUrl(fn, query = '') {
+  const suffix = query ? `&${query}` : '';
+  return `${buildApiUrl('/automation')}?fn=${fn}${suffix}`;
 }
 
-async function j(url, opt) { 
-  const r = await fetch(url, {
-    ...opt,
+async function requestJson(url, options) {
+  const response = await fetch(url, {
+    ...options,
     credentials: 'omit',
     headers: {
-      'Accept': 'application/json',
-      ...(opt?.headers || {})
-    }
-  }); 
-  
-  const ctype = r.headers.get('content-type') || '';
+      Accept: 'application/json',
+      ...(options?.headers || {}),
+    },
+  });
 
-  if (!r.ok) {
-    const text = await r.text().catch(() => '');
-    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
-      throw new Error(`Upstream returned HTML (${r.status}). Snippet: ${text.slice(0, 160)}`);
-    }
-    // Sometimes upstream sends JSON error with text/plain; try to parse
-    try {
-      if (text && (ctype.includes('json') || text.trim().startsWith('{') || text.trim().startsWith('['))) {
-        const parsed = JSON.parse(text);
-        throw new Error(`${r.status} ${r.statusText} — ${JSON.stringify(parsed).slice(0, 200)}`);
-      }
-    } catch {}
-    throw new Error(`${r.status} ${r.statusText} — ${text.slice(0, 200)}`);
+  const ctype = response.headers.get('content-type') || '';
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`${response.status} ${response.statusText} - ${text.slice(0, 200)}`);
   }
-  
-  // Try JSON first
+
   if (ctype.includes('json')) {
-    return await r.json();
+    return response.json();
   }
-  // Fallback: parse text that looks like JSON (guards against wrong content-type)
-  const text = await r.text();
-  const trimmed = text.trim();
-  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    try { return JSON.parse(trimmed); } catch {}
+
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
   }
-  // Surface a helpful error if still not JSON
-  throw new Error(`Failed to parse JSON response. Content-Type: ${ctype || 'n/a'}. Snippet: ${trimmed.slice(0, 200)}`);
 }
 
-// Try multiple candidate URLs in order until one yields valid JSON
-async function jTry(urls, opt) {
-  let lastErr;
-  for (const u of urls.filter(Boolean)) {
+async function firstSuccess(urls, options) {
+  let lastError = null;
+  for (const url of urls.filter(Boolean)) {
     try {
-      return await j(u, opt);
-    } catch (e) {
-      lastErr = e;
-      // continue to next candidate
+      return await requestJson(url, options);
+    } catch (error) {
+      lastError = error;
     }
   }
-  throw lastErr || new Error('No valid endpoints configured');
+  throw lastError || new Error('No valid endpoints configured');
 }
 
-export async function withRetry(fn, tries = 3, delay = 600) {
-  let last;
-  for (let i = 0; i < tries; i++) { 
-    try { 
-      return await fn(); 
-    } catch (e) { 
-      last = e; 
-      if (i < tries - 1) {
-        await new Promise(r => setTimeout(r, delay * (i + 1)));
+export async function withRetry(fn, tries = 3, delay = 400) {
+  let lastError = null;
+  for (let index = 0; index < tries; index += 1) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (index < tries - 1) {
+        await new Promise((resolve) => setTimeout(resolve, delay * (index + 1)));
       }
     }
   }
-  throw last;
+  throw lastError;
 }
 
-export async function getHealth() { 
-  const urls = [
-    HEALTH && `${HEALTH}?fn=getHealth`,
-    GAS_URL && `${GAS_URL}?fn=getHealth`,
-  ];
-  return withRetry(() => jTry(urls));
+export async function getHealth() {
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl('getHealth'));
+  }
+  urls.push(HEALTH && `${HEALTH}?fn=getHealth`);
+  urls.push(GAS_URL && `${GAS_URL}?fn=getHealth`);
+  return withRetry(() => firstSuccess(urls));
 }
 
-export async function getCadence() { 
-  const urls = [
-    GAS_PROXY && `${GAS_PROXY}?fn=getCadence`,
-    GAS_URL && `${GAS_URL}?fn=getCadence`,
-  ];
-  return withRetry(() => jTry(urls));
+export async function getCadence() {
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl('getCadence'));
+  }
+  urls.push(GAS_PROXY && `${GAS_PROXY}?fn=getCadence`);
+  urls.push(GAS_URL && `${GAS_URL}?fn=getCadence`);
+  return withRetry(() => firstSuccess(urls));
 }
 
 export async function setCadence(payload) {
-  const urls = [
-    GAS_PROXY && `${GAS_PROXY}?fn=setCadence`,
-    GAS_URL && `${GAS_URL}?fn=setCadence`,
-  ];
-  return withRetry(() => jTry(urls, {
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl('setCadence'));
+  }
+  urls.push(GAS_PROXY && `${GAS_PROXY}?fn=setCadence`);
+  urls.push(GAS_URL && `${GAS_URL}?fn=setCadence`);
+  return withRetry(() => firstSuccess(urls, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   }));
 }
 
-export async function getReports() { 
-  if (!FOLDER) throw new Error('Missing VITE_REPORTS_FOLDER_ID');
-  const urls = [
-    GAS_URL && `${GAS_URL}?fn=getReports&folderId=${encodeURIComponent(FOLDER)}`,
-    GAS_PROXY && `${GAS_PROXY}?fn=getReports&folderId=${encodeURIComponent(FOLDER)}`,
-  ];
-  return withRetry(() => jTry(urls));
+export async function getJobs(statusFilter) {
+  const qs = statusFilter ? `&status=${encodeURIComponent(statusFilter)}` : '';
+  return withRetry(() => firstSuccess([localAutomationUrl('getJobs', `limit=50${qs}`)]));
 }
 
-// Opportunities (Manus intake)
+export async function getReports() {
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl('getReports'));
+  }
+  if (FOLDER) {
+    urls.push(GAS_URL && `${GAS_URL}?fn=getReports&folderId=${encodeURIComponent(FOLDER)}`);
+    urls.push(GAS_PROXY && `${GAS_PROXY}?fn=getReports&folderId=${encodeURIComponent(FOLDER)}`);
+  }
+  return withRetry(() => firstSuccess(urls));
+}
+
 export async function getOpportunities() {
-  const urls = [
-    GAS_PROXY && `${GAS_PROXY}?fn=getOpportunities`,
-    GAS_URL && `${GAS_URL}?fn=getOpportunities`,
-  ];
-  const data = await withRetry(() => jTry(urls));
-  if (Array.isArray(data)) return data;
-  if (Array.isArray(data?.opportunities)) return data.opportunities;
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl('getOpportunities'));
+  }
+  urls.push(GAS_PROXY && `${GAS_PROXY}?fn=getOpportunities`);
+  urls.push(GAS_URL && `${GAS_URL}?fn=getOpportunities`);
+  const data = await withRetry(() => firstSuccess(urls));
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (Array.isArray(data?.opportunities)) {
+    return data.opportunities;
+  }
   return [];
 }
 
-// Backward compatibility
+// Fire the full intake pipeline: solicitation → proposal + checklist + overview
+// Returns { ok, jobId, message } immediately (202 Accepted); pipeline runs async.
+// Poll GET /proposals to see the new record appear.
+export async function captureOpportunity(payload) {
+  if (!isLocalRuntime()) {
+    throw new Error('captureOpportunity requires local server runtime');
+  }
+  return requestJson(buildApiUrl('/capture'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+// ── Capture Records ────────────────────────────────────────────────────────────
+export async function getCaptureRecords() {
+  if (!isLocalRuntime()) return [];
+  try {
+    const data = await requestJson(buildApiUrl('/capture-records'));
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function createCaptureRecordApi(payload) {
+  if (!isLocalRuntime()) throw new Error('createCaptureRecord requires local server runtime');
+  return requestJson(buildApiUrl('/capture-records'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateCaptureRecordApi(id, patch) {
+  if (!isLocalRuntime()) throw new Error('updateCaptureRecord requires local server runtime');
+  return requestJson(buildApiUrl(`/capture-records/${encodeURIComponent(id)}`), {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+}
+
+export async function deleteCaptureRecordApi(id) {
+  if (!isLocalRuntime()) throw new Error('deleteCaptureRecord requires local server runtime');
+  return fetch(buildApiUrl(`/capture-records/${encodeURIComponent(id)}`), {
+    method: 'DELETE',
+    credentials: 'omit',
+  });
+}
+
+// ── Knowledge Items ────────────────────────────────────────────────────────────
+export async function getKnowledgeItems() {
+  if (!isLocalRuntime()) return [];
+  try {
+    const data = await requestJson(buildApiUrl('/knowledge-items'));
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function createKnowledgeItemApi(payload) {
+  if (!isLocalRuntime()) throw new Error('createKnowledgeItem requires local server runtime');
+  return requestJson(buildApiUrl('/knowledge-items'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteKnowledgeItemApi(id) {
+  if (!isLocalRuntime()) throw new Error('deleteKnowledgeItem requires local server runtime');
+  return fetch(buildApiUrl(`/knowledge-items/${encodeURIComponent(id)}`), {
+    method: 'DELETE',
+    credentials: 'omit',
+  });
+}
+
+// ── Operator Updates (hourly cadence) ─────────────────────────────────────────
+export async function getOperatorUpdates({ limit = 50, since } = {}) {
+  if (!isLocalRuntime()) return { updates: [], summary: {} };
+  const qs = new URLSearchParams();
+  if (limit) qs.set('limit', limit);
+  if (since) qs.set('since', since);
+  return requestJson(`${buildApiUrl('/operator-updates')}?${qs}`);
+}
+
+export async function postOperatorUpdate(payload) {
+  if (!isLocalRuntime()) throw new Error('postOperatorUpdate requires local server runtime');
+  return requestJson(buildApiUrl('/operator-updates'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function resolveOperatorBlocked(updateId, blockedText) {
+  if (!isLocalRuntime()) throw new Error('resolveOperatorBlocked requires local server runtime');
+  return requestJson(buildApiUrl(`/operator-updates/${encodeURIComponent(updateId)}/resolve`), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ blockedText }),
+  });
+}
+
+export async function getCronStatus() {
+  if (!isLocalRuntime()) return null;
+  return requestJson(buildApiUrl('/cron-status'));
+}
+
+export async function getStageReadiness(proposalId) {
+  if (!isLocalRuntime()) return null;
+  return requestJson(buildApiUrl(`/proposals/${encodeURIComponent(proposalId)}/stage-readiness`));
+}
+
 export async function gasGet(fn) {
-  const urls = [
-    GAS_PROXY && `${GAS_PROXY}?fn=${encodeURIComponent(fn)}`,
-    GAS_URL && `${GAS_URL}?fn=${encodeURIComponent(fn)}`,
-  ];
-  return withRetry(() => jTry(urls));
+  const urls = [];
+  if (isLocalRuntime()) {
+    urls.push(localAutomationUrl(encodeURIComponent(fn)));
+  }
+  urls.push(GAS_PROXY && `${GAS_PROXY}?fn=${encodeURIComponent(fn)}`);
+  urls.push(GAS_URL && `${GAS_URL}?fn=${encodeURIComponent(fn)}`);
+  return withRetry(() => firstSuccess(urls));
+}
+
+function crmExecutionPath({ opportunityId, companyId } = {}) {
+  if (opportunityId) {
+    return buildApiUrl(`/crm/opportunities/${encodeURIComponent(opportunityId)}/execution`);
+  }
+
+  if (companyId) {
+    return buildApiUrl(`/crm/companies/${encodeURIComponent(companyId)}/execution`);
+  }
+
+  return buildApiUrl('/crm/execution');
+}
+
+async function requestCrmExecution(payload, target = {}) {
+  if (!isLocalRuntime()) {
+    throw new Error('Twenty execution requires local server runtime');
+  }
+
+  return requestJson(crmExecutionPath(target), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Queue-Token': QUEUE_TOKEN,
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function previewTwentyExecution(payload, target = {}) {
+  return requestCrmExecution({
+    ...(payload || {}),
+    dryRun: true,
+  }, target);
+}
+
+export async function runTwentyExecution(payload, target = {}) {
+  return requestCrmExecution(payload || {}, target);
+}
+
+export async function getTwentyExecutionStatus() {
+  if (!isLocalRuntime()) {
+    throw new Error('Twenty execution status requires local server runtime');
+  }
+
+  return requestJson(buildApiUrl('/crm/execution/status'), {
+    headers: {
+      'X-Queue-Token': QUEUE_TOKEN,
+    },
+  });
 }

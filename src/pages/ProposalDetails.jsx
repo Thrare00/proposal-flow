@@ -1,14 +1,14 @@
 import { Fragment, useState, useEffect, useCallback, useMemo } from 'react';
-import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Edit, 
-  Trash2, 
-  FileText, 
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  FileText,
   FilePieChart,
-  Plus, 
-  ChevronRight, 
-  ChevronLeft, 
+  Plus,
+  ChevronRight,
+  ChevronLeft,
   AlertTriangle,
   Download,
   Building,
@@ -22,23 +22,22 @@ import {
   FileCode,
   FileAudio,
   FileVideo,
-  File
+  File,
 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
-import { enqueue } from '../lib/enqueue.js';
-import { 
-  getStatusName, 
-  getStatusColor, 
-  getNextStatus, 
+import {
+  getStatusName,
+  getStatusColor,
+  getNextStatus,
   getPreviousStatus,
-  STATUS_OPTIONS
+  STATUS_OPTIONS,
 } from '../utils/statusUtils.js';
-import { 
-  formatDate, 
-  getUrgencyLevel, 
+import {
+  formatDate,
+  getUrgencyLevel,
   getUrgencyBorderColor,
   isOverdue,
-  getDaysUntilDue
+  getDaysUntilDue,
 } from '../utils/dateUtils.js';
 import { generateUUID } from '../utils/uuid.js';
 import { formatFileSize } from '../utils/formatUtils.js';
@@ -48,68 +47,51 @@ import { Card, CardContent, CardHeader } from '../components/ui/card.jsx';
 import { Badge } from '../components/ui/badge.jsx';
 import { Separator } from '../components/ui/separator.jsx';
 import { Skeleton } from '../components/ui/skeleton.jsx';
-import TaskCard from '../components/TaskCard.jsx';
-import TaskForm from '../components/TaskForm.jsx';
+import ProposalCommandCenter from '../components/ProposalCommandCenter.jsx';
+import CrmActions from '../components/CrmActions.jsx';
+import RapidResponseDrafts from '../components/RapidResponseDrafts.jsx';
+import StageChecklist from '../components/StageChecklist.jsx';
+import StageReadinessPanel from '../components/StageReadinessPanel.jsx';
+import OperatorIntelPanels from '../components/OperatorIntelPanels.jsx';
 
 /**
- * Displays detailed information about a proposal including status, files, and tasks
+ * Displays detailed information about a proposal including status and files.
  * @returns {JSX.Element} The rendered component
  */
 const ProposalDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const { addToast } = useToast();
   const context = useProposalContext();
-  const { 
-    getProposal, 
-    updateProposalStatus, 
+  const {
+    getProposal,
+    updateProposalStatus,
     updateProposal,
     isLoading: isProposalLoading,
-    error: proposalError
+    error: proposalError,
   } = context;
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showTaskForm, setShowTaskForm] = useState(false);
-  const [editingTaskId, setEditingTaskId] = useState(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
-  
+
   // Get the proposal with error handling
   const proposal = id ? getProposal(id) : undefined;
-  
-  // Calculate task statistics - defined later in the file
-  
-  // Check if there's a task to edit from the query parameter
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const taskId = params.get('editTask');
-    
-    if (taskId) {
-      setEditingTaskId(taskId);
-      setShowTaskForm(true);
-      
-      // Clean up the URL
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, '', newUrl);
-    }
-  }, [location.search]);
-  
+
   // Handle loading and error states
   useEffect(() => {
     const loadProposal = async () => {
       try {
         setIsLoading(true);
-        
+
         if (id && !proposal && !isProposalLoading) {
-          // If we have an ID but no proposal, try to load it
           const loadedProposal = getProposal(id);
           if (!loadedProposal) {
             throw new Error('Proposal not found');
           }
         }
-        
+
         setError(null);
       } catch (err) {
         console.error('Error loading proposal:', err);
@@ -117,66 +99,63 @@ const ProposalDetails = () => {
         addToast({
           title: 'Error',
           description: 'Failed to load proposal details',
-          variant: 'destructive'
+          variant: 'destructive',
         });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     loadProposal();
   }, [id, proposal, isProposalLoading, getProposal, addToast]);
-  
+
   // Redirect if proposal not found
   useEffect(() => {
     if (!isLoading && !proposal && !isProposalLoading && id) {
       addToast({
         title: 'Not Found',
         description: 'The requested proposal could not be found',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       navigate('/dashboard');
     }
   }, [proposal, isLoading, isProposalLoading, id, navigate, addToast]);
-  
+
   const urgencyLevel = getUrgencyLevel(proposal?.dueDate);
   const urgencyBorderClass = getUrgencyBorderColor(urgencyLevel);
   const statusColorClass = getStatusColor(proposal?.status);
   const daysUntilDue = getDaysUntilDue(proposal?.dueDate);
   const isProposalOverdue = isOverdue(proposal?.dueDate);
-  
+
   const handleStatusChange = useCallback(async (direction) => {
     try {
       setIsSubmitting(true);
-      const action = direction === 'next' ? 'next' : 'previous';
-      setEditingTaskId(`status-${action}`);
-      
-      const newStatus = direction === 'next' 
+
+      const newStatus = direction === 'next'
         ? getNextStatus(proposal.status)
         : getPreviousStatus(proposal.status);
-        
+
       if (!newStatus) return;
-      
+
       await updateProposalStatus(proposal.id, newStatus);
-      
+
       addToast({
         title: 'Status Updated',
         description: `Proposal status changed to ${getStatusName(newStatus)}`,
-        variant: 'default'
+        variant: 'default',
       });
     } catch (err) {
       console.error('Failed to update status:', err);
       addToast({
         title: 'Update Failed',
         description: 'Failed to update proposal status. Please try again.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
-      setEditingTaskId(undefined);
     }
   }, [proposal?.id, proposal?.status, updateProposalStatus, addToast]);
-  
+
   // Utility: return an icon for a given MIME type/extension
   const getFileIcon = (fileType) => {
     if (!fileType) return <File className="h-5 w-5 text-gray-400" />;
@@ -205,248 +184,132 @@ const ProposalDetails = () => {
 
   const handleFileChange = async (event) => {
     const files = Array.from(event.target.files || []);
-    
+
     if (files.length === 0) return;
-    
-    // Check file size (max 10MB per file)
+
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-    const oversizedFiles = files.filter(file => file.size > MAX_FILE_SIZE);
-    
+    const oversizedFiles = files.filter((file) => file.size > MAX_FILE_SIZE);
+
     if (oversizedFiles.length > 0) {
       addToast({
         title: 'File too large',
         description: `Some files exceed the maximum size of ${formatFileSize(MAX_FILE_SIZE)}`,
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
-    
+
     try {
       setIsFileUploading(true);
-      
-      // Process each file
-      const newFiles = await Promise.all(files.map(file => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          
-          reader.onload = () => {
-            resolve({
-              id: generateUUID(),
-              filename: file.name,
-              type: file.type,
-              size: file.size,
-              url: URL.createObjectURL(file),
-              createdAt: new Date().toISOString(),
-              uploadProgress: 100,
-              status: 'completed'
-            });
-          };
-          
-          reader.onerror = () => {
-            resolve({
-              id: generateUUID(),
-              filename: file.name,
-              type: file.type,
-              size: file.size,
-              error: 'Failed to read file',
-              status: 'error'
-            });
-          };
-          
-          // Simulate upload progress
-          setTimeout(() => {
-            reader.readAsDataURL(file);
-          }, 500);
-        });
-      }));
-      
-      // Update proposal with new files
+
+      const newFiles = await Promise.all(files.map((file) => new Promise((resolve) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          resolve({
+            id: generateUUID(),
+            filename: file.name,
+            type: file.type,
+            size: file.size,
+            url: URL.createObjectURL(file),
+            createdAt: new Date().toISOString(),
+            uploadProgress: 100,
+            status: 'completed',
+          });
+        };
+
+        reader.onerror = () => {
+          resolve({
+            id: generateUUID(),
+            filename: file.name,
+            type: file.type,
+            size: file.size,
+            error: 'Failed to read file',
+            status: 'error',
+          });
+        };
+
+        setTimeout(() => {
+          reader.readAsDataURL(file);
+        }, 500);
+      })));
+
       await updateProposal(proposal.id, {
-        files: [...(proposal.files || []), ...newFiles]
+        files: [...(proposal.files || []), ...newFiles],
       });
-      
+
       addToast({
         title: 'Files uploaded',
         description: `Successfully uploaded ${newFiles.length} file(s)`,
-        variant: 'default'
+        variant: 'default',
       });
-      
     } catch (err) {
       console.error('Error uploading files:', err);
       addToast({
         title: 'Upload failed',
         description: 'Failed to upload one or more files',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsFileUploading(false);
-      // Reset file input
       event.target.value = '';
     }
   };
 
   const handleDeleteFile = async (fileId) => {
     if (!proposal.files) return;
-    
+
     try {
-      const fileToDelete = proposal.files.find(f => f.id === fileId);
+      const fileToDelete = proposal.files.find((f) => f.id === fileId);
       if (!fileToDelete) return;
-      
-      // Show confirmation dialog
+
       if (!window.confirm(`Are you sure you want to delete "${fileToDelete.filename}"?`)) {
         return;
       }
-      
-      const updatedFiles = proposal.files.filter(file => file.id !== fileId);
-      
+
+      const updatedFiles = proposal.files.filter((file) => file.id !== fileId);
+
       await updateProposal(proposal.id, {
-        files: updatedFiles
+        files: updatedFiles,
       });
-      
+
       addToast({
         title: 'File deleted',
         description: `"${fileToDelete.filename}" has been removed`,
-        variant: 'default'
+        variant: 'default',
       });
-      
     } catch (err) {
       console.error('Error deleting file:', err);
       addToast({
         title: 'Delete failed',
         description: 'Failed to delete the file. Please try again.',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleEditTask = (taskId) => {
-    setEditingTaskId(taskId);
-    setShowTaskForm(true);
-  };
-
-  const runAutomationAction = useCallback(async (action) => {
-    try {
-      setIsSubmitting(true);
-      await enqueue({ action, payload: { proposalId: proposal.id } });
-      await context.fetchProposals();
-      addToast({
-        title: 'Automation queued',
-        description: `${action} has been queued for this proposal.`,
-        variant: 'default',
-      });
-    } catch (err) {
-      console.error(`Failed to queue ${action}:`, err);
-      addToast({
-        title: 'Automation failed',
-        description: err.message || `Failed to queue ${action}.`,
         variant: 'destructive',
       });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [addToast, context, proposal?.id]);
-
-  const handleDeleteTask = async (taskId) => {
-    const taskToDelete = proposal.tasks?.find(t => t.id === taskId);
-    if (!taskToDelete) return;
-    
-    try {
-      if (!window.confirm(`Are you sure you want to delete the task "${taskToDelete.title}"?`)) {
-        return;
-      }
-      
-      const updatedTasks = proposal.tasks.filter(task => task.id !== taskId);
-      
-      await updateProposal(proposal.id, {
-        tasks: updatedTasks
-      });
-      
-      addToast({
-        title: 'Task deleted',
-        description: `"${taskToDelete.title}" has been removed`,
-        variant: 'default'
-      });
-      
-    } catch (err) {
-      console.error('Error deleting task:', err);
-      addToast({
-        title: 'Delete failed',
-        description: 'Failed to delete the task. Please try again.',
-        variant: 'destructive'
-      });
     }
   };
-  
-  // Task form handlers - defined later in the file
 
-  // Sort tasks - incomplete first (ordered by due date), then completed
-  const sortedTasks = useMemo(() => {
-    if (!proposal.tasks) return [];
-    
-    return [...proposal.tasks].sort((a, b) => {
-      // Incomplete tasks first
-      if (a.completed && !b.completed) return 1;
-      if (!a.completed && b.completed) return -1;
-      
-      // Then sort by due date (ascending)
-      const dateA = a.dueDate ? new Date(a.dueDate) : new Date(0);
-      const dateB = b.dueDate ? new Date(b.dueDate) : new Date(0);
-      
-      // If due dates are the same, sort by title
-      if (dateA.getTime() === dateB.getTime()) {
-        return (a.title || '').localeCompare(b.title || '');
-      }
-      
-      return dateA.getTime() - dateB.getTime();
-    });
-  }, [proposal?.tasks]);
-  
-  // Calculate task completion stats
-  const taskStats = useMemo(() => {
-    if (!proposal?.tasks?.length) return { total: 0, completed: 0, percent: 0 };
-    
-    const total = proposal.tasks.length;
-    const completed = proposal.tasks.filter(t => t.completed).length;
-    const percent = Math.round((completed / total) * 100) || 0;
-    
-    return { total, completed, percent };
-  }, [proposal?.tasks]);
-  
-  // Determine if the proposal is in a final state
   const isFinalState = useMemo(() => {
     const finalStatuses = ['submitted', 'awarded', 'rejected', 'withdrawn'];
     return finalStatuses.includes(proposal.status);
   }, [proposal?.status]);
 
-  const openTaskForm = () => {
-    setEditingTaskId(undefined);
-    setShowTaskForm(true);
-  };
-
-  const closeTaskForm = () => {
-    setEditingTaskId(undefined);
-    setShowTaskForm(false);
-  };
-
-  // Format due date with relative time
   const formatDueDate = (dateString) => {
     if (!dateString) return 'No due date';
-    
+
     const date = new Date(dateString);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     const isToday = date.toDateString() === today.toDateString();
     const isTomorrow = date.toDateString() === tomorrow.toDateString();
-    
+
     if (isToday) return 'Today';
     if (isTomorrow) return 'Tomorrow';
-    
+
     return formatDate(dateString, 'MMM d, yyyy');
   };
 
-  // Show loading state
   if (isLoading || isProposalLoading) {
     return (
       <div className="max-w-5xl mx-auto p-6">
@@ -461,8 +324,7 @@ const ProposalDetails = () => {
       </div>
     );
   }
-  
-  // Show error state
+
   if (error || proposalError) {
     return (
       <div className="max-w-5xl mx-auto p-6">
@@ -484,17 +346,17 @@ const ProposalDetails = () => {
       </div>
     );
   }
-  
+
   if (!proposal) {
-    return null; // Should be caught by the redirect effect
+    return null;
   }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="mb-6">
-        <Button 
-          asChild 
-          variant="ghost" 
+        <Button
+          asChild
+          variant="ghost"
           className="text-primary-600 hover:text-primary-800 hover:bg-primary-50"
         >
           <Link to="/dashboard" className="flex items-center">
@@ -503,8 +365,7 @@ const ProposalDetails = () => {
           </Link>
         </Button>
       </div>
-      
-      {/* Main Proposal Card */}
+
       <Card className="mb-6 overflow-hidden">
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -523,22 +384,21 @@ const ProposalDetails = () => {
               </Link>
             </Button>
           </div>
-          
-          {/* Status and urgency badges */}
+
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Badge className={`${statusColorClass} text-sm`}>
               {getStatusName(proposal.status)}
             </Badge>
-            
+
             <Badge variant="outline" className={`${urgencyBorderClass} text-sm`}>
-              {isProposalOverdue 
+              {isProposalOverdue
                 ? `Overdue: ${Math.abs(daysUntilDue)} days`
                 : `Due in ${daysUntilDue} days`}
               {isProposalOverdue && (
                 <AlertTriangle size={14} className="ml-1" />
               )}
             </Badge>
-            
+
             {proposal.opportunityType && (
               <Badge variant="secondary" className="text-sm">
                 {proposal.opportunityType}
@@ -546,13 +406,11 @@ const ProposalDetails = () => {
             )}
           </div>
         </CardHeader>
-        
+
         <Separator />
-        
+
         <CardContent className="p-6">
-          {/* Main info grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Agency/Client */}
             <div>
               <h3 className="text-sm font-medium text-gray-500 mb-1">Agency/Client</h3>
               <div className="flex items-center">
@@ -560,17 +418,12 @@ const ProposalDetails = () => {
                 <p className="text-gray-900">{proposal.agency || 'Not specified'}</p>
               </div>
             </div>
-            
-            {/* Due Date */}
+
             <div>
               <h3 className="text-sm font-medium text-gray-500 mb-1">Due Date</h3>
               <div className="flex items-center">
-                <Clock size={18} className={`mr-2 ${
-                  isProposalOverdue ? 'text-error-500' : 'text-gray-400'
-                }`} />
-                <p className={`${
-                  isProposalOverdue ? 'text-error-600 font-medium' : 'text-gray-900'
-                }`}>
+                <Clock size={18} className={`mr-2 ${isProposalOverdue ? 'text-error-500' : 'text-gray-400'}`} />
+                <p className={`${isProposalOverdue ? 'text-error-600 font-medium' : 'text-gray-900'}`}>
                   {formatDueDate(proposal.dueDate)}
                   {isProposalOverdue && (
                     <span className="ml-1 text-error-500">(Overdue)</span>
@@ -578,8 +431,7 @@ const ProposalDetails = () => {
                 </p>
               </div>
             </div>
-            
-            {/* Budget */}
+
             {proposal.budget && (
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-1">Budget</h3>
@@ -588,19 +440,18 @@ const ProposalDetails = () => {
                     style: 'currency',
                     currency: proposal.currency || 'USD',
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
+                    maximumFractionDigits: 0,
                   }).format(proposal.budget)}
                 </p>
               </div>
             )}
-            
-            {/* Contact */}
+
             {proposal.contactName && (
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-1">Contact</h3>
                 <p className="text-gray-900">{proposal.contactName}</p>
                 {proposal.contactEmail && (
-                  <a 
+                  <a
                     href={`mailto:${proposal.contactEmail}`}
                     className="text-primary-600 hover:underline text-sm"
                   >
@@ -612,8 +463,7 @@ const ProposalDetails = () => {
                 )}
               </div>
             )}
-            
-            {/* Submission Date */}
+
             {proposal.submissionDate && (
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-1">
@@ -624,8 +474,7 @@ const ProposalDetails = () => {
                 </p>
               </div>
             )}
-            
-            {/* Created At */}
+
             <div>
               <h3 className="text-sm font-medium text-gray-500 mb-1">Created</h3>
               <p className="text-gray-900">
@@ -633,8 +482,7 @@ const ProposalDetails = () => {
               </p>
             </div>
           </div>
-          
-          {/* Notes */}
+
           {proposal.notes && (
             <div className="mt-6">
               <h3 className="text-sm font-medium text-gray-500 mb-2">Notes</h3>
@@ -646,8 +494,7 @@ const ProposalDetails = () => {
             </div>
           )}
         </CardContent>
-        
-        {/* Status change section */}
+
         <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between">
             <div className="mb-4 sm:mb-0">
@@ -658,26 +505,25 @@ const ProposalDetails = () => {
                 <span className={`${statusColorClass} px-3 py-1 rounded-full text-sm font-medium`}>
                   {getStatusName(proposal.status)}
                 </span>
-                
-                {/* Status progress indicator */}
+
                 <div className="hidden md:flex items-center ml-6">
                   {STATUS_OPTIONS.map((status, index) => (
                     <Fragment key={status.value}>
                       {index > 0 && (
                         <div className={`h-0.5 w-8 ${
-                          index <= STATUS_OPTIONS.findIndex(s => s.value === proposal.status) 
-                            ? 'bg-primary-500' 
+                          index <= STATUS_OPTIONS.findIndex((s) => s.value === proposal.status)
+                            ? 'bg-primary-500'
                             : 'bg-gray-200'
                         }`} />
                       )}
-                      <div 
+                      <div
                         className={`h-6 w-6 rounded-full flex items-center justify-center ${
-                          index <= STATUS_OPTIONS.findIndex(s => s.value === proposal.status)
+                          index <= STATUS_OPTIONS.findIndex((s) => s.value === proposal.status)
                             ? 'bg-primary-500 text-white'
                             : 'bg-gray-200 text-gray-500'
                         }`}
                       >
-                        {index < STATUS_OPTIONS.findIndex(s => s.value === proposal.status) ? (
+                        {index < STATUS_OPTIONS.findIndex((s) => s.value === proposal.status) ? (
                           <CheckCircle2 size={14} />
                         ) : (
                           <span className="text-xs font-medium">{index + 1}</span>
@@ -688,7 +534,7 @@ const ProposalDetails = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex space-x-3">
               <Button
                 onClick={() => handleStatusChange('previous')}
@@ -696,20 +542,20 @@ const ProposalDetails = () => {
                 variant="outline"
                 className="min-w-[120px] justify-center"
               >
-                {isSubmitting && editingTaskId === 'status-prev' ? (
+                {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                 ) : (
                   <ChevronLeft size={16} className="mr-1" />
                 )}
                 Previous
               </Button>
-              
+
               <Button
                 onClick={() => handleStatusChange('next')}
                 disabled={!getNextStatus(proposal.status) || isSubmitting}
                 className="min-w-[120px] justify-center"
               >
-                {isSubmitting && editingTaskId === 'status-next' ? (
+                {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                 ) : (
                   <span className="mr-1">Next</span>
@@ -721,65 +567,25 @@ const ProposalDetails = () => {
         </div>
       </Card>
 
-      <Card className="mb-6">
-        <CardHeader className="pb-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-xl font-bold">Automation Pipeline</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Pre-solicitation operations from intake through Google Docs finalization
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" onClick={() => runAutomationAction('upload_solicitation_documents')} disabled={isSubmitting}>
-                Attach Solicitation Docs
-              </Button>
-              <Button variant="outline" onClick={() => runAutomationAction('proposal_overview')} disabled={isSubmitting}>
-                Generate Overview
-              </Button>
-              <Button onClick={() => runAutomationAction('build_proposal_draft')} disabled={isSubmitting}>
-                Build Proposal Draft
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="rounded-md border p-4">
-              <div className="text-sm text-gray-500">Overview</div>
-              <div className="font-medium">{proposal.metadata?.draftOverviewStatus || 'pending'}</div>
-            </div>
-            <div className="rounded-md border p-4">
-              <div className="text-sm text-gray-500">Proposal Draft</div>
-              <div className="font-medium">{proposal.metadata?.proposalDraftStatus || 'pending'}</div>
-            </div>
-            <div className="rounded-md border p-4">
-              <div className="text-sm text-gray-500">Fit Score</div>
-              <div className="font-medium">{proposal.metadata?.fitScore ?? 'n/a'}</div>
-            </div>
-          </div>
+      <OperatorIntelPanels proposal={proposal} />
 
-          {proposal.metadata?.workflowSteps?.length ? (
-            <div className="space-y-3">
-              {proposal.metadata.workflowSteps.map((step) => (
-                <div key={step.id} className="flex items-start justify-between rounded-md border p-3">
-                  <div>
-                    <div className="font-medium text-gray-900">{step.label}</div>
-                    <div className="text-sm text-gray-500">{step.stage}</div>
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {formatDate(step.timestamp, 'N/A')}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-500">No workflow steps recorded yet.</p>
-          )}
-        </CardContent>
-      </Card>
-      
-      {/* Files section */}
+      <RapidResponseDrafts
+        proposal={proposal}
+        addToast={addToast}
+      />
+
+      <CrmActions
+        proposal={proposal}
+        onRefresh={context.fetchProposals}
+        addToast={addToast}
+      />
+
+      <ProposalCommandCenter
+        proposal={proposal}
+        onProposalRefresh={context.fetchProposals}
+        addToast={addToast}
+      />
+
       <Card className="mb-6">
         <CardHeader className="pb-2">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between">
@@ -804,7 +610,7 @@ const ProposalDetails = () => {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           {isFileUploading && (
             <div className="mb-4 p-3 bg-blue-50 rounded-md flex items-center">
@@ -812,12 +618,12 @@ const ProposalDetails = () => {
               <span className="text-sm text-blue-700">Uploading files, please wait...</span>
             </div>
           )}
-          
+
           {proposal.files && proposal.files.length > 0 ? (
             <div className="space-y-2">
               {proposal.files.map((file) => (
-                <div 
-                  key={file.id} 
+                <div
+                  key={file.id}
                   className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-md transition-colors"
                 >
                   <div className="flex items-center min-w-0">
@@ -834,9 +640,9 @@ const ProposalDetails = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 ml-4">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => window.open(file.url, '_blank')}
                       className="text-gray-500 hover:text-gray-700"
                     >
@@ -878,87 +684,9 @@ const ProposalDetails = () => {
           )}
         </CardContent>
       </Card>
-      
-      {/* Tasks section */}
-      <Card>
-        <CardHeader className="pb-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold">Tasks</h2>
-              <div className="flex items-center space-x-4 mt-1">
-                <p className="text-sm text-gray-500">
-                  {taskStats.completed} of {taskStats.total} tasks completed
-                </p>
-                {taskStats.total > 0 && (
-                  <div className="hidden sm:flex items-center">
-                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-green-500 transition-all duration-300"
-                        style={{ width: `${taskStats.percent}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500 ml-2">{taskStats.percent}%</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            <Button onClick={openTaskForm} className="mt-2 sm:mt-0">
-              <Plus size={16} className="mr-2" />
-              Add Task
-            </Button>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="space-y-4">
-          {proposal.tasks && proposal.tasks.length > 0 ? (
-            <div className="space-y-3">
-              {sortedTasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={{
-                    ...task,
-                    status: {
-                      current: task.completed ? 'completed' : 'in_progress',
-                      progress: task.completed ? 100 : 0,
-                      lastUpdated: task.updatedAt || new Date().toISOString()
-                    },
-                    owner: task.assignee || 'Unassigned',
-                    urgency: task.priority?.toLowerCase() || 'medium',
-                    dueDate: task.dueDate,
-                    proposalId: proposal.id
-                  }}
-                  showProposalLink={false}
-                  onEdit={() => handleEditTask(task.id)}
-                  onDelete={() => handleDeleteTask(task.id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-md">
-              <FileText size={48} className="mx-auto text-gray-300 mb-3" />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">No tasks yet</h3>
-              <p className="text-sm text-gray-500 mb-4">
-                Add tasks to keep track of what needs to be done for this proposal
-              </p>
-              <Button onClick={openTaskForm}>
-                <Plus size={16} className="mr-2" />
-                Add your first task
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-      
-      {/* Task form modal */}
-      {showTaskForm && (
-        <TaskForm 
-          proposalId={proposal.id} 
-          editingTaskId={editingTaskId}
-          onClose={closeTaskForm} 
-          onTaskSaved={closeTaskForm}
-          onDeleteTask={handleDeleteTask}
-        />
-      )}
+
+      <StageChecklist proposal={proposal} />
+      <StageReadinessPanel proposalId={proposal.id} />
     </div>
   );
 };

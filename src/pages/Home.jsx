@@ -44,7 +44,7 @@ const Home = () => {
               <span>Get Started</span>
             </button>
             <button
-              onClick={() => navigate('/guide')}
+              onClick={() => navigate('/guides/proposal-development')}
               className="btn btn-secondary px-8 py-3 text-lg"
             >
               View Guide

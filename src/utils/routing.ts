@@ -5,20 +5,20 @@ export const ROUTES = {
   ROOT: '/',
   LANDING: '/landing',
   DASHBOARD: '/dashboard',
-  PROPOSALS: '/dashboard/proposals',
-  PROPOSAL_NEW: '/dashboard/proposals/new',
-  PROPOSAL_DETAILS: '/dashboard/proposals/:id',
-  PROPOSAL_ANALYZE: '/dashboard/proposals/:id/analyze',
-  PROPOSAL_EDIT: '/dashboard/proposals/:id/edit',
-  FLOWBOARD: '/dashboard/flowboard',
-  MARKET_RESEARCH: '/dashboard/market-research',
-  CALENDAR: '/dashboard/calendar',
-  REMINDERS: '/dashboard/reminders',
-  GUIDE: '/dashboard/guide',
-  AI_GUIDE: '/dashboard/guide/ai',
-  PROPOSAL_GUIDE: '/dashboard/guide/proposal',
-  SOW_ANALYZER: '/dashboard/tools/sow-analyzer',
-  SETTINGS: '/dashboard/settings'
+  PROPOSALS: '/proposals',
+  PROPOSAL_NEW: '/proposals/new',
+  PROPOSAL_DETAILS: '/proposals/:id',
+  PROPOSAL_ANALYZE: '/proposals/:id/analyze',
+  PROPOSAL_EDIT: '/proposals/edit/:id',
+  FLOWBOARD: '/flowboard',
+  MARKET_RESEARCH: '/market-research',
+  CALENDAR: '/calendar',
+  REMINDERS: '/reminders',
+  GUIDE: '/guides',
+  AI_GUIDE: '/guides/ai-agent',
+  PROPOSAL_GUIDE: '/guides/proposal-development',
+  SOW_ANALYZER: '/sow-analyzer',
+  SETTINGS: '/settings'
 } as const;
 
 export type RoutePaths = typeof ROUTES[keyof typeof ROUTES];
@@ -28,11 +28,7 @@ export const useRoutePrefix = () => {
   const isGitHubPages = location.pathname.startsWith('/proposal-flow');
   const isDev = window.location.hostname === 'localhost';
   
-  return isGitHubPages 
-    ? '/proposal-flow'
-    : isDev 
-    ? ''
-    : '/dashboard';
+  return isGitHubPages ? '/proposal-flow' : '';
 };
 
 export const getRoutePath = (path: RoutePaths, params: Record<string, string> = {}): string => {
@@ -80,7 +76,7 @@ export const useIntelligentRouting = () => {
       case 'commercial':
         navigate(getRoutePath(ROUTES.MARKET_RESEARCH));
         break;
-      case 'local_state':
+      case 'state_local':
         navigate(getRoutePath(ROUTES.CALENDAR));
         break;
       case 'federal':

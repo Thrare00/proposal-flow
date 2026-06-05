@@ -5,6 +5,7 @@ import { format, parseISO, isAfter, isBefore, addDays } from 'date-fns';
 import { getUrgencyLevel, getStatusName } from '../utils/statusUtils.js';
 import { buildApiUrl } from '../lib/runtimeApi.js';
 import { CheckCircle, ChevronRight, Upload, FileText, AlertTriangle, SearchCheck, Briefcase, Microscope, ShieldCheck, Calculator, FilePenLine, ClipboardCheck, FileSpreadsheet } from 'lucide-react';
+import { getPursuitBucket, daysUntilDate } from '../lib/pursuitTiming.js';
 
 const STAGES = [
   {
@@ -38,7 +39,7 @@ const STAGES = [
   },
   {
     id: 'pre_solicitation',
-    name: 'Pre-Solicitation Brief',
+    name: 'Pre-solicitation',
     next: 'research',
     container: 'bg-violet-50 dark:bg-violet-900/10 border-l-4 border-violet-400 dark:border-violet-500',
     header: 'bg-violet-700 dark:bg-violet-800 text-white',
@@ -47,7 +48,7 @@ const STAGES = [
     secondaryAction: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600',
     text: 'text-gray-800 dark:text-gray-100',
     actions: [
-      { id: 'create_overview', label: 'Create Brief', icon: Briefcase, variant: 'primary' },
+      { id: 'create_overview', label: 'Pre-solicitation', icon: Briefcase, variant: 'primary' },
       { id: 'upload_docs', label: 'Upload Docs', icon: Upload, variant: 'secondary' },
     ],
   },
@@ -67,8 +68,8 @@ const STAGES = [
   },
   {
     id: 'technical_compliance',
-    name: 'Technical / Compliance',
-    next: 'pricing_packaging',
+    name: 'Compliance Matrix',
+    next: 'pricing_strategy',
     container: 'bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-400 dark:border-amber-500',
     header: 'bg-amber-600 dark:bg-amber-700 text-gray-900 dark:text-white',
     content: 'bg-white/80 dark:bg-gray-800/80',
@@ -76,12 +77,12 @@ const STAGES = [
     secondaryAction: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600',
     text: 'text-gray-800 dark:text-gray-100',
     actions: [
-      { id: 'build_compliance', label: 'Build Matrix', icon: ShieldCheck, variant: 'primary' },
+      { id: 'build_compliance', label: 'Build Compliance Matrix', icon: ShieldCheck, variant: 'primary' },
     ],
   },
   {
-    id: 'pricing_packaging',
-    name: 'Pricing / Packaging',
+    id: 'pricing_strategy',
+    name: 'Pricing Strategy',
     next: 'drafting',
     container: 'bg-orange-50 dark:bg-orange-900/10 border-l-4 border-orange-400 dark:border-orange-500',
     header: 'bg-orange-600 dark:bg-orange-700 text-white',
@@ -95,7 +96,7 @@ const STAGES = [
   },
   {
     id: 'drafting',
-    name: 'Claude Drafting',
+    name: 'Rough Draft',
     next: 'review',
     container: 'bg-fuchsia-50 dark:bg-fuchsia-900/10 border-l-4 border-fuchsia-400 dark:border-fuchsia-500',
     header: 'bg-fuchsia-700 dark:bg-fuchsia-800 text-white',
@@ -104,13 +105,13 @@ const STAGES = [
     secondaryAction: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600',
     text: 'text-gray-800 dark:text-gray-100',
     actions: [
-      { id: 'start_draft', label: 'Build Draft', icon: FilePenLine, variant: 'primary' },
+      { id: 'start_draft', label: 'Rough Draft', icon: FilePenLine, variant: 'primary' },
       { id: 'upload_draft', label: 'Upload Draft', icon: Upload, variant: 'secondary' },
     ],
   },
   {
     id: 'review',
-    name: 'ChatGPT Review',
+    name: 'AI Review',
     next: 'google_docs_final',
     container: 'bg-emerald-50 dark:bg-emerald-900/10 border-l-4 border-emerald-400 dark:border-emerald-500',
     header: 'bg-emerald-700 dark:bg-emerald-800 text-white',
@@ -119,12 +120,12 @@ const STAGES = [
     secondaryAction: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600',
     text: 'text-gray-800 dark:text-gray-100',
     actions: [
-      { id: 'request_review', label: 'Run Review', icon: ClipboardCheck, variant: 'primary' },
+      { id: 'request_review', label: 'AI Review', icon: ClipboardCheck, variant: 'primary' },
     ],
   },
   {
     id: 'google_docs_final',
-    name: 'Google Docs Final',
+    name: 'Final Draft',
     next: 'submitted',
     container: 'bg-green-50 dark:bg-green-900/10 border-l-4 border-green-400 dark:border-green-500',
     header: 'bg-green-700 dark:bg-green-800 text-white',
@@ -133,7 +134,7 @@ const STAGES = [
     secondaryAction: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600',
     text: 'text-gray-800 dark:text-gray-100',
     actions: [
-      { id: 'finalize_docs', label: 'Finalize Docs', icon: FileSpreadsheet, variant: 'primary' },
+      { id: 'finalize_docs', label: 'Final Draft', icon: FileSpreadsheet, variant: 'primary' },
       { id: 'upload_final', label: 'Upload Final', icon: Upload, variant: 'secondary' },
     ],
   },
@@ -155,6 +156,7 @@ const LEGACY_STAGE_MAP = {
   outline: 'pre_solicitation',
   internal_review: 'review',
   final_review: 'google_docs_final',
+  pricing_packaging: 'pricing_strategy',
 };
 
 function normalizeStage(stage) {
@@ -231,16 +233,31 @@ function FlowBoard() {
     STAGES.forEach((stage) => {
       grouped[stage.id] = filteredProposals
         .filter((p) => normalizeStage(p.status) === stage.id)
-        .map((proposal) => ({
-          ...proposal,
-          normalizedStatus: normalizeStage(proposal.status),
-          isDueSoon: isDueSoon(proposal.dueDate),
-          isOverdue: isOverdue(proposal.dueDate),
-          urgency: getUrgencyLevel(proposal.dueDate),
-        }));
+        .map((proposal) => {
+          const captureTiming = proposal.metadata?.captureTiming || {};
+          const bucket = getPursuitBucket(daysUntilDate(proposal.dueDate));
+          return {
+            ...proposal,
+            normalizedStatus: normalizeStage(proposal.status),
+            isDueSoon: isDueSoon(proposal.dueDate),
+            isOverdue: isOverdue(proposal.dueDate),
+            urgency: getUrgencyLevel(proposal.dueDate),
+            captureTiming,
+            pursuitBucket: bucket,
+          };
+        });
     });
     return grouped;
   }, [filteredProposals, isDueSoon, isOverdue]);
+
+  const watchItems = useMemo(() => {
+    return filteredProposals
+      .filter((proposal) => {
+        const status = proposal.metadata?.rapidResponse?.inquiryStatus || 'none';
+        return ['new_inbound', 'contact_found', 'draft_needed'].includes(status);
+      })
+      .sort((a, b) => new Date(b.metadata?.rapidResponse?.lastInboundAt || 0) - new Date(a.metadata?.rapidResponse?.lastInboundAt || 0));
+  }, [filteredProposals]);
 
   const handleAction = useCallback(async (action, proposalId, currentStage) => {
     const actionId = `${action}-${proposalId}`;
@@ -250,22 +267,38 @@ function FlowBoard() {
 
       const currentStageObj = STAGES.find((s) => s.id === currentStage);
 
-      switch (action) {
-        case 'start_draft':
-          await fetch(buildApiUrl(`/automation?fn=enqueue`), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([{ action: 'build_proposal_draft', payload: { proposalId } }]),
-          });
-          break;
+      const popup = window.open('', '_blank');
+      const navigatePopup = (url) => {
+        if (!url) return;
+        if (popup) {
+          popup.location = url;
+        } else {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      };
 
-        case 'create_overview':
-          await fetch(buildApiUrl(`/automation?fn=enqueue`), {
+      switch (action) {
+        case 'start_draft': {
+          const draftResp = await fetch(buildApiUrl(`/proposals/${proposalId}/rough-draft`), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([{ action: 'proposal_overview', payload: { proposalId } }]),
           });
+          const draftData = await draftResp.json().catch(() => ({}));
+          if (!draftResp.ok) throw new Error(draftData.error || `Server error ${draftResp.status}`);
+          navigatePopup(draftData.artifactUrl);
           break;
+        }
+
+        case 'create_overview': {
+          const preResp = await fetch(buildApiUrl(`/proposals/${proposalId}/pre-solicitation`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const preData = await preResp.json().catch(() => ({}));
+          if (!preResp.ok) throw new Error(preData.error || `Server error ${preResp.status}`);
+          navigatePopup(preData.artifactUrl);
+          break;
+        }
 
         case 'log_pipeline':
           await fetch(buildApiUrl(`/proposals/${proposalId}/log`), {
@@ -288,12 +321,44 @@ function FlowBoard() {
           break;
         }
 
+        case 'build_compliance': {
+          const compResp = await fetch(buildApiUrl(`/proposals/${proposalId}/compliance-matrix`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const compData = await compResp.json().catch(() => ({}));
+          if (!compResp.ok) throw new Error(compData.error || `Server error ${compResp.status}`);
+          if (compData.artifactUrl) {
+            navigatePopup(compData.artifactUrl);
+          } else if (compData.message) {
+            // Show success message when no artifact URL returned
+            alert(compData.message);
+          }
+          break;
+        }
+        case 'request_review': {
+          const reviewResp = await fetch(buildApiUrl(`/proposals/${proposalId}/ai-review`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const reviewData = await reviewResp.json().catch(() => ({}));
+          if (!reviewResp.ok) throw new Error(reviewData.error || `Server error ${reviewResp.status}`);
+          navigatePopup(reviewData.artifactUrl);
+          break;
+        }
+        case 'finalize_docs': {
+          const finalResp = await fetch(buildApiUrl(`/proposals/${proposalId}/final-draft`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const finalData = await finalResp.json().catch(() => ({}));
+          if (!finalResp.ok) throw new Error(finalData.error || `Server error ${finalResp.status}`);
+          navigatePopup(finalData.gdocUrl || finalData.gdocAuthUrl);
+          break;
+        }
         case 'qualify':
         case 'run_research':
-        case 'build_compliance':
         case 'prepare_pricing':
-        case 'request_review':
-        case 'finalize_docs':
         case 'next_stage':
         default:
           if (currentStageObj?.next) {
@@ -364,6 +429,11 @@ function FlowBoard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Rapid response queue</p>
+          <p className="mt-1 text-2xl font-bold text-amber-900">{watchItems.length}</p>
+          <p className="mt-1 text-sm text-amber-800">Inbound items needing an acknowledgement or outreach draft.</p>
+        </div>
         <div>
           <label className="block text-sm font-medium mb-1">Search</label>
           <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className="w-full p-2 border rounded" placeholder="Search proposals..." />
@@ -405,6 +475,26 @@ function FlowBoard() {
                         {proposal.agency && <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 truncate">{proposal.agency}</p>}
                         <p className="text-[11px] text-gray-500 mt-1">{getStatusName(proposal.status)}</p>
 
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${proposal.pursuitBucket?.tone || 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+                            {proposal.pursuitBucket?.label || 'Urgent'}
+                          </span>
+                          <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-2 py-0.5 text-[10px] font-semibold text-gray-700">
+                            {(proposal.captureTiming?.pursuitPosture || 'either').replace('_', ' ')}
+                          </span>
+                          {proposal.solicitation_number === 'B-2622LM' && (
+                            <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-800">
+                              Bonfire portal
+                            </span>
+                          )}
+                        </div>
+
+                        {proposal.captureTiming?.primeOutreachStartDate && (
+                          <p className="mt-2 text-[11px] text-gray-500">
+                            Teaming window: {format(new Date(proposal.captureTiming.primeOutreachStartDate), 'MMM d')} to {format(new Date(proposal.captureTiming.primeOutreachEndDate), 'MMM d')}
+                          </p>
+                        )}
+
                         {dueDate && (
                           <div className={`mt-2 flex items-center text-xs font-medium ${proposal.isOverdue ? 'text-red-600 dark:text-red-400' : proposal.isDueSoon ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400'}`}>
                             <span className={`inline-block w-2 h-2 rounded-full mr-1.5 ${proposal.isOverdue ? 'bg-red-500' : proposal.isDueSoon ? 'bg-amber-400' : 'bg-gray-400'}`} />
@@ -426,8 +516,12 @@ function FlowBoard() {
                                 disabled={isProcessing[`${action.id}-${proposal.id}`]}
                                 className={`flex items-center px-2 py-1 text-xs rounded-md transition-colors whitespace-nowrap ${action.variant === 'primary' ? stage.primaryAction : stage.secondaryAction} ${isProcessing[`${action.id}-${proposal.id}`] ? 'opacity-70 cursor-not-allowed' : ''}`}
                               >
-                                <action.icon className="w-3 h-3 mr-1" />
-                                {action.label}
+                                {isProcessing[`${action.id}-${proposal.id}`] ? (
+                                  <svg className="animate-spin w-3 h-3 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                ) : (
+                                  <action.icon className="w-3 h-3 mr-1" />
+                                )}
+                                {isProcessing[`${action.id}-${proposal.id}`] ? 'Working...' : action.label}
                               </button>
                             ))}
                           </div>

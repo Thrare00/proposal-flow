@@ -3,10 +3,10 @@ import type { ProposalStatus, ProposalStatusOrNull } from '../types/index.js';
 export const getStatusName = (status: ProposalStatus): string => {
   switch (status) {
     case 'intake': return 'Intake';
-    case 'outline': return 'Outline';
-    case 'drafting': return 'Drafting';
-    case 'internal_review': return 'Internal Review';
-    case 'final_review': return 'Final Review';
+    case 'outline': return 'Generate Outline';
+    case 'drafting': return 'Rough Draft';
+    case 'internal_review': return 'AI Review';
+    case 'final_review': return 'Final Draft';
     case 'submitted': return 'Submitted';
     default: throw new Error(`Unknown status: ${status}`);
   }

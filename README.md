@@ -1,38 +1,79 @@
-# Proposal Flow - Vite SPA Deployment
+# Proposal Flow
 
-> Last deployment: 2025-09-11 13:15:00 UTC
+Proposal Flow is a local-first government proposal operating system built with React/Vite on the frontend and an Express JSON runtime on the backend.
 
-A modern proposal management tool built with React, Vite, and TypeScript.
+## Workflow
 
-## Environment Variables
+Proposal Flow now treats these stages as first-class application concepts:
 
-Create `.env.development` and `.env.production` files in the project root with the following variables:
+1. `Ingestion`
+2. `Compliance`
+3. `Strategy`
+4. `Outline`
+5. `Drafting`
+6. `Red Team`
+7. `Final Review`
 
-```
-VITE_QUEUE_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
-VITE_QUEUE_TOKEN=your_token_here
-```
+Whole-proposal drafting is gated until ingestion, compliance, strategy, and outline are complete.
 
-- `VITE_QUEUE_URL`: Google Apps Script Web App URL (must end with /exec)
-- `VITE_QUEUE_TOKEN`: Bearer token for authentication
+## Core proposal entities
+
+Each proposal is normalized into structured GovCon entities instead of loose text blobs:
+
+- `Opportunity`
+- `SolicitationDocument`
+- `Requirement`
+- `EvaluationFactor`
+- `ComplianceMatrix`
+- `ProposalSection`
+- `Artifact`
+- `PastPerformanceRecord`
+- `CapabilityStatement`
+- `PartnerProfile`
+- `RedTeamFinding`
+- `SubmissionPackage`
+
+## Model routing
+
+Model routing is centralized in the shared workflow layer:
+
+- `GPT-5.4` is the default writer for extraction, compliance, outline generation, drafting, red-team, and final review.
+- `Claude Sonnet` is the default rewrite/polish lane.
+- `Claude Opus` is the escalation lane for hard strategic section rewrites.
+- cheaper models are reserved for low-risk bulk work.
+
+If a configured provider is unavailable, Proposal Flow falls back to the default writer and records that fallback in the workflow metadata.
+
+## Local runtime
+
+The local server exposes proposal workflow actions under `/proposal-flow/api/proposals/:id/...` for:
+
+- compliance build
+- strategy generation
+- annotated outline generation
+- section drafting
+- section polish / escalation
+- red-team review
+- final review
 
 ## Development
 
-Run the development server:
 ```bash
 npm run dev
 ```
 
-## Build & Deploy
+## Build
 
 ```bash
 npm run build
-npm run build:gh
 ```
 
-## Cloud Queue Integration
+## Local production-style preview
 
-Jobs are enqueued to the Google Apps Script Web App and appear in:
-`Rare Earth Ltd GovCon/00_Config/cloud_queue.json`
+```bash
+npm run serve:local
+```
 
-They are processed by the local watcher which updates the pipeline workbook.
+Then open:
+
+- `http://localhost:5010/proposal-flow`

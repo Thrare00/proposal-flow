@@ -1,3 +1,6 @@
+import { recomputeProposalState } from './proposalWorkflow.js';
+import { getRecommendedWindows, normalizePosture } from '../src/lib/pursuitTiming.js';
+
 const PROPOSAL_TYPE_MAP = Object.freeze({
   federal: 'federal',
   commercial: 'commercial',
@@ -13,7 +16,8 @@ const PROPOSAL_STATUS_MAP = Object.freeze({
   pre_solicitation: 'pre_solicitation',
   research: 'research',
   technical_compliance: 'technical_compliance',
-  pricing_packaging: 'pricing_packaging',
+  pricing_strategy: 'pricing_strategy',
+  pricing_packaging: 'pricing_strategy',
   drafting: 'drafting',
   review: 'review',
   google_docs_final: 'google_docs_final',
@@ -65,13 +69,55 @@ export function normalizeProposalMetadata(metadata = {}, proposal = {}) {
     normalizedMetadata.sourceType = proposal.solicitationText ? 'solicitation' : 'manual';
   }
 
+  const resolvedPosture = normalizePosture(
+    normalizedMetadata.pursuitPosture
+    || normalizedMetadata.captureTiming?.pursuitPosture
+    || proposal.pursuitPosture
+    || 'either',
+  );
+
+  const recommended = getRecommendedWindows(
+    proposal.dueDate || normalizedMetadata.dueDate,
+    resolvedPosture,
+  );
+
+  normalizedMetadata.captureTiming = {
+    pursuitPosture: resolvedPosture,
+    pursuitBucket: normalizedMetadata.pursuitBucket || proposal.pursuitBucket || recommended.bucket,
+    timingBucket: recommended.timingBucket,
+    daysOut: Number.isFinite(normalizedMetadata.daysOut) ? normalizedMetadata.daysOut : recommended.daysOut,
+    intentToBidDate: normalizedMetadata.intentToBidDate || proposal.intentToBidDate || recommended.intentToBidDate,
+    teamingStartDate: normalizedMetadata.teamingStartDate || proposal.teamingStartDate || recommended.teamingStartDate,
+    primeOutreachStartDate: normalizedMetadata.primeOutreachStartDate || proposal.primeOutreachStartDate || recommended.primeOutreachStartDate,
+    primeOutreachEndDate: normalizedMetadata.primeOutreachEndDate || proposal.primeOutreachEndDate || recommended.primeOutreachEndDate,
+    recommendedWindow: recommended,
+  };
+
+  normalizedMetadata.rapidResponse = {
+    inquiryStatus: normalizedMetadata.rapidResponse?.inquiryStatus || 'none',
+    acknowledgedAt: normalizedMetadata.rapidResponse?.acknowledgedAt || null,
+    lastInboundAt: normalizedMetadata.rapidResponse?.lastInboundAt || null,
+    responseOwner: normalizedMetadata.rapidResponse?.responseOwner || '',
+    nextDraftType: normalizedMetadata.rapidResponse?.nextDraftType || '',
+    notes: normalizedMetadata.rapidResponse?.notes || '',
+  };
+
+  // Structured decisions — go/no-go, bid/no-bid, partner selections
+  normalizedMetadata.decisions = Array.isArray(normalizedMetadata.decisions)
+    ? normalizedMetadata.decisions
+    : [];
+
+  // Proposal-linked blockers (synced from operator updates)
+  normalizedMetadata.blockers = Array.isArray(normalizedMetadata.blockers)
+    ? normalizedMetadata.blockers
+    : [];
+
   return normalizedMetadata;
 }
 
 export function normalizeProposal(proposal = {}) {
   const timestamp = new Date().toISOString();
-
-  return {
+  const normalized = {
     ...proposal,
     title: proposal.title || 'Untitled Proposal',
     agency: proposal.agency || 'Unknown Agency',
@@ -86,4 +132,6 @@ export function normalizeProposal(proposal = {}) {
     files: Array.isArray(proposal.files) ? proposal.files : [],
     metadata: normalizeProposalMetadata(proposal.metadata, proposal),
   };
+
+  return recomputeProposalState(normalized);
 }

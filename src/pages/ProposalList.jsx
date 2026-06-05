@@ -37,6 +37,9 @@ export function ProposalList() {
 
   // Filter and sort proposals when filters change
   useEffect(() => {
+    // Guard: skip if still loading or no data yet
+    if (navigation.state === 'loading' || !initialProposals.length) return;
+    
     try {
       let filtered = [...initialProposals];
       
@@ -79,7 +82,7 @@ export function ProposalList() {
       setError('Failed to filter proposals. Please try again.');
       setProposals(initialProposals);
     }
-  }, [initialProposals, filters]);
+  }, [initialProposals, filters, navigation.state]);
 
   // Handle filter changes
   const handleFilterChange = (e) => {
@@ -136,7 +139,7 @@ export function ProposalList() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900">Proposals</h1>
         <Button 
-          to="/dashboard/proposals/new" 
+          to="/proposals/new" 
           className="w-full md:w-auto"
           aria-label="Create new proposal"
         >
@@ -253,7 +256,7 @@ export function ProposalList() {
                 <div className="mt-auto pt-4 border-t border-gray-100">
                   <Button 
                     as={Link}
-                    to={`/dashboard/proposals/${proposal.id}`} 
+                    to={`/proposals/${proposal.id}`} 
                     variant="outline"
                     className="w-full justify-center"
                     aria-label={`View details for ${proposal.title}`}
@@ -288,7 +291,7 @@ export function ProposalList() {
               : 'Get started by creating a new proposal.'}
           </p>
           <div className="mt-6">
-            <Button to="/dashboard/proposals/new" variant="primary">
+            <Button to="/proposals/new" variant="primary">
               <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
               </svg>
@@ -316,8 +319,4 @@ ProposalList.propTypes = {
       })
     })
   )
-};
-
-ProposalList.defaultProps = {
-  initialProposals: []
 };

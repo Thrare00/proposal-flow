@@ -5,6 +5,7 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   const baseUrl = command === 'serve' ? '/' : process.env.VITE_BASE_URL || '/proposal-flow/';
+  const shouldUseSourcemaps = process.env.VITE_SOURCEMAP === 'true';
 
   return {
     base: baseUrl,
@@ -13,6 +14,13 @@ export default defineConfig(({ command }) => {
       host: '0.0.0.0',
       port: Number(process.env.PORT || 3012),
       strictPort: true,
+      proxy: {
+        '/api': {
+          target: process.env.VITE_LOCAL_API_ORIGIN || 'http://localhost:5174',
+          changeOrigin: true,
+          rewrite: (requestPath) => requestPath.replace(/^\/api/, '/proposal-flow/api'),
+        },
+      },
     },
     preview: {
       host: '0.0.0.0',
@@ -23,7 +31,7 @@ export default defineConfig(({ command }) => {
       outDir: 'docs',
       emptyOutDir: true,
       chunkSizeWarningLimit: 1024,
-      sourcemap: true,
+      sourcemap: shouldUseSourcemaps,
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html')

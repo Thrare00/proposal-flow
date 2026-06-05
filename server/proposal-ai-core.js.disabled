@@ -1,0 +1,219 @@
+import { readFileSync, existsSync } from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import OpenAI from 'openai';
+import { getAttachmentAbsolutePath } from './attachment-store.js';
+import { getDb, nowIso, updateDb } from './automation-store.js';
+import { getPromptContract } from '../shared/proposalPrompts.js';
+import { DEFAULT_MODEL_ROUTING, PROPOSAL_WORKFLOW_STAGES, recomputeProposalState } from '../shared/proposalWorkflow.js';
+
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
+
+export const LEGACY_STATUS = {
+  ingestion: 'intake',
+  compliance: 'technical_compliance',
+  strategy: 'pre_solicitation',
+  outline: 'outline',
+  drafting: 'drafting',
+  red_team: 'review',
+  final_review: 'google_docs_final',
+};
+
+export function escapeHtml(value = '') {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+export function stripCodeFences(value = '') {
+  return String(value).replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/, '').trim();
+}
+
+export function parseJson(raw, fallback = {}) {
+  try {
+    return JSON.parse(stripCodeFences(raw));
+  } catch {
+    return fallback;
+  }
+}
+
+export function stageIndex(stageId) {
+  return PROPOSAL_WORKFLOW_STAGES.findIndex((stage) => stage.id === stageId);
+}
+
+export function findProposal(id) {
+  const proposal = getDb().proposals.find((item) => item.id === id);
+  return proposal ? recomputeProposalState(proposal) : null;
+}
+
+export function saveProposal(id, mutator) {
+  let saved = null;
+  updateDb((db) => {
+    const index = db.proposals.findIndex((item) => item.id === id);
+    if (index === -1) return db;
+    const base = recomputeProposalState(db.proposals[index]);
+    saved = recomputeProposalState(mutator(base) || base);
+    db.proposals[index] = saved;
+    const opportunity = db.opportunities.find((item) => item.id === id);
+    if (opportunity) {
+      opportunity.title = saved.title;
+      opportunity.agency = saved.agency;
+      opportunity.stage = saved.status;
+      opportunity.updatedAt = nowIso();
+    }
+    return db;
+  });
+  return saved;
+}
+
+export function appendStep(proposal, stage, label, status = 'completed') {
+  proposal.metadata = proposal.metadata || {};
+  proposal.metadata.workflowSteps = Array.isArray(proposal.metadata.workflowSteps) ? proposal.metadata.workflowSteps : [];
+  proposal.metadata.workflowSteps.unshift({ id: `step-${Date.now()}`, stage, label, status, timestamp: nowIso() });
+  proposal.metadata.workflowSteps = proposal.metadata.workflowSteps.slice(0, 50);
+}
+
+export function completeStage(proposal, completedStage, label) {
+  const completedIndex = stageIndex(completedStage);
+  const nextStage = PROPOSAL_WORKFLOW_STAGES[completedIndex + 1]?.id || completedStage;
+  const timestamp = nowIso();
+  proposal.workflow.currentStage = nextStage;
+  proposal.workflow.updatedAt = timestamp;
+  proposal.workflow.stages = proposal.workflow.stages.map((stage, index) => {
+    if (index < completedIndex) return { ...stage, status: 'completed', completedAt: stage.completedAt || timestamp, updatedAt: timestamp, blocker: '' };
+    if (stage.stageId === completedStage) return { ...stage, status: 'completed', completedAt: timestamp, updatedAt: timestamp, blocker: '' };
+    if (stage.stageId === nextStage) return { ...stage, status: 'in_progress', updatedAt: timestamp, blocker: '' };
+    return stage;
+  });
+  proposal.status = LEGACY_STATUS[nextStage] || proposal.status;
+  appendStep(proposal, completedStage, label);
+  return proposal;
+}
+
+export function prerequisitesMet(proposal, stageId) {
+  return proposal.workflow.stages.slice(0, stageIndex(stageId)).every((stage) => stage.status === 'completed');
+}
+
+export function missingStages(stageId) {
+  return PROPOSAL_WORKFLOW_STAGES.slice(0, stageIndex(stageId)).map((stage) => stage.label).join(' -> ');
+}
+
+async function extractTextFromPdf(filePath) {
+  try {
+    const result = await pdfParse(readFileSync(filePath));
+    return result.text || '';
+  } catch {
+    return '';
+  }
+}
+
+export async function gatherProposalText(proposal) {
+  const parts = [];
+  if (proposal.solicitationText) parts.push(`SOLICITATION\n${proposal.solicitationText}`);
+  if (proposal.notes) parts.push(`NOTES\n${proposal.notes}`);
+  for (const file of Array.isArray(proposal.files) ? proposal.files : []) {
+    if (!file.storedRelativePath) continue;
+    if (path.extname(file.filename || file.name || '').toLowerCase() !== '.pdf') continue;
+    const absolutePath = getAttachmentAbsolutePath(proposal.id, file.storedRelativePath);
+    if (!existsSync(absolutePath)) continue;
+    const text = await extractTextFromPdf(absolutePath);
+    if (text.trim()) parts.push(`ATTACHMENT ${file.filename || file.name}\n${text}`);
+  }
+  return parts.join('\n\n').slice(0, 70000);
+}
+
+export function evidenceText(proposal) {
+  const chunks = [];
+  if (proposal.artifacts?.length) chunks.push(`Artifacts: ${proposal.artifacts.map((item) => item.name || item.title).join(', ')}`);
+  if (proposal.pastPerformanceRecords?.length) chunks.push(`Past performance: ${proposal.pastPerformanceRecords.map((item) => item.title || item.customer).join(', ')}`);
+  if (proposal.capabilityStatements?.length) chunks.push(`Capability statements: ${proposal.capabilityStatements.map((item) => item.title || item.name).join(', ')}`);
+  if (proposal.partnerProfiles?.length) chunks.push(`Partners: ${proposal.partnerProfiles.map((item) => item.name || item.company).join(', ')}`);
+  return chunks.join('\n') || 'No evidence inventory recorded.';
+}
+
+export function routeForTask(proposal, taskKey) {
+  const routing = proposal.workflow?.modelRouting || DEFAULT_MODEL_ROUTING;
+  const requested = routing[taskKey] || DEFAULT_MODEL_ROUTING[taskKey] || DEFAULT_MODEL_ROUTING.technical_draft;
+  if (requested.provider === 'anthropic' && !process.env.ANTHROPIC_API_KEY) {
+    return { requested, resolved: routing.technical_draft || DEFAULT_MODEL_ROUTING.technical_draft, fallbackReason: `Anthropic route ${requested.model} unavailable.` };
+  }
+  return { requested, resolved: requested, fallbackReason: null };
+}
+
+function openAiClient() {
+  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not configured.');
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
+
+async function callMiniMax(model, system, userPrompt, maxTokens = 4096) {
+  const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY || process.env.OPENAI_API_KEY;
+  if (!MINIMAX_API_KEY) throw new Error('MINIMAX_API_KEY is not configured.');
+  
+  // Use MiniMax API - map model names
+  const modelMap = {
+    'MiniMax-M2.5': 'MiniMax-M2.5',
+    'MiniMax-Text-01': 'MiniMax-Text-01',
+  };
+  const mappedModel = modelMap[model] || 'MiniMax-M2.5';
+  
+  const response = await fetch('https://api.minimax.chat/v1/text/chatcompletion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${MINIMAX_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: mappedModel,
+      max_tokens: maxTokens,
+      temperature: 0.2,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: userPrompt }
+      ],
+    }),
+  });
+  
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error?.message || `MiniMax request failed (${response.status})`);
+  return data.choices?.[0]?.message?.content || '{}';
+}
+
+async function callOpenAi(model, system, userPrompt, maxTokens = 4096) {
+  const apiKey = process.env.OPENAI_API_KEY || process.env.MINIMAX_API_KEY;
+  if (!apiKey) throw new Error('OPENAI_API_KEY is not configured.');
+  const client = new OpenAI({ apiKey });
+  const response = await client.chat.completions.create({
+    model,
+    temperature: 0.2,
+    max_tokens: maxTokens,
+    messages: [{ role: 'system', content: system }, { role: 'user', content: userPrompt }],
+  });
+  return response.choices[0]?.message?.content || '{}';
+}
+
+async function callAnthropic(model, system, userPrompt, maxTokens = 4096) {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model, max_tokens: maxTokens, system, messages: [{ role: 'user', content: userPrompt }] }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error?.message || `Anthropic request failed (${response.status})`);
+  return Array.isArray(data.content) ? data.content.filter((item) => item.type === 'text').map((item) => item.text).join('\n') : '{}';
+}
+
+export async function runJsonTask(proposal, contractKey, userPrompt, fallback, maxTokens = 4096) {
+  const contract = getPromptContract(contractKey);
+  const route = routeForTask(proposal, contract.taskKey);
+  const raw = route.resolved.provider === 'minimax'
+    ? await callMiniMax(route.resolved.model, contract.system, userPrompt, maxTokens)
+    : await callOpenAi(route.resolved.model, contract.system, userPrompt, maxTokens);
+  return { data: parseJson(raw, fallback), modelUsed: { requested: route.requested, resolved: route.resolved, fallbackReason: route.fallbackReason } };
+}
+
+export async function runTextTask(proposal, taskKey, systemPrompt, userPrompt, maxTokens = 4096) {
+  const route = routeForTask(proposal, taskKey);
+  const raw = route.resolved.provider === 'minimax'
+    ? await callMiniMax(route.resolved.model, systemPrompt, userPrompt, maxTokens)
+    : await callOpenAi(route.resolved.model, systemPrompt, userPrompt, maxTokens);
+  return { text: stripCodeFences(raw), modelUsed: { requested: route.requested, resolved: route.resolved, fallbackReason: route.fallbackReason } };
+}

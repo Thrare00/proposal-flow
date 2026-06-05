@@ -24,6 +24,7 @@ const FlowBoard = lazy(() => import('../pages/FlowBoard'));
 const Reports = lazy(() => import('../pages/Reports'));
 const SOWAnalyzer = lazy(() => import('../pages/SOWAnalyzer'));
 const MarketResearch = lazy(() => import('../pages/MarketResearch'));
+const PricingDashboard = lazy(() => import('../pages/PricingDashboard'));
 
 // Settings & Configuration
 const CadenceSettings = lazy(() => import('../pages/CadenceSettings'));
@@ -35,11 +36,21 @@ const CeoActionsTabs = lazy(() => import('../pages/CeoActionsTabs'));
 const FlowBoardTabs = lazy(() => import('../pages/FlowBoardTabs'));
 const ProposalsTabs = lazy(() => import('../pages/ProposalsTabs'));
 
+// Capture Board (pre-solicitation intelligence)
+const CaptureBoardTabs = lazy(() => import('../pages/CaptureBoardTabs'));
+
+// GovCon Inbox
+const GovConInbox = lazy(() => import('../pages/GovConInbox'));
+
+// Operator Updates
+const OperatorUpdates = lazy(() => import('../pages/OperatorUpdates'));
+
 // Guides & Help
 const AIAgentGuide = lazy(() => import('../pages/AIAgentGuide'));
 const Guide = lazy(() => import('../pages/Guide'));
 const GettingStarted = lazy(() => import('../pages/GettingStarted'));
 const ProposalDevelopmentGuide = lazy(() => import('../pages/ProposalDevelopmentGuide'));
+const FederalProposalGuide = lazy(() => import('../pages/FederalProposalGuide'));
 
 // Testing & Debug
 const TestPage = lazy(() => import('../pages/TestPage'));
@@ -98,6 +109,7 @@ const routes = [
       // Legacy proposal subroutes (avoid 404s on old links)
       { path: 'proposals/new', element: React.createElement(LazyComponent, { component: ProposalForm }) },
       { path: 'proposals/:id', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
+      { path: 'proposals/:id/analyze', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
       { path: 'proposals/edit/:id', element: React.createElement(LazyComponent, { component: ProposalForm }) },
       // Legacy proposal routes (kept for back-compat)
       {
@@ -108,6 +120,12 @@ const routes = [
           { path: ':id', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
           { path: 'edit/:id', element: React.createElement(LazyComponent, { component: ProposalForm }) },
         ],
+      },
+
+      // Capture Board — pre-solicitation intelligence, bid/no-bid, dossier, compliance, knowledge
+      {
+        path: 'capture',
+        element: React.createElement(LazyComponent, { component: CaptureBoardTabs }),
       },
 
       // Tools & Features
@@ -121,6 +139,10 @@ const routes = [
       },
       {
         path: 'flowboard',
+        element: React.createElement(LazyComponent, { component: FlowBoardTabs }),
+      },
+      {
+        path: 'pipeline-board',
         element: React.createElement(LazyComponent, { component: FlowBoard }),
       },
       {
@@ -134,6 +156,22 @@ const routes = [
       {
         path: 'market-research',
         element: React.createElement(LazyComponent, { component: MarketResearch }),
+      },
+      {
+        path: 'pricing',
+        element: React.createElement(LazyComponent, { component: PricingDashboard }),
+      },
+
+      // GovCon Inbox
+      {
+        path: 'govcon-inbox',
+        element: React.createElement(LazyComponent, { component: GovConInbox }),
+      },
+
+      // Operator Updates (hourly cadence)
+      {
+        path: 'operator-updates',
+        element: React.createElement(LazyComponent, { component: OperatorUpdates }),
       },
 
       // Top-level utility pages
@@ -182,8 +220,12 @@ const routes = [
             element: React.createElement(LazyComponent, { component: ProposalDevelopmentGuide }),
           },
           {
+            path: 'federal-proposal',
+            element: React.createElement(LazyComponent, { component: FederalProposalGuide }),
+          },
+          {
             index: true,
-            element: React.createElement(LazyComponent, { component: Guide }),
+            element: React.createElement(LazyComponent, { component: ProposalDevelopmentGuide }),
           },
         ],
       },
@@ -223,6 +265,7 @@ export const router = createBrowserRouter(routes, {
   basename: BASE_PATH,
   future: {
     v7_relativeSplatPath: true,
+    v7_startTransition: true,
   },
 });
 

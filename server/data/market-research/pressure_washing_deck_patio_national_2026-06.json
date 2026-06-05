@@ -1,0 +1,17 @@
+{
+  "service": "pressure_washing",
+  "subScope": "deck_patio",
+  "zipCode": null,
+  "marketRange": {
+    "low": 0.15,
+    "median": 0.4,
+    "high": 0.65,
+    "sampleSize": 0
+  },
+  "federalBenchmark": null,
+  "sources": [
+    "GSA/Thumbtack 2025"
+  ],
+  "confidence": "static",
+  "fetchedAt": "2026-06-02T00:59:57.281Z"
+}

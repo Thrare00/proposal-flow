@@ -1,0 +1,17 @@
+{
+  "service": "pressure_washing",
+  "subScope": "commercial_lot",
+  "zipCode": null,
+  "marketRange": {
+    "low": 0.15,
+    "median": 0.4,
+    "high": 0.65,
+    "sampleSize": 0
+  },
+  "federalBenchmark": null,
+  "sources": [
+    "GSA/Thumbtack 2025"
+  ],
+  "confidence": "static",
+  "fetchedAt": "2026-04-17T18:53:42.019Z"
+}

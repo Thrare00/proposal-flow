@@ -8,7 +8,14 @@ export default function HealthPanel(){
     (async () => { 
       try { 
         const data = await getHealth();
-        setRows(Array.isArray(data?.health) ? data.health : []);
+        const rows = Array.isArray(data?.health)
+          ? data.health
+          : Array.isArray(data?.events)
+            ? data.events
+            : Array.isArray(data?.results)
+              ? data.results
+              : [];
+        setRows(rows);
       } catch(e) { 
         console.error("Failed to load health data:", e);
         setRows([]);

@@ -41,9 +41,6 @@ function sendIndex(res) {
 
 function resolveRequestPath(urlPath) {
   let requestPath = decodeURIComponent(urlPath.split('?')[0]);
-  if (requestPath === '/') {
-    return join(docsDir, 'index.html');
-  }
   if (requestPath === basePath || requestPath === `${basePath}/`) {
     return join(docsDir, 'index.html');
   }
@@ -55,6 +52,14 @@ function resolveRequestPath(urlPath) {
 }
 
 const server = http.createServer((req, res) => {
+  const requestPath = decodeURIComponent((req.url || '/').split('?')[0]);
+
+  if (requestPath === '/') {
+    res.writeHead(302, { Location: `${basePath}/` });
+    res.end();
+    return;
+  }
+
   const filePath = resolveRequestPath(req.url || '/');
 
   if (existsSync(filePath) && statSync(filePath).isFile()) {

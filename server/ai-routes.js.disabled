@@ -1,0 +1,413 @@
+import { Router } from 'express';
+import { PROPOSAL_SECTION_LIBRARY } from '../shared/proposalWorkflow.js';
+import {
+  completeStage,
+  escapeHtml,
+  evidenceText,
+  findProposal,
+  gatherProposalText,
+  missingStages,
+  prerequisitesMet,
+  runJsonTask,
+  saveProposal,
+} from './proposal-ai-core.js';
+import {
+  appendStatusUpdate,
+  updateTrackerLine,
+  writeProposalArtifact,
+  writeProposalTrigger,
+} from './morpheus-bridge.js';
+import { nowIso } from './automation-store.js';
+
+const router = Router();
+
+function buildArtifactId() {
+  return `artifact-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function storeArtifact(working, { type, title, html }) {
+  const artifact = {
+    id: buildArtifactId(),
+    type,
+    title,
+    html,
+    createdAt: nowIso(),
+  };
+  working.metadata = working.metadata || {};
+  working.metadata.generatedArtifacts = Array.isArray(working.metadata.generatedArtifacts)
+    ? working.metadata.generatedArtifacts
+    : [];
+  working.metadata.generatedArtifacts.unshift(artifact);
+  working.metadata.generatedArtifacts = working.metadata.generatedArtifacts.slice(0, 50);
+  return artifact;
+}
+
+function artifactUrl(req, proposalId, artifactId) {
+  return `/proposal-flow/api/proposals/${encodeURIComponent(proposalId)}/artifacts/${artifactId}`;
+}
+
+function renderPage({ title, subtitle, body }) {
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${escapeHtml(title)}</title><style>body{font-family:Arial,sans-serif;background:#f5f1e8;color:#1f2937;margin:0}.page{max-width:980px;margin:0 auto;background:#fff;min-height:100vh;padding:32px}h1{margin:0 0 8px}h2{margin-top:24px}table{width:100%;border-collapse:collapse;margin-top:12px}td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px}th{font-size:11px;text-transform:uppercase;color:#6b7280;background:#f3f4f6}.badge{display:inline-block;border-radius:999px;background:#e5e7eb;color:#111827;padding:4px 10px;font-size:11px;font-weight:700}.card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fafaf9;margin-top:12px}ul{margin:8px 0 0 20px}</style></head><body><div class="page"><span class="badge">Proposal Flow Artifact</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(subtitle || '')}</p>${body}</div></body></html>`;
+}
+
+function compliancePrompt(proposal, sourceText) {
+  return `Proposal: ${proposal.title}\nAgency: ${proposal.agency}\nDue: ${proposal.dueDate || 'TBD'}\n\nSource material:\n${sourceText || proposal.notes || 'No solicitation text available.'}`;
+}
+
+function preSolicitationPrompt(proposal) {
+  return `Proposal: ${proposal.title}\nAgency: ${proposal.agency}\n\nCompliance map:\n${proposal.complianceMatrix.map((item) => `- ${item.requirement_id}: ${item.requirement_text}`).slice(0, 25).join('\n') || 'None yet.'}\n\nEvidence inventory:\n${evidenceText(proposal)}`;
+}
+
+function outlinePrompt(proposal) {
+  return `Proposal: ${proposal.title}\nAgency: ${proposal.agency}\n\nPre-solicitation posture:\n${proposal.metadata?.preSolicitation?.positioningNotes?.join('\n') || 'None yet.'}\n\nCompliance map:\n${proposal.complianceMatrix.map((item) => `- ${item.requirement_id}: ${item.requirement_text}`).slice(0, 25).join('\n') || 'None yet.'}\n\nSection library:\n${PROPOSAL_SECTION_LIBRARY.map((item) => `- ${item.key}: ${item.title}`).join('\n')}`;
+}
+
+function roughDraftPrompt(proposal) {
+  const outline = proposal.outline?.sections || [];
+  const outlineText = outline.map((section) => `## ${section.title}\n${section.paragraph || section.notes || ''}`).join('\n\n');
+  return `Proposal: ${proposal.title}\nAgency: ${proposal.agency}\n\nOutline:\n${outlineText || 'No outline paragraphs available.'}\n\nCompliance matrix:\n${proposal.complianceMatrix.map((item) => `- ${item.requirement_id}: ${item.requirement_text}`).slice(0, 25).join('\n') || 'None yet.'}`;
+}
+
+function aiReviewPrompt(proposal, roughDraftText) {
+  return `Proposal: ${proposal.title}\nAgency: ${proposal.agency}\n\nCompliance matrix:\n${proposal.complianceMatrix.map((item) => `- ${item.requirement_id}: ${item.requirement_text} (${item.status})`).slice(0, 25).join('\n') || 'None yet.'}\n\nRough draft:\n${roughDraftText || 'No rough draft text available.'}`;
+}
+
+function renderComplianceArtifact(proposal, complianceData) {
+  const matrix = proposal.complianceMatrix || [];
+  const limits = Array.isArray(complianceData.limits) ? complianceData.limits : [];
+  const hasPageOrChar = limits.some((limit) => ['page', 'character', 'word', 'section'].includes(String(limit.type || '').toLowerCase()));
+  const limitItems = limits.length
+    ? limits.map((limit, index) => `<li>${escapeHtml(limit.type)}: ${escapeHtml(limit.value)}${limit.source ? ` (${escapeHtml(limit.source)})` : ''}</li>`).join('')
+    : '';
+  const limitsHtml = `<div class="card"><h2>Limits & Constraints</h2><ul>${limitItems}${hasPageOrChar ? '' : '<li>No explicit page/character limit found</li>'}</ul></div>`;
+  const rows = matrix.length
+    ? matrix.map((item) => `<tr><td>${escapeHtml(item.requirement_text)}</td><td>${escapeHtml(item.source_section || '')}</td><td>${escapeHtml(item.action_required || '')}</td><td>${escapeHtml(item.mandatory_or_scored || '')}</td><td>${escapeHtml(item.proposal_section || '')}</td><td>${escapeHtml(item.status || '')}</td><td>${escapeHtml(item.notes || '')}</td></tr>`).join('')
+    : '<tr><td colspan="7">No requirements extracted yet.</td></tr>';
+  const table = `<div class="card"><h2>Compliance Matrix</h2><table><thead><tr><th>Requirement</th><th>Source</th><th>Limit / Constraint</th><th>Compliance / FAR Alignment</th><th>Scope Alignment</th><th>Status</th><th>Notes</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  return renderPage({
+    title: `${proposal.title} — Compliance Matrix`,
+    subtitle: `${proposal.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+    body: `${limitsHtml}${table}`,
+  });
+}
+
+function renderPreSolicitationArtifact(proposal, data) {
+  const risks = (data.riskNotes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>None recorded.</li>';
+  const positioning = (data.positioningNotes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>None recorded.</li>';
+  const body = `
+    <div class="card"><h2>Subcontracting Posture</h2><p>${escapeHtml(data.subcontractingPosture || 'Not provided.')}</p></div>
+    <div class="card"><h2>Teaming Posture</h2><p>${escapeHtml(data.teamingPosture || 'Not provided.')}</p></div>
+    <div class="card"><h2>Pricing Posture</h2><p>${escapeHtml(data.pricingPosture || 'Not provided.')}</p></div>
+    <div class="card"><h2>Risk Notes</h2><ul>${risks}</ul></div>
+    <div class="card"><h2>Positioning Notes</h2><ul>${positioning}</ul></div>
+  `;
+  return renderPage({
+    title: `${proposal.title} — Pre-solicitation`,
+    subtitle: `${proposal.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+    body,
+  });
+}
+
+function renderOutlineArtifact(proposal, sections) {
+  const body = sections.length
+    ? sections.map((section) => (
+      `<div class="card"><h2>${escapeHtml(section.title)}</h2><p><strong>Purpose:</strong> ${escapeHtml(section.purpose || '')}</p><p><strong>Evaluator question:</strong> ${escapeHtml(section.evaluatorQuestion || '')}</p><p>${escapeHtml(section.paragraph || section.notes || '')}</p></div>`
+    )).join('')
+    : '<div class="card">No outline generated yet.</div>';
+  return renderPage({
+    title: `${proposal.title} — Outline`,
+    subtitle: `${proposal.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+    body,
+  });
+}
+
+function renderRoughDraftArtifact(proposal, draftText) {
+  return renderPage({
+    title: `${proposal.title} — Rough Draft`,
+    subtitle: `${proposal.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+    body: `<div class="card"><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;line-height:1.6">${escapeHtml(draftText || 'No rough draft generated yet.')}</pre></div>`,
+  });
+}
+
+function renderAiReviewArtifact(proposal, data) {
+  const missing = (data.missingRequirements || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>None recorded.</li>';
+  const weak = (data.weakSections || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>None recorded.</li>';
+  const presentation = (data.presentationSuggestions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>None recorded.</li>';
+  const body = `
+    <div class="card"><h2>Review Summary</h2><p>${escapeHtml(data.reviewSummary || '')}</p></div>
+    <div class="card"><h2>Compliance Score</h2><p>${escapeHtml(String(data.complianceScore || 0))}</p></div>
+    <div class="card"><h2>Missing Requirements</h2><ul>${missing}</ul></div>
+    <div class="card"><h2>Weak Sections</h2><ul>${weak}</ul></div>
+    <div class="card"><h2>Presentation Suggestions</h2><ul>${presentation}</ul></div>
+    <div class="card"><h2>Improved Draft</h2><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;line-height:1.6">${escapeHtml(data.improvedDraft || '')}</pre></div>
+  `;
+  return renderPage({
+    title: `${proposal.title} — AI Review`,
+    subtitle: `${proposal.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+    body,
+  });
+}
+
+async function requireProposal(req, res) {
+  const proposal = findProposal(req.params.id);
+  if (!proposal) {
+    res.status(404).json({ ok: false, error: 'Proposal not found' });
+    return null;
+  }
+  return proposal;
+}
+
+router.post('/:id/compliance-matrix', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  try {
+    const sourceText = await gatherProposalText(proposal);
+    const { data, modelUsed } = await runJsonTask(
+      proposal,
+      'compliance_matrix_builder',
+      compliancePrompt(proposal, sourceText),
+      {
+        solicitationDocuments: [],
+        requirements: [],
+        evaluationFactors: [],
+        complianceMatrix: [],
+        limits: [],
+        missingArtifacts: [],
+        complianceSummary: '',
+      },
+      6144,
+    );
+
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      working.solicitationDocuments = Array.isArray(data.solicitationDocuments) ? data.solicitationDocuments : [];
+      working.requirements = Array.isArray(data.requirements) ? data.requirements : [];
+      working.evaluationFactors = Array.isArray(data.evaluationFactors) ? data.evaluationFactors : [];
+      working.complianceMatrix = Array.isArray(data.complianceMatrix) ? data.complianceMatrix : [];
+      working.metadata.complianceLimits = Array.isArray(data.limits) ? data.limits : [];
+      working.artifacts = [...(working.artifacts || []), ...(Array.isArray(data.missingArtifacts) ? data.missingArtifacts.map((item) => ({ id: `artifact-${Date.now()}-${item}`, name: item, type: 'missing_evidence', status: 'missing' })) : [])].slice(0, 100);
+      working.metadata.draftOverviewStatus = 'completed';
+      working.metadata.draftOverview = { generatedAt: nowIso(), executiveSummary: data.complianceSummary || '', summary: data.complianceSummary || '', complianceMatrix: working.complianceMatrix, winThemes: working.strategy.winThemes || [], objectives: [], guideAlignment: [], modelUsed };
+      const html = renderComplianceArtifact(working, data);
+      artifactRecord = storeArtifact(working, { type: 'compliance_matrix', title: 'Compliance Matrix', html });
+      return completeStage(working, 'compliance', 'Compliance matrix generated');
+    });
+
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+      writeProposalTrigger('pre-solicitation', saved, { artifactId: artifactRecord.id });
+    }
+    appendStatusUpdate(`[${nowIso()}] Build Compliance Matrix: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] Compliance matrix built for ${saved.title} (${saved.id})`);
+    res.json({
+      ok: true,
+      proposal: saved,
+      modelUsed,
+      artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post('/:id/compliance', async (req, res) => {
+  req.url = req.url.replace('/compliance', '/compliance-matrix');
+  return router.handle(req, res);
+});
+
+router.post('/:id/pre-solicitation', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  if (!prerequisitesMet(proposal, 'strategy') || !proposal.complianceMatrix.length) {
+    res.status(409).json({ ok: false, error: `Complete ${missingStages('strategy')} first.` });
+    return;
+  }
+  try {
+    const { data, modelUsed } = await runJsonTask(proposal, 'pre_solicitation_builder', preSolicitationPrompt(proposal), {
+      subcontractingPosture: '',
+      teamingPosture: '',
+      pricingPosture: '',
+      riskNotes: [],
+      positioningNotes: [],
+    });
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      working.metadata.preSolicitation = data;
+      const html = renderPreSolicitationArtifact(working, data);
+      artifactRecord = storeArtifact(working, { type: 'pre_solicitation', title: 'Pre-solicitation', html });
+      return completeStage(working, 'strategy', 'Pre-solicitation generated');
+    });
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+      writeProposalTrigger('generate-outline', saved, { artifactId: artifactRecord.id });
+    }
+    appendStatusUpdate(`[${nowIso()}] Pre-solicitation generated: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] Pre-solicitation complete for ${saved.title} (${saved.id})`);
+    res.json({ ok: true, proposal: saved, modelUsed, artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post('/:id/strategy', async (req, res) => {
+  req.url = req.url.replace('/strategy', '/pre-solicitation');
+  return router.handle(req, res);
+});
+
+router.post('/:id/outline', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  if (!prerequisitesMet(proposal, 'outline')) {
+    res.status(409).json({ ok: false, error: `Complete ${missingStages('outline')} first.` });
+    return;
+  }
+  try {
+    const { data, modelUsed } = await runJsonTask(proposal, 'outline_builder', outlinePrompt(proposal), { sections: [], pageBudgetNotes: '' });
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      const outlineSections = Array.isArray(data.sections) ? data.sections : [];
+      working.outline = { status: 'completed', notes: data.pageBudgetNotes || '', sections: outlineSections, generatedAt: nowIso(), modelUsed };
+      working.proposalSections = working.proposalSections.map((section) => {
+        const fromOutline = outlineSections.find((item) => item.sectionKey === section.key);
+        return fromOutline ? {
+          ...section,
+          title: fromOutline.title || section.title,
+          purpose: fromOutline.purpose || section.purpose,
+          evaluatorQuestion: fromOutline.evaluatorQuestion || section.evaluatorQuestion,
+          pageBudget: Number(fromOutline.pageBudget || section.pageBudget || 0),
+          requirementIds: Array.isArray(fromOutline.requirementIds) ? fromOutline.requirementIds : section.requirementIds,
+          evidenceLinks: Array.isArray(fromOutline.evidenceLinks) ? fromOutline.evidenceLinks : section.evidenceLinks,
+          summary: fromOutline.paragraph || section.summary,
+          readiness: 'outlined',
+        } : section;
+      });
+      const html = renderOutlineArtifact(working, outlineSections);
+      artifactRecord = storeArtifact(working, { type: 'outline', title: 'Outline', html });
+      return completeStage(working, 'outline', 'Outline generated');
+    });
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+      writeProposalTrigger('rough-draft', saved, { artifactId: artifactRecord.id });
+    }
+    appendStatusUpdate(`[${nowIso()}] Outline generated: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] Outline generated for ${saved.title} (${saved.id})`);
+    res.json({ ok: true, proposal: saved, modelUsed, artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post('/:id/rough-draft', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  if (!prerequisitesMet(proposal, 'drafting') || proposal.outline.status !== 'completed') {
+    res.status(409).json({ ok: false, error: `Complete ${missingStages('drafting')} first.` });
+    return;
+  }
+  try {
+    const { data, modelUsed } = await runJsonTask(proposal, 'rough_draft_builder', roughDraftPrompt(proposal), { draftText: '' }, 4096);
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      working.metadata.roughDraft = { generatedAt: nowIso(), draftText: data.draftText || '', modelUsed };
+      const html = renderRoughDraftArtifact(working, data.draftText || '');
+      artifactRecord = storeArtifact(working, { type: 'rough_draft', title: 'Rough Draft', html });
+      return completeStage(working, 'drafting', 'Rough draft generated');
+    });
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+      writeProposalTrigger('ai-review', saved, { artifactId: artifactRecord.id });
+    }
+    appendStatusUpdate(`[${nowIso()}] Rough draft generated: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] Rough draft generated for ${saved.title} (${saved.id})`);
+    res.json({ ok: true, proposal: saved, modelUsed, artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post('/:id/ai-review', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  if (!prerequisitesMet(proposal, 'red_team') || !proposal.metadata?.roughDraft?.draftText) {
+    res.status(409).json({ ok: false, error: `Complete ${missingStages('red_team')} first.` });
+    return;
+  }
+  try {
+    const roughDraftText = proposal.metadata?.roughDraft?.draftText || '';
+    const { data, modelUsed } = await runJsonTask(proposal, 'ai_review', aiReviewPrompt(proposal, roughDraftText), {
+      complianceScore: 0,
+      missingRequirements: [],
+      weakSections: [],
+      presentationSuggestions: [],
+      improvedDraft: '',
+      reviewSummary: '',
+    }, 6144);
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      working.metadata.aiReview = { ...data, generatedAt: nowIso(), modelUsed };
+      const html = renderAiReviewArtifact(working, data);
+      artifactRecord = storeArtifact(working, { type: 'ai_review', title: 'AI Review', html });
+      return completeStage(working, 'red_team', 'AI review completed');
+    });
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+      writeProposalTrigger('final-draft', saved, { artifactId: artifactRecord.id });
+    }
+    appendStatusUpdate(`[${nowIso()}] AI review completed: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] AI review complete for ${saved.title} (${saved.id})`);
+    res.json({ ok: true, proposal: saved, modelUsed, artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post('/:id/final-draft', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  if (!prerequisitesMet(proposal, 'final_review')) {
+    res.status(409).json({ ok: false, error: `Complete ${missingStages('final_review')} first.` });
+    return;
+  }
+  try {
+    const draftText = proposal.metadata?.aiReview?.improvedDraft || proposal.metadata?.roughDraft?.draftText || '';
+    let artifactRecord;
+    const saved = saveProposal(proposal.id, (working) => {
+      working.metadata = working.metadata || {};
+      const html = renderPage({
+        title: `${working.title} — Final Draft`,
+        subtitle: `${working.agency || 'Unknown agency'} · Generated ${nowIso()}`,
+        body: `<div class="card"><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;line-height:1.6">${escapeHtml(draftText || 'Final draft text not available yet.')}</pre></div>`,
+      });
+      artifactRecord = storeArtifact(working, { type: 'final_draft', title: 'Final Draft', html });
+      return completeStage(working, 'final_review', 'Final draft generated');
+    });
+    if (artifactRecord) {
+      writeProposalArtifact(saved, artifactRecord);
+    }
+    appendStatusUpdate(`[${nowIso()}] Final draft generated: ${saved.title} (${saved.id})`);
+    updateTrackerLine(`- [${nowIso()}] Final draft generated for ${saved.title} (${saved.id})`);
+    res.json({ ok: true, proposal: saved, artifactUrl: artifactRecord ? artifactUrl(req, proposal.id, artifactRecord.id) : null });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.get('/:id/artifacts/:artifactId', async (req, res) => {
+  const proposal = await requireProposal(req, res);
+  if (!proposal) return;
+  const artifacts = proposal.metadata?.generatedArtifacts || [];
+  const artifact = artifacts.find((item) => item.id === req.params.artifactId);
+  if (!artifact) {
+    res.status(404).send('Artifact not found.');
+    return;
+  }
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(artifact.html || renderPage({ title: artifact.title || 'Artifact', subtitle: '', body: '<div class="card">No content available.</div>' }));
+});
+
+export default router;

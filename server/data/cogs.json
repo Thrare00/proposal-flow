@@ -1,0 +1,63 @@
+{
+  "overhead": {
+    "monthly_fixed": 2755,
+    "yearly_fixed": 34574,
+    "target_margin_pct": 0.15,
+    "insurance_per_job": 35,
+    "vehicle_per_job": 25,
+    "admin_per_job": 15,
+    "gl_insurance_monthly": 600,
+    "commercial_auto_monthly": 500,
+    "trailer_monthly": 600,
+    "fuel_monthly": 300,
+    "supplies_monthly": 500,
+    "adp_biweekly": 49,
+    "phone_monthly": 130,
+    "claude_monthly": 100,
+    "chatgpt_monthly": 25
+  },
+  "supplies": {
+    "pressure_washing": {
+      "bleach_per_gal": 3.20,
+      "degreaser_per_gal": 69,
+      "soap_per_gal": 1.50,
+      "storm_drain_socks_ea": 69,
+      "gas_per_gal": 3.00,
+      "tool_rental_per_job": 180,
+      "equipment_maintenance_per_job": 40,
+      "chemicals_soft_wash_per_job": 25,
+      "fuel_per_mile": 0.58
+    },
+    "property_preservation": {
+      "board_up_materials_per_door": 57,
+      "lockset": { "min": 28, "max": 35 },
+      "board_up_sheet": 22,
+      "antifreeze_per_gal": 12,
+      "tarp_per_roll": 45,
+      "trash_bags_per_bundle": 8,
+      "dumpster_30yd": 520,
+      "tool_rental_saw": 160
+    },
+    "restriping": {
+      "paint_per_5gal": 85,
+      "ada_stencil": 15,
+      "reflective_beads_per_lb": 3.50
+    },
+    "aggregates": {
+      "rip_rap_per_ton_cost": 36,
+      "crushed_stone_57_per_ton_cost": 24,
+      "crusher_run_per_ton_cost": 15,
+      "crushed_stone_34_per_ton_cost": 28,
+      "delivery_per_load": 2700
+    }
+  },
+  "labor": {
+    "base_hourly": 25,
+    "man_hour_cost_pw": 50,
+    "man_hour_cost_pp": 20,
+    "burden_multiplier": 1.35,
+    "prevailing_wage_hourly": 38,
+    "crew_size_default": 2,
+    "day_rate_per_worker": 150
+  }
+}

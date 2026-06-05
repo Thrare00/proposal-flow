@@ -8,11 +8,17 @@
   }
   
   body {
-    @apply font-sans text-gray-800 bg-gray-50 dark:text-gray-200 dark:bg-gray-900;
+    @apply font-sans text-gray-800 dark:text-gray-200;
+    background: #08111f;
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-gray-900 font-bold;
+    @apply font-serif text-gray-900 dark:text-gray-100 font-bold;
   }
   
   h1 {
@@ -78,7 +84,10 @@
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-card p-4 transition-all duration-200;
+    @apply rounded-lg shadow-card p-4 transition-all duration-200;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.42);
   }
   
   .badge {
@@ -245,4 +254,118 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+.desktop-shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.desktop-wallpaper,
+.desktop-wallpaper-tint {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.desktop-wallpaper {
+  z-index: -3;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: background-image 1.4s ease-in-out;
+  transform: scale(1.02);
+}
+
+.desktop-wallpaper-tint {
+  z-index: -2;
+  background:
+    linear-gradient(128deg, rgba(3, 8, 18, 0.42), rgba(8, 18, 36, 0.18) 32%, rgba(20, 54, 118, 0.26) 100%),
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.12), transparent 20%),
+    radial-gradient(circle at 82% 78%, rgba(36, 132, 255, 0.22), transparent 26%);
+}
+
+.desktop-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 14%, transparent 72%, rgba(5, 10, 20, 0.46)),
+    radial-gradient(circle at 52% 18%, rgba(255, 255, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 50% 80%, rgba(32, 102, 255, 0.28), transparent 28%);
+  opacity: 0.92;
+}
+
+.glass-panel {
+  background: rgba(245, 249, 255, 0.68);
+  backdrop-filter: blur(24px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 20px 48px rgba(3, 12, 28, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.desktop-content-frame {
+  background: rgba(248, 251, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.dark .card,
+.dark .glass-panel {
+  background: rgba(10, 18, 34, 0.68);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: #e2e8f0;
+  box-shadow:
+    0 18px 40px rgba(2, 6, 23, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dark .card h1,
+.dark .card h2,
+.dark .card h3,
+.dark .card h4 {
+  color: #f1f5f9;
+}
+
+.dark .card .text-gray-900 {
+  color: #e2e8f0;
+}
+
+.dark .card .text-gray-800 {
+  color: #cbd5e1;
+}
+
+.dark .card .text-gray-700 {
+  color: #cbd5e1;
+}
+
+.dark .card .text-gray-600 {
+  color: #94a3b8;
+}
+
+.dark .card .text-gray-500 {
+  color: #94a3b8;
+}
+
+.dark .card .bg-gray-50 {
+  background-color: rgba(30, 41, 59, 0.5);
+}
+
+/* Page-level text on dark space background (outside cards) */
+.dark .text-gray-900 {
+  color: #f1f5f9;
+}
+
+.dark .text-gray-700 {
+  color: #cbd5e1;
+}
+
+.dark .desktop-content-frame {
+  background: rgba(7, 12, 22, 0.3);
+  border-color: rgba(148, 163, 184, 0.12);
 }

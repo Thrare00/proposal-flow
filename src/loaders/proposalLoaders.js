@@ -1,12 +1,14 @@
+import { buildApiUrl } from '../lib/runtimeApi.js';
+import { normalizeProposal } from '../../shared/proposalNormalization.js';
+
 export async function proposalLoader() {
   try {
-    // Simulate API call
-    const response = await fetch('/api/proposals');
+    const response = await fetch(buildApiUrl('/proposals'));
     if (!response.ok) {
       throw new Error('Failed to load proposals');
     }
     const data = await response.json();
-    return data;
+    return Array.isArray(data) ? data.map((proposal) => normalizeProposal(proposal)) : [];
   } catch (error) {
     throw new Error('Failed to load proposals');
   }
@@ -14,13 +16,12 @@ export async function proposalLoader() {
 
 export async function proposalDetailsLoader(id) {
   try {
-    // Simulate API call
-    const response = await fetch(`/api/proposals/${id}`);
+    const response = await fetch(buildApiUrl(`/proposals/${id}`));
     if (!response.ok) {
       throw new Error('Failed to load proposal details');
     }
     const data = await response.json();
-    return data;
+    return normalizeProposal(data);
   } catch (error) {
     throw new Error('Failed to load proposal details');
   }

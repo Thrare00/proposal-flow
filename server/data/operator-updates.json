@@ -1,0 +1,45 @@
+[
+  {
+    "id": "op-a8e39f40-b7d7-4513-95bf-96bfc4c15bac",
+    "ts": "2026-06-05T07:46:33.493Z",
+    "hour": "2026-06-05T07",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "BidNet B-2622LM: 2026-06-08",
+      "GDOT prequalification App #2269",
+      "GDOT prequalification App #2271",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Vendor packets x5"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-05T07:46:32.988996+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  }
+]

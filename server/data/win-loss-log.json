@@ -1,0 +1,41 @@
+{
+  "revenueTarget": {
+    "monthly": 22000,
+    "currency": "USD"
+  },
+  "entries": [
+    {
+      "proposalId": "proposal-6ac6a13a-072c-41c6-b939-5f81bbe3ee57",
+      "title": "Janitorial Services, Avery Office and Engine Bay",
+      "service": "pressure_washing",
+      "bidAmount": 1600,
+      "outcome": "win",
+      "awardAmount": 25000,
+      "competitorCount": null,
+      "recordedAt": "2026-05-25T16:11:38.852Z",
+      "notes": ""
+    },
+    {
+      "proposalId": "proposal-524a7cad-3b80-490c-822d-f9f99cf7691c",
+      "title": "Awarded Janitorial Services - Mercedes",
+      "service": "property_preservation",
+      "bidAmount": 850,
+      "outcome": "win",
+      "awardAmount": 5000,
+      "competitorCount": null,
+      "recordedAt": "2026-05-25T16:17:00.702Z",
+      "notes": ""
+    },
+    {
+      "proposalId": "proposal-fdce6422-cefd-4ed7-b7ff-f1c42121192b",
+      "title": "GROUNDS MAINTENANCE FORT STEWART/HAAF",
+      "service": "aggregates",
+      "bidAmount": 5000,
+      "outcome": "win",
+      "awardAmount": 12000,
+      "competitorCount": null,
+      "recordedAt": "2026-05-25T16:32:57.464Z",
+      "notes": ""
+    }
+  ]
+}

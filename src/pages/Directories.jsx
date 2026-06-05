@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { enqueue } from '../lib/enqueue.js';
 import { format } from 'date-fns';
+import { buildApiUrl } from '../lib/runtimeApi.js';
 import { Button, Input, Label } from '../components/ui/index.js';
 
 // Inline styles for form elements
@@ -47,7 +48,28 @@ export default function Directories() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [autoRegister, setAutoRegister] = useState(true);
+  const [entries, setEntries] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const response = await fetch(buildApiUrl('/directories'));
+        if (!response.ok) return;
+        const data = await response.json();
+        if (mounted) {
+          setEntries(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error('Failed to load directory entries:', error);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (formData.portal) {
@@ -74,7 +96,7 @@ export default function Directories() {
           payload: {
             portal: PORTAL_OPTIONS.find(p => p.id === formData.portal)?.name || formData.portal,
             portalUrl: formData.url,
-            company: "Rare Earth Ltd",
+            company: "Thrare Contracting",
             contact: { 
               name: "Eric White", 
               phone: "478-718-1278", 
@@ -103,11 +125,25 @@ export default function Directories() {
         submittedDate: format(new Date(), 'yyyy-MM-dd'),
         notes: ''
       });
+      const response = await fetch(buildApiUrl('/directories'));
+      if (response.ok) {
+        const data = await response.json();
+        setEntries(Array.isArray(data) ? data : []);
+      }
     } catch (error) {
       console.error('Error submitting directory entry:', error);
       toast.error(`Error: ${error.message}`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const runPortalWatch = async () => {
+    try {
+      await enqueue({ action: 'run_portal_watch' });
+      toast.success('Portal watch queued successfully!');
+    } catch (error) {
+      toast.error(`Failed to queue portal watch: ${error.message}`);
     }
   };
 
@@ -121,7 +157,12 @@ export default function Directories() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-2xl font-bold mb-6">Directory Entry</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Directory Entry</h1>
+        <Button type="button" variant="outline" onClick={runPortalWatch}>
+          Run Portal Watch
+        </Button>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
@@ -235,6 +276,21 @@ export default function Directories() {
           </Button>
         </div>
       </form>
+
+      <div className="mt-10">
+        <h2 className="text-xl font-semibold mb-3">Tracked Portal Activity</h2>
+        <div className="space-y-3">
+          {entries.length > 0 ? entries.map((entry) => (
+            <div key={entry.id} className="rounded border p-3 bg-white">
+              <div className="font-medium">{entry.portal || 'Portal'}</div>
+              <div className="text-sm text-gray-600">{entry.portalUrl || entry.url || 'No URL'}</div>
+              <div className="text-sm text-gray-500">{entry.status || 'Started'}</div>
+            </div>
+          )) : (
+            <p className="text-sm text-gray-500">No portal activity recorded yet.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

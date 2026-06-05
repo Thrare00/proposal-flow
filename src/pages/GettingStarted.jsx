@@ -144,7 +144,7 @@ const GettingStarted = () => {
           Create your first proposal and start organizing your workflow today!
         </p>
         <NavLink 
-          to="/dashboard/proposals/new" 
+          to="/proposals/new"
           className="btn btn-primary flex items-center justify-center space-x-2"
         >
           <FileText size={18} />

@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} ProposalType
- * @property {'commercial'|'local_state'|'federal'} type
+ * @property {'commercial'|'state_local'|'federal'} type
  * @property {string} description
  * @property {string[]} requirements
  * @property {(data: any) => boolean} validation
@@ -13,8 +13,8 @@ export const PROPOSAL_TYPES = {
     requirements: ['business_plan', 'financials', 'market_analysis'],
     validation: (data) => data.business_plan && data.financials,
   },
-  local_state: {
-    type: 'local_state',
+  state_local: {
+    type: 'state_local',
     description: 'State and local government proposals',
     requirements: ['regulatory_compliance', 'community_impact'],
     validation: (data) => data.regulatory_compliance,
@@ -137,7 +137,174 @@ export const URGENCY_LEVELS = {
  * @property {string} updatedAt
  * @property {ProposalMetadata} metadata
  * @property {ValidationStatus} validationStatus
+ * @property {PricingGovernance} [pricingGovernance]
  */
+
+/**
+ * @typedef {Object} PricingConstraint
+ * @property {string} id
+ * @property {string} lineItem
+ * @property {'ceiling'|'floor'|'fixed'|'not_to_exceed'|'range'|'other'} constraintType
+ * @property {string} description
+ * @property {number|null} threshold
+ * @property {string} unit
+ * @property {string} source
+ * @property {'open'|'met'|'violated'|'waived'} status
+ * @property {string} notes
+ */
+
+/**
+ * @typedef {Object} PricingAssumption
+ * @property {string} id
+ * @property {string} text
+ * @property {boolean} validated
+ * @property {string} validatedBy
+ * @property {string|null} validatedAt
+ * @property {string} notes
+ */
+
+/**
+ * @typedef {Object} PricingGovernance
+ * @property {PricingConstraint[]} constraints
+ * @property {number|null} marginFloor
+ * @property {string} riskAdjustmentNotes
+ * @property {Object} bondInsurance
+ * @property {Object} wageDetermination
+ * @property {Object} taxEscalation
+ * @property {PricingAssumption[]} assumptions
+ * @property {'not_started'|'in_progress'|'approved'|'flagged'} reviewStatus
+ * @property {string} reviewedBy
+ * @property {string|null} reviewedAt
+ * @property {string} notes
+ */
+
+// ── Pursuit Posture & Timing ─────────────────────────────────────────────────
+
+/**
+ * @typedef {'prime'|'subcontract'|'watch'|'pre_position'|'no_bid'|'either'} PursuitPosture
+ */
+
+/**
+ * @typedef {'now'|'this_week'|'next_week'|'30_days'|'60_days'|'90_180'|'beyond'|'overdue'} TimingBucket
+ */
+
+/**
+ * @typedef {Object} CaptureTiming
+ * @property {PursuitPosture} pursuitPosture
+ * @property {string}         pursuitBucket    - PURSUIT_BUCKETS id (urgent, active, etc.)
+ * @property {TimingBucket}   timingBucket     - dashboard-oriented horizon id
+ * @property {number|null}    daysOut
+ * @property {string|null}    intentToBidDate
+ * @property {string|null}    teamingStartDate
+ * @property {string|null}    primeOutreachStartDate
+ * @property {string|null}    primeOutreachEndDate
+ * @property {Object}         recommendedWindow
+ */
+
+// ── Pre-Solicitation / Capture Foundation ────────────────────────────────────
+
+/**
+ * @typedef {'detected'|'qualifying'|'bid_review'|'capture_active'|'no_bid'|'awaiting_rfp'} OpportunityStage
+ */
+
+/**
+ * @typedef {Object} BidNoBidScore
+ * @property {number} incumbentStrength   - 1–5: incumbent entrenchment
+ * @property {number} competitiveFit      - 1–5: fit to capabilities / service lanes
+ * @property {number} pastPerformanceFit  - 1–5: past performance relevance
+ * @property {number} teamingReadiness    - 1–5: teaming readiness (0=major gaps)
+ * @property {number} pricingConfidence   - 1–5: PTW confidence
+ * @property {number} strategicValue      - 1–5: pipeline / strategic value
+ * @property {number} total               - computed 6–30
+ * @property {number} pwin                - 0–100 Pwin estimate
+ * @property {'bid'|'no_bid'|'conditional'} recommendation
+ * @property {string} [rationale]
+ */
+
+/**
+ * @typedef {Object} CaptureStakeholder
+ * @property {string} role        - e.g. CO, COR, PM, OSDBU
+ * @property {string} [name]
+ * @property {string} [agency]
+ * @property {string} [notes]
+ */
+
+/**
+ * @typedef {Object} PortalReadiness
+ * @property {boolean} samActive
+ * @property {boolean} portalIdentified
+ * @property {boolean} credentialsConfirmed
+ * @property {string}  [notes]
+ */
+
+/**
+ * @typedef {Object} CaptureRecord
+ * @property {string}           id
+ * @property {string}           opportunityId         - SAM.gov notice ID or external ref
+ * @property {string}           [proposalId]          - set when full Proposal is created
+ * @property {OpportunityStage} stage
+ * @property {string}           [solicitationNumber]
+ * @property {string[]}         naicsCodes
+ * @property {string[]}         pscCodes
+ * @property {string}           [setAside]
+ * @property {string}           [incumbentName]
+ * @property {string}           [incumbentContractNumber]
+ * @property {BidNoBidScore}    [bidNoBid]
+ * @property {string[]}         winThemes
+ * @property {string[]}         ghostingTargets       - incumbent weaknesses to contrast
+ * @property {string[]}         teamingGaps           - capability gaps needing partners
+ * @property {CaptureStakeholder[]} stakeholders
+ * @property {PortalReadiness}  portalReadiness
+ * @property {string}           [notes]
+ * @property {string}           createdAt
+ * @property {string}           updatedAt
+ */
+
+/**
+ * Returns a blank CaptureRecord with safe defaults.
+ * @param {string} opportunityId
+ * @returns {CaptureRecord}
+ */
+export function createCaptureRecord(opportunityId) {
+  const now = new Date().toISOString();
+  return {
+    id: `capture-${Date.now()}`,
+    opportunityId,
+    stage: 'detected',
+    naicsCodes: [],
+    pscCodes: [],
+    winThemes: [],
+    ghostingTargets: [],
+    teamingGaps: [],
+    stakeholders: [],
+    portalReadiness: {
+      samActive: false,
+      portalIdentified: false,
+      credentialsConfirmed: false,
+    },
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+/**
+ * Returns a blank BidNoBidScore.
+ * @returns {BidNoBidScore}
+ */
+export function createBidNoBidScore() {
+  return {
+    incumbentStrength: 3,
+    competitiveFit: 3,
+    pastPerformanceFit: 3,
+    teamingReadiness: 3,
+    pricingConfidence: 3,
+    strategicValue: 3,
+    total: 18,
+    pwin: 50,
+    recommendation: 'conditional',
+    rationale: '',
+  };
+}
 
 /**
  * @typedef {Object} CalendarEventStatus

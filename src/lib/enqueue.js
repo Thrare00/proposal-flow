@@ -1,125 +1,115 @@
-// Safely get environment variables that works in the browser
+import { buildApiUrl, isLocalRuntime } from './runtimeApi.js';
+
 function getEnvVar(name, defaultValue = '') {
-  // In Vite, environment variables are available under import.meta.env
   if (typeof import.meta !== 'undefined' && import.meta.env) {
     return import.meta.env[name] || defaultValue;
   }
-  // Fallback to empty string if import.meta.env is not available
   return defaultValue;
 }
 
-// Prefer explicit queue URL; fall back to GAS proxy; then legacy enqueue endpoint
-const QUEUE_URL = getEnvVar('VITE_QUEUE_URL')
+const REMOTE_QUEUE_URL = getEnvVar('VITE_QUEUE_URL')
   || getEnvVar('VITE_GAS_PROXY')
   || getEnvVar('VITE_ENQUEUE_ENDPOINT');
-const QUEUE_TOKEN = getEnvVar('VITE_QUEUE_TOKEN');
+const QUEUE_TOKEN = getEnvVar('VITE_QUEUE_TOKEN') || 'local-dev-token';
+
+function getQueueCandidates() {
+  const candidates = [];
+
+  if (isLocalRuntime()) {
+    candidates.push(buildApiUrl('/automation'));
+  }
+
+  if (REMOTE_QUEUE_URL) {
+    candidates.push(REMOTE_QUEUE_URL.replace(/\/$/, ''));
+  }
+
+  return [...new Set(candidates.filter(Boolean))];
+}
+
+async function fetchQueue(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Queue-Token': QUEUE_TOKEN,
+      ...(options.headers || {}),
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`enqueue failed ${response.status}: ${text || response.statusText}`);
+  }
+
+  return response.json().catch(() => ({}));
+}
 
 export async function enqueue(jobOrArray) {
   if (typeof window === 'undefined') {
-    // Skip during SSR/build
     return { id: 'build-skip', status: 'skipped' };
   }
 
-  if (!QUEUE_URL) {
-    console.warn('Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables');
-    return { id: 'no-queue-url', status: 'error', error: 'Queue URL not configured' };
-  }
-  
-  if (!QUEUE_TOKEN) {
-    console.warn('Missing VITE_QUEUE_TOKEN in environment variables');
-    return { id: 'no-queue-token', status: 'error', error: 'Queue token not configured' };
-  }
-  
   const jobs = Array.isArray(jobOrArray) ? jobOrArray : [jobOrArray];
-  const url = `${QUEUE_URL}?fn=enqueue`;
-  
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'X-Queue-Token': QUEUE_TOKEN 
-      },
-      body: JSON.stringify({ jobs })
-    });
+  const urls = getQueueCandidates().map((baseUrl) => `${baseUrl}?fn=enqueue`);
 
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      throw new Error(`enqueue failed ${res.status}: ${text || res.statusText}`);
+  let lastError = null;
+  for (const url of urls) {
+    try {
+      return await fetchQueue(url, {
+        method: 'POST',
+        body: JSON.stringify({ jobs }),
+      });
+    } catch (error) {
+      lastError = error;
     }
-    
-    return await res.json().catch(() => ({}));
-  } catch (error) {
-    if (error.message.includes('<!DOCTYPE')) {
-      throw new Error('Server returned HTML instead of JSON. Check if the endpoint URL is correct.');
-    }
-    throw error;
   }
+
+  throw lastError || new Error('Queue endpoint not configured');
 }
 
-// Plural helper for batching multiple jobs
 export async function enqueueJobs(jobs) {
   if (!Array.isArray(jobs)) {
-    throw new Error("enqueueJobs expects an array of jobs");
+    throw new Error('enqueueJobs expects an array of jobs');
   }
 
-  const results = [];
-  for (const job of jobs) {
-    results.push(await enqueue(job));
-  }
-  return results;
+  return enqueue(jobs);
 }
 
-/**
- * Check connectivity to the enqueue endpoint
- * @returns {Promise<Object>} Object with connection status
- */
 export async function checkConnectivity() {
   if (typeof window === 'undefined') {
-    // Skip during SSR/build
     return {
       connected: true,
       status: 'skipped',
-      message: 'Skipping connectivity check during build'
+      message: 'Skipping connectivity check during build',
     };
   }
 
-  if (!QUEUE_URL) {
-    return {
-      connected: false,
-      status: 'error',
-      error: 'Missing VITE_QUEUE_URL or VITE_ENQUEUE_ENDPOINT in environment variables',
-    };
+  const urls = getQueueCandidates().map((baseUrl) => `${baseUrl}?fn=getHealth`);
+  let lastError = null;
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'X-Queue-Token': QUEUE_TOKEN },
+      });
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText,
+        lastChecked: new Date().toISOString(),
+      };
+    } catch (error) {
+      lastError = error;
+    }
   }
 
-  if (!QUEUE_TOKEN) {
-    return {
-      connected: false,
-      status: 'error',
-      error: 'Missing VITE_QUEUE_TOKEN in environment variables',
-    };
-  }
-
-  try {
-    const healthUrl = `${QUEUE_URL}?fn=getHealth`;
-    const response = await fetch(healthUrl, {
-      method: 'GET',
-      mode: 'cors',
-      headers: QUEUE_TOKEN ? { 'X-Queue-Token': QUEUE_TOKEN } : {}
-    });
-
-    return {
-      ok: response.ok,
-      status: response.status,
-      statusText: response.statusText,
-      lastChecked: new Date().toISOString()
-    };
-  } catch (error) {
-    return {
-      ok: false,
-      status: 0,
-      statusText: error.message,
-      lastChecked: new Date().toISOString()
-    };
-  }
+  return {
+    ok: false,
+    status: 0,
+    statusText: lastError?.message || 'Unknown connectivity error',
+    lastChecked: new Date().toISOString(),
+  };
 }

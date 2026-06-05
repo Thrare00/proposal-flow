@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, AlertTriangle, X, Check } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, AlertTriangle, X, Check, Download, Loader2 } from 'lucide-react';
 import { useProposalContext } from '../contexts/ProposalContext.jsx';
 import { normalizeProposalType } from '../../shared/proposalNormalization.js';
+import { PURSUIT_POSTURES, getRecommendedWindows } from '../lib/pursuitTiming.js';
 
 // Confirmation Dialog Component
 const ConfirmationDialog = ({ 
@@ -101,6 +102,7 @@ const ProposalForm = () => {
   const existingProposal = id ? getProposal(id) : undefined;
   const isEditing = !!existingProposal;
   
+  const captureTiming = existingProposal?.metadata?.captureTiming || {};
   const [formData, setFormData] = useState({
     title: existingProposal?.title || '',
     agency: existingProposal?.agency || '',
@@ -109,7 +111,12 @@ const ProposalForm = () => {
       : '',
     status: existingProposal?.status || 'intake',
     notes: existingProposal?.notes || '',
-    type: normalizeProposalType(existingProposal?.type) || 'federal'
+    type: normalizeProposalType(existingProposal?.type) || 'federal',
+    pursuitPosture: captureTiming.pursuitPosture || 'either',
+    intentToBidDate: captureTiming.intentToBidDate || '',
+    teamingStartDate: captureTiming.teamingStartDate || '',
+    primeOutreachStartDate: captureTiming.primeOutreachStartDate || '',
+    primeOutreachEndDate: captureTiming.primeOutreachEndDate || '',
   });
   
   const [errors, setErrors] = useState({});
@@ -118,6 +125,40 @@ const ProposalForm = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [formIsDirty, setFormIsDirty] = useState(false);
   const initialFormData = useRef(JSON.stringify(formData));
+  const [solicitationUrl, setSolicitationUrl] = useState('');
+  const [fetchingDoc, setFetchingDoc] = useState(false);
+  const [fetchResult, setFetchResult] = useState(null);
+
+  const handleFetchDocument = async () => {
+    if (!solicitationUrl.trim()) return;
+    setFetchingDoc(true);
+    setFetchResult(null);
+    try {
+      const resp = await fetch('/api/proposals/fetch-document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: solicitationUrl.trim() }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        setFetchResult({ error: data.error || 'Failed to fetch document' });
+      } else if (data.note && !data.text) {
+        setFetchResult({ warning: data.note });
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          notes: prev.notes
+            ? `${prev.notes}\n\n--- Fetched from ${data.sourceUrl} ---\n${data.text}`
+            : `--- Fetched from ${data.sourceUrl} ---\n${data.text}`,
+        }));
+        setFetchResult({ success: true, note: data.note || `Fetched ${data.text.length} characters from ${data.filename}` });
+      }
+    } catch (err) {
+      setFetchResult({ error: err.message });
+    } finally {
+      setFetchingDoc(false);
+    }
+  };
   
   // Track form changes
   useEffect(() => {
@@ -127,10 +168,22 @@ const ProposalForm = () => {
   
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => {
+      const next = {
+        ...prev,
+        [name]: value
+      };
+
+      if (name === 'dueDate' || name === 'pursuitPosture') {
+        const recommended = getRecommendedWindows(next.dueDate, next.pursuitPosture);
+        next.intentToBidDate = recommended.intentToBidDate || next.intentToBidDate;
+        next.teamingStartDate = recommended.teamingStartDate || next.teamingStartDate;
+        next.primeOutreachStartDate = recommended.primeOutreachStartDate || next.primeOutreachStartDate;
+        next.primeOutreachEndDate = recommended.primeOutreachEndDate || next.primeOutreachEndDate;
+      }
+
+      return next;
+    });
   };
   
   const validateForm = () => {
@@ -175,6 +228,7 @@ const ProposalForm = () => {
     setIsSubmitting(true);
     
     try {
+      const recommended = getRecommendedWindows(formData.dueDate, formData.pursuitPosture);
       const proposalData = {
         title: formData.title.trim(),
         agency: formData.agency.trim(),
@@ -182,6 +236,19 @@ const ProposalForm = () => {
         status: formData.status,
         type: normalizeProposalType(formData.type),
         notes: formData.notes.trim(),
+        metadata: {
+          ...(existingProposal?.metadata || {}),
+          captureTiming: {
+            pursuitPosture: recommended.pursuitPosture,
+            pursuitBucket: recommended.bucket,
+            timingBucket: recommended.timingBucket,
+            daysOut: recommended.daysOut,
+            intentToBidDate: formData.intentToBidDate || recommended.intentToBidDate,
+            teamingStartDate: formData.teamingStartDate || recommended.teamingStartDate,
+            primeOutreachStartDate: formData.primeOutreachStartDate || recommended.primeOutreachStartDate,
+            primeOutreachEndDate: formData.primeOutreachEndDate || recommended.primeOutreachEndDate,
+          },
+        },
       };
       
       let newId;
@@ -357,7 +424,7 @@ const ProposalForm = () => {
                 <option value="pre_solicitation">Pre-Solicitation Brief</option>
                 <option value="research">Research</option>
                 <option value="technical_compliance">Technical / Compliance</option>
-                <option value="pricing_packaging">Pricing / Packaging</option>
+                <option value="pricing_strategy">Pricing Strategy</option>
                 <option value="drafting">Claude Drafting</option>
                 <option value="review">ChatGPT Review</option>
                 <option value="google_docs_final">Google Docs Final</option>
@@ -382,7 +449,87 @@ const ProposalForm = () => {
                 <option value="commercial">Commercial</option>
               </select>
             </div>
+
+            <div>
+              <label htmlFor="pursuitPosture" className="block text-sm font-medium text-gray-700">
+                Pursuit Posture
+              </label>
+              <select
+                id="pursuitPosture"
+                name="pursuitPosture"
+                value={formData.pursuitPosture}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              >
+                {PURSUIT_POSTURES.map((posture) => (
+                  <option key={posture.value} value={posture.value}>{posture.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="intentToBidDate" className="block text-sm font-medium text-gray-700">
+                Intent to Bid Date
+              </label>
+              <input type="date" id="intentToBidDate" name="intentToBidDate" value={formData.intentToBidDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+            </div>
+
+            <div>
+              <label htmlFor="teamingStartDate" className="block text-sm font-medium text-gray-700">
+                Planned Teaming Start
+              </label>
+              <input type="date" id="teamingStartDate" name="teamingStartDate" value={formData.teamingStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+            </div>
+
+            <div>
+              <label htmlFor="primeOutreachStartDate" className="block text-sm font-medium text-gray-700">
+                Prime Outreach Start
+              </label>
+              <input type="date" id="primeOutreachStartDate" name="primeOutreachStartDate" value={formData.primeOutreachStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+            </div>
+
+            <div>
+              <label htmlFor="primeOutreachEndDate" className="block text-sm font-medium text-gray-700">
+                Prime Outreach End
+              </label>
+              <input type="date" id="primeOutreachEndDate" name="primeOutreachEndDate" value={formData.primeOutreachEndDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+            </div>
             
+            <div className="sm:col-span-2">
+              <label htmlFor="solicitationUrl" className="block text-sm font-medium text-gray-700">
+                Fetch Solicitation from URL
+              </label>
+              <p className="text-xs text-gray-500 mb-1">Paste a SAM.gov, beta.sam.gov, or other solicitation URL to auto-import text</p>
+              <div className="flex gap-2 mt-1">
+                <input
+                  type="url"
+                  id="solicitationUrl"
+                  value={solicitationUrl}
+                  onChange={(e) => setSolicitationUrl(e.target.value)}
+                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                  placeholder="https://sam.gov/opp/..."
+                />
+                <button
+                  type="button"
+                  onClick={handleFetchDocument}
+                  disabled={fetchingDoc || !solicitationUrl.trim()}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {fetchingDoc ? <Loader2 size={16} className="animate-spin mr-1" /> : <Download size={16} className="mr-1" />}
+                  Fetch
+                </button>
+              </div>
+              {fetchResult?.error && (
+                <p className="mt-1 text-sm text-red-600">{fetchResult.error}</p>
+              )}
+              {fetchResult?.warning && (
+                <p className="mt-1 text-sm text-amber-600">{fetchResult.warning}</p>
+              )}
+              {fetchResult?.success && (
+                <p className="mt-1 text-sm text-green-600">{fetchResult.note}</p>
+              )}
+            </div>
+
             <div className="sm:col-span-2">
               <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
                 Notes

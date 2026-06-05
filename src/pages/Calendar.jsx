@@ -91,7 +91,7 @@ const Calendar = () => {
                 <ErrorBoundary>
                   {customEvents.map((event) => (
                     <div key={event.id}>
-                      {isSameDay(event.date, day) && (
+                      {isSameDay(new Date(event.date), day) && (
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-blue-600 truncate max-w-[120px]">{event.title}</span>
                           <div className="flex gap-1">

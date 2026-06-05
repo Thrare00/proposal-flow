@@ -11,6 +11,9 @@ import {
 } from 'lucide-react';
 import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../utils/dateUtils.js';
 import { getStatusName, getStatusColor } from '../utils/statusUtils.js';
+import { STAGE_LABELS } from '../../shared/proposalWorkflow.js';
+import { PURSUIT_POSTURES, DASHBOARD_HORIZONS } from '../lib/pursuitTiming.js';
+
 const ProposalCard = ({ proposal = {}, showActions = true }) => {
   // Safely handle missing or malformed proposal data
   if (!proposal || typeof proposal !== 'object') {
@@ -21,14 +24,23 @@ const ProposalCard = ({ proposal = {}, showActions = true }) => {
     );
   }
 
-  const { 
-    id, 
-    title = 'Untitled Proposal', 
-    agency = 'No Agency', 
-    dueDate, 
+  const {
+    id,
+    title = 'Untitled Proposal',
+    agency = 'No Agency',
+    dueDate,
     status = 'drafting',
-    tasks = [] 
+    tasks = [],
+    complianceStatus = {},
+    scoring = {},
+    workflow = {},
+    metadata = {}
   } = proposal;
+
+  const captureTiming = metadata.captureTiming || {};
+  const postureLabel = PURSUIT_POSTURES.find((p) => p.value === captureTiming.pursuitPosture)?.label || 'Either';
+  const horizon = DASHBOARD_HORIZONS.find((h) => h.id === captureTiming.timingBucket);
+  const horizonTone = horizon?.tone || 'bg-gray-100 text-gray-700 border-gray-200';
 
   const urgencyLevel = getUrgencyLevel(dueDate);
   const urgencyColorClass = getUrgencyColor(urgencyLevel);
@@ -55,7 +67,7 @@ const ProposalCard = ({ proposal = {}, showActions = true }) => {
       aria-labelledby={`proposal-${id}-title`}
     >
       <div className="flex justify-between items-start mb-3">
-        <h3 id={`proposal-${id}-title`} className="text-xl font-semibold line-clamp-1">
+        <h3 id={`proposal-${id}-title`} className="text-xl font-semibold line-clamp-1 text-gray-900 dark:text-gray-100">
           {title}
         </h3>
         <span 
@@ -129,6 +141,36 @@ const ProposalCard = ({ proposal = {}, showActions = true }) => {
           <p className="text-xs text-gray-500 mt-1">No tasks created yet</p>
         )}
       </div>
+
+      <div className="flex items-center gap-2 mb-3 text-xs">
+        <span className="inline-flex items-center rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 font-medium">
+          {postureLabel}
+        </span>
+        {horizon && (
+          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-medium ${horizonTone}`}>
+            {horizon.label}
+          </span>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+        <div className="rounded-md bg-gray-50 px-2 py-2">
+          <div className="font-semibold text-gray-500">Workflow</div>
+          <div className="mt-1 text-sm text-gray-900">{STAGE_LABELS[workflow.currentStage] || workflow.currentStage || 'Ingestion'}</div>
+        </div>
+        <div className="rounded-md bg-gray-50 px-2 py-2">
+          <div className="font-semibold text-gray-500">Compliance</div>
+          <div className="mt-1 text-sm text-gray-900">{Math.round(complianceStatus.completenessPercent || 0)}%</div>
+        </div>
+        <div className="rounded-md bg-gray-50 px-2 py-2">
+          <div className="font-semibold text-gray-500">Draft Ready</div>
+          <div className="mt-1 text-sm text-gray-900">{Math.round(scoring.draft_readiness_percent || 0)}%</div>
+        </div>
+        <div className="rounded-md bg-gray-50 px-2 py-2">
+          <div className="font-semibold text-gray-500">Submission</div>
+          <div className="mt-1 text-sm text-gray-900">{Math.round(scoring.submission_readiness_percent || 0)}%</div>
+        </div>
+      </div>
       
       {showActions && (
         <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
@@ -149,7 +191,7 @@ const ProposalCard = ({ proposal = {}, showActions = true }) => {
           </div>
           
           <Link 
-            to={`/proposals/${proposal.id}/analyze`}
+            to={`/proposals/${proposal.id}`}
             className="flex items-center text-primary-600 hover:text-primary-800 text-sm font-medium"
           >
             View Details

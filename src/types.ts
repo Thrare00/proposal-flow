@@ -1,5 +1,5 @@
 export type ProposalType = {
-  type: 'commercial' | 'local_state' | 'federal';
+  type: 'commercial' | 'state_local' | 'federal';
   description: string;
   requirements: string[];
   validation: (data: any) => boolean;
@@ -12,8 +12,8 @@ export const PROPOSAL_TYPES: Record<string, ProposalType> = {
     requirements: ['business_plan', 'financials', 'market_analysis'],
     validation: (data) => data.business_plan && data.financials,
   },
-  local_state: {
-    type: 'local_state',
+  state_local: {
+    type: 'state_local',
     description: 'State and local government proposals',
     requirements: ['regulatory_compliance', 'community_impact'],
     validation: (data) => data.regulatory_compliance,
@@ -130,6 +130,113 @@ export interface Proposal {
     errors: string[];
     warnings: string[];
   };
+}
+
+// ── Pursuit Posture & Timing ─────────────────────────────────────────────────
+
+export type PursuitPosture =
+  | 'prime'
+  | 'subcontract'
+  | 'watch'
+  | 'pre_position'
+  | 'no_bid'
+  | 'either';
+
+export type TimingBucket =
+  | 'now'
+  | 'this_week'
+  | 'next_week'
+  | '30_days'
+  | '60_days'
+  | '90_180'
+  | 'beyond'
+  | 'overdue';
+
+export interface CaptureTiming {
+  pursuitPosture: PursuitPosture;
+  /** PURSUIT_BUCKETS id (urgent, active, etc.) */
+  pursuitBucket: string;
+  /** Dashboard-oriented timing horizon */
+  timingBucket: TimingBucket;
+  daysOut: number | null;
+  intentToBidDate: string | null;
+  teamingStartDate: string | null;
+  primeOutreachStartDate: string | null;
+  primeOutreachEndDate: string | null;
+  recommendedWindow: Record<string, any>;
+}
+
+// ── Pre-Solicitation / Capture Foundation ────────────────────────────────────
+
+export type OpportunityStage =
+  | 'detected'
+  | 'qualifying'
+  | 'bid_review'
+  | 'capture_active'
+  | 'no_bid'
+  | 'awaiting_rfp';
+
+export interface BidNoBidScore {
+  /** 1–5: how entrenched is the incumbent (5 = very strong) */
+  incumbentStrength: number;
+  /** 1–5: fit to our capabilities / service lanes */
+  competitiveFit: number;
+  /** 1–5: past performance relevance */
+  pastPerformanceFit: number;
+  /** 1–5: teaming readiness (0 = major gaps) */
+  teamingReadiness: number;
+  /** 1–5: pricing / PTW confidence */
+  pricingConfidence: number;
+  /** 1–5: strategic / pipeline value */
+  strategicValue: number;
+  /** Computed sum (6–30) */
+  total: number;
+  /** 0–100 Pwin estimate */
+  pwin: number;
+  recommendation: 'bid' | 'no_bid' | 'conditional';
+  rationale?: string;
+}
+
+export interface CaptureStakeholder {
+  role: string; // e.g. CO, COR, PM, OSDBU
+  name?: string;
+  agency?: string;
+  notes?: string;
+}
+
+export interface PortalReadiness {
+  samActive: boolean;
+  portalIdentified: boolean;
+  credentialsConfirmed: boolean;
+  notes?: string;
+}
+
+export interface CaptureRecord {
+  id: string;
+  /** SAM.gov notice ID or similar external identifier */
+  opportunityId: string;
+  /** Set when a full Proposal is created from this capture record */
+  proposalId?: string;
+  stage: OpportunityStage;
+  solicitationNumber?: string;
+  naicsCodes: string[];
+  pscCodes: string[];
+  setAside?: string;
+  /** Incumbent company name */
+  incumbentName?: string;
+  /** FPDS / USASpending contract number for incumbent */
+  incumbentContractNumber?: string;
+  bidNoBid?: BidNoBidScore;
+  winThemes: string[];
+  /** Incumbent weaknesses to contrast implicitly */
+  ghostingTargets: string[];
+  /** Capability or personnel gaps needing teaming partners */
+  teamingGaps: string[];
+  stakeholders: CaptureStakeholder[];
+  portalReadiness: PortalReadiness;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CalendarEvent {
