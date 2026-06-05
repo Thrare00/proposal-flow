@@ -61,13 +61,31 @@ export const URGENCY_LEVELS: Record<string, UrgencyLevel> = {
 };
 
 export enum ProposalStatus {
-  Intake = 'intake',
+  // Canonical workflow stages (shared/proposalWorkflow.js)
+  Ingestion = 'ingestion',
+  Compliance = 'compliance',
+  Strategy = 'strategy',
   Outline = 'outline',
+  PricingStrategy = 'pricing_strategy',
   Drafting = 'drafting',
-  InternalReview = 'internal_review',
+  RedTeam = 'red_team',
   FinalReview = 'final_review',
-  Submitted = 'submitted'
+  // Terminal
+  Submitted = 'submitted',
+  Closed = 'closed',
+  // Legacy aliases (still appear in stored data)
+  Intake = 'intake',
+  Qualification = 'qualification',
+  PreSolicitation = 'pre_solicitation',
+  Research = 'research',
+  TechnicalCompliance = 'technical_compliance',
+  PricingPackaging = 'pricing_packaging',
+  Review = 'review',
+  GoogleDocsFinal = 'google_docs_final',
+  InternalReview = 'internal_review',
 }
+
+export type ProposalStatusOrNull = ProposalStatus | null;
 
 export interface FileMeta {
   id: string;
