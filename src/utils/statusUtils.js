@@ -31,21 +31,21 @@ const STATUS_NAME_MAP = Object.freeze({
 });
 
 const STATUS_COLOR_MAP = Object.freeze({
-  intake: 'bg-blue-50 text-blue-800',
-  qualification: 'bg-cyan-50 text-cyan-800',
-  pre_solicitation: 'bg-violet-50 text-violet-800',
-  research: 'bg-indigo-50 text-indigo-800',
-  technical_compliance: 'bg-amber-50 text-amber-800',
-  pricing_strategy: 'bg-orange-50 text-orange-800',
-  pricing_packaging: 'bg-orange-50 text-orange-800',
-  drafting: 'bg-fuchsia-50 text-fuchsia-800',
-  review: 'bg-emerald-50 text-emerald-800',
-  google_docs_final: 'bg-green-50 text-green-800',
+  intake: 'bg-blue-100 text-blue-900',
+  qualification: 'bg-cyan-100 text-cyan-900',
+  pre_solicitation: 'bg-violet-100 text-violet-900',
+  research: 'bg-indigo-100 text-indigo-900',
+  technical_compliance: 'bg-amber-100 text-amber-900',
+  pricing_strategy: 'bg-orange-100 text-orange-900',
+  pricing_packaging: 'bg-orange-100 text-orange-900',
+  drafting: 'bg-fuchsia-100 text-fuchsia-900',
+  review: 'bg-emerald-100 text-emerald-900',
+  google_docs_final: 'bg-green-100 text-green-900',
   submitted: 'bg-green-600 text-white',
-  closed: 'bg-gray-100 text-gray-500',
-  outline: 'bg-violet-50 text-violet-800',
-  internal_review: 'bg-emerald-50 text-emerald-800',
-  final_review: 'bg-green-50 text-green-800',
+  closed: 'bg-gray-200 text-gray-700',
+  outline: 'bg-violet-100 text-violet-900',
+  internal_review: 'bg-emerald-100 text-emerald-900',
+  final_review: 'bg-green-100 text-green-900',
 });
 
 const STATUS_BORDER_MAP = Object.freeze({

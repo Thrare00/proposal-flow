@@ -31,35 +31,123 @@ function appendWorkflowStep(proposal, step) {
   proposal.metadata.workflowSteps = proposal.metadata.workflowSteps.slice(0, 100);
 }
 
+// Core service keywords that always apply (independent of businessProfile)
+const CORE_SERVICE_KEYWORDS = [
+  // Primary services
+  { term: 'pressure wash', weight: 15 },
+  { term: 'power wash', weight: 15 },
+  { term: 'softwash', weight: 15 },
+  { term: 'soft wash', weight: 15 },
+  { term: 'janitorial', weight: 15 },
+  { term: 'custodial', weight: 12 },
+  { term: 'cleaning', weight: 10 },
+  { term: 'window clean', weight: 12 },
+  { term: 'landscap', weight: 12 },
+  { term: 'grounds maintenance', weight: 15 },
+  { term: 'lawn', weight: 8 },
+  { term: 'mowing', weight: 10 },
+  { term: 'facility maintenance', weight: 12 },
+  { term: 'facility support', weight: 12 },
+  { term: 'building maintenance', weight: 12 },
+  // Adjacent services
+  { term: 'painting', weight: 8 },
+  { term: 'striping', weight: 6 },
+  { term: 'post-construction', weight: 10 },
+  { term: 'debris removal', weight: 8 },
+  { term: 'trash', weight: 6 },
+  { term: 'waste', weight: 6 },
+  { term: 'sanitation', weight: 8 },
+  { term: 'porter', weight: 8 },
+  { term: 'floor care', weight: 10 },
+  { term: 'carpet clean', weight: 10 },
+  // GovCon signals
+  { term: 'small business', weight: 5 },
+  { term: 'set-aside', weight: 5 },
+  { term: 'sdvosb', weight: 5 },
+  { term: '8(a)', weight: 5 },
+  { term: 'hubzone', weight: 5 },
+];
+
+// Geography bonus
+const GEO_KEYWORDS = [
+  { term: 'georgia', weight: 8 },
+  { term: 'atlanta', weight: 10 },
+  { term: 'fulton', weight: 8 },
+  { term: 'gwinnett', weight: 8 },
+  { term: 'dekalb', weight: 8 },
+  { term: 'cobb', weight: 8 },
+  { term: 'fort stewart', weight: 6 },
+  { term: 'fort benning', weight: 6 },
+  { term: 'fort eisenhower', weight: 6 },
+  { term: 'robins afb', weight: 6 },
+  { term: 'moody afb', weight: 6 },
+];
+
 function scoreOpportunity(opportunity, businessProfile) {
   const text = [
     opportunity.title,
     opportunity.summary,
     opportunity.agency,
-  ].join(' ').toLowerCase();
+    opportunity.description,
+    opportunity.notes,
+  ].filter(Boolean).join(' ').toLowerCase();
 
-  let score = 40;
+  let score = 25; // Lower baseline — earn your score
   const matches = [];
 
+  // Core service keyword matching (highest signal)
+  for (const kw of CORE_SERVICE_KEYWORDS) {
+    if (text.includes(kw.term)) {
+      score += kw.weight;
+      matches.push(`service:${kw.term}`);
+    }
+  }
+
+  // Geography bonus
+  for (const geo of GEO_KEYWORDS) {
+    if (text.includes(geo.term)) {
+      score += geo.weight;
+      matches.push(`geo:${geo.term}`);
+    }
+  }
+
+  // Business profile keywords (configurable)
   for (const keyword of businessProfile.keywords || []) {
     if (text.includes(keyword.toLowerCase())) {
-      score += 8;
+      score += 6;
       matches.push(`keyword:${keyword}`);
     }
   }
 
+  // Target agency match (with common abbreviation expansion)
+  const agencyText = (opportunity.agency || '').toLowerCase();
+  const AGENCY_ALIASES = {
+    'department of defense': ['dept of defense', 'dod', 'dept. of defense', 'dept of the army', 'dept. of the army', 'department of the army', 'micc'],
+    'department of energy': ['dept of energy', 'doe', 'dept. of energy'],
+    'environmental protection agency': ['epa'],
+    'gsa': ['general services administration'],
+    'city of atlanta': ['atlanta'],
+    'department of agriculture': ['usda', 'dept of agriculture', 'forest service', 'ranger station'],
+  };
   for (const agency of businessProfile.targetAgencies || []) {
-    if ((opportunity.agency || '').toLowerCase().includes(agency.toLowerCase())) {
-      score += 10;
+    const lc = agency.toLowerCase();
+    const aliases = AGENCY_ALIASES[lc] || [];
+    const allTerms = [lc, ...aliases];
+    if (allTerms.some((term) => agencyText.includes(term))) {
+      score += 8;
       matches.push(`agency:${agency}`);
     }
   }
 
   const normalizedScore = Math.max(0, Math.min(98, score));
+  const fitDecision = normalizedScore >= 65 ? 'recommended'
+    : normalizedScore >= 45 ? 'review'
+    : 'watch';
+
   return {
     fitScore: normalizedScore,
-    fitDecision: normalizedScore >= 60 ? 'recommended' : 'watch',
-    fitReasons: matches.slice(0, 5),
+    fitDecision,
+    fitReasons: matches.slice(0, 8),
   };
 }
 
@@ -1526,7 +1614,7 @@ export function checkStageAutoAdvance(proposal) {
   if (currentStage === STAGE_SEQUENCE[STAGE_SEQUENCE.length - 1]) return null; // already at final stage
 
   const stageTasks = proposal.tasks.filter((t) => t.stage === currentStage);
-  if (stageTasks.length === 0) return null; // no tasks mapped to this stage — don't auto-advance
+  if (stageTasks.length === 0) return nextStage(currentStage); // no tasks for this stage — pass through
 
   const allCompleted = stageTasks.every((t) => t.completed === true || t.status === 'completed');
   if (!allCompleted) return null;
@@ -1608,6 +1696,52 @@ function shouldCreateCadenceReport(db, kind) {
 function shouldRunMarketResearch(db) {
   const today = new Date().toISOString().slice(0, 10);
   return !db.health.events.some((event) => event.action === 'run_market_research' && event.timestamp?.startsWith(today));
+}
+
+/**
+ * Housekeeping pass — backfill tasks and scoring on proposals that slipped through intake.
+ * Runs every worker tick (15s). Only touches proposals that are missing data.
+ */
+export function runHousekeepingPass() {
+  const db = getDb();
+  const timestamp = nowIso();
+  let seeded = 0;
+  let scored = 0;
+
+  updateDb((workingDb) => {
+    const bp = workingDb.businessProfile || {};
+
+    for (const proposal of workingDb.proposals) {
+      // Backfill task checklist on proposals with no tasks
+      if (!Array.isArray(proposal.tasks) || proposal.tasks.length === 0) {
+        proposal.tasks = [];
+        generateTaskChecklist(proposal, timestamp);
+        appendWorkflowStep(proposal, {
+          stage: proposal.status || 'intake',
+          label: `Housekeeping: task checklist backfilled (${proposal.tasks.length} tasks)`,
+        });
+        seeded++;
+      }
+
+      // Score/re-score proposals not yet scored with v2 algorithm
+      proposal.metadata = proposal.metadata || {};
+      if (proposal.metadata.fitAlgorithm !== 'v2') {
+        const fit = scoreOpportunity(
+          { title: proposal.title, summary: proposal.notes || '', agency: proposal.agency },
+          bp,
+        );
+        proposal.metadata.fitScore = fit.fitScore;
+        proposal.metadata.fitDecision = fit.fitDecision;
+        proposal.metadata.fitReasons = fit.fitReasons;
+        proposal.metadata.fitAlgorithm = 'v2';
+        scored++;
+      }
+    }
+
+    return workingDb;
+  });
+
+  return { seeded, scored };
 }
 
 export function runCadencePass() {

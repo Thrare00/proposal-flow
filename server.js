@@ -12,6 +12,7 @@ import {
   enqueueJobs,
   runCadencePass,
   runWorkerPass,
+  runHousekeepingPass,
   createProposalFromSolicitation,
   findDuplicateProposal,
   checkStageAutoAdvance,
@@ -4194,6 +4195,14 @@ const workerInterval = setInterval(async () => {
 
   const cadenceResult = runCadencePass();
   _loopState.lastCadenceResult = cadenceResult;
+
+  // Backfill tasks + scoring on proposals that slipped through intake
+  try {
+    const hk = runHousekeepingPass();
+    if (hk.seeded > 0 || hk.scored > 0) {
+      console.log(`[housekeeping] seeded=${hk.seeded} scored=${hk.scored}`);
+    }
+  } catch (err) { console.error('[housekeeping]', err.message, err.stack); }
 
   const workerResult = await safeRunWorkerPass();
 
