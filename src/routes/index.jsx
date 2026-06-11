@@ -8,7 +8,6 @@ const Layout = lazy(() => import('../components/Layout'));
 
 // Dashboard & Main Views
 const Dashboard = lazy(() => import('../pages/DashboardFixed'));
-const DashboardOld = lazy(() => import('../pages/Dashboard'));
 const Home = lazy(() => import('../pages/Home'));
 const LandingPage = lazy(() => import('../pages/LandingPage'));
 
@@ -39,6 +38,9 @@ const ProposalsTabs = lazy(() => import('../pages/ProposalsTabs'));
 // Capture Board (pre-solicitation intelligence)
 const CaptureBoardTabs = lazy(() => import('../pages/CaptureBoardTabs'));
 
+// Intake Lanes — score-gated routing view
+const IntakeLanes = lazy(() => import('../pages/IntakeLanes'));
+
 // GovCon Inbox
 const GovConInbox = lazy(() => import('../pages/GovConInbox'));
 
@@ -51,10 +53,6 @@ const Guide = lazy(() => import('../pages/Guide'));
 const GettingStarted = lazy(() => import('../pages/GettingStarted'));
 const ProposalDevelopmentGuide = lazy(() => import('../pages/ProposalDevelopmentGuide'));
 const FederalProposalGuide = lazy(() => import('../pages/FederalProposalGuide'));
-
-// Testing & Debug
-const TestPage = lazy(() => import('../pages/TestPage'));
-const SimpleTest = lazy(() => import('../pages/SimpleTest'));
 
 // Error Pages
 const Error404 = lazy(() => import('../pages/Error404'));
@@ -120,6 +118,12 @@ const routes = [
           { path: ':id', element: React.createElement(LazyComponent, { component: ProposalDetails }) },
           { path: 'edit/:id', element: React.createElement(LazyComponent, { component: ProposalForm }) },
         ],
+      },
+
+      // Intake Lanes — score-gated routing: Active Pursuit / Review Queue / Watchlist / Award Intel / Archive
+      {
+        path: 'intake-lanes',
+        element: React.createElement(LazyComponent, { component: IntakeLanes }),
       },
 
       // Capture Board — pre-solicitation intelligence, bid/no-bid, dossier, compliance, knowledge
@@ -226,25 +230,6 @@ const routes = [
           {
             index: true,
             element: React.createElement(LazyComponent, { component: ProposalDevelopmentGuide }),
-          },
-        ],
-      },
-
-      // Testing & Debug
-      {
-        path: 'test',
-        children: [
-          {
-            index: true,
-            element: React.createElement(LazyComponent, { component: TestPage }),
-          },
-          {
-            path: 'simple',
-            element: React.createElement(LazyComponent, { component: SimpleTest }),
-          },
-          {
-            path: 'dashboard-old',
-            element: React.createElement(LazyComponent, { component: DashboardOld }),
           },
         ],
       },
