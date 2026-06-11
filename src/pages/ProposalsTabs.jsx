@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ProposalList } from './ProposalList.jsx';
-import Guide from './Guide.jsx';
+import ProposalDevelopmentGuide from './ProposalDevelopmentGuide.jsx';
 import { buildApiUrl } from '../lib/runtimeApi.js';
 
 function WorkflowBuilderTab() {
@@ -155,7 +155,7 @@ export default function ProposalsTabs() {
       </div>
       {tab === 'list' && <ProposalList />}
       {tab === 'overview' && <WorkflowBuilderTab />}
-      {tab === 'guide' && <Guide />}
+      {tab === 'guide' && <ProposalDevelopmentGuide />}
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
   DollarSign,
   Inbox,
   Radio,
+  Layers,
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
 import ThemeSlider from './ThemeSlider.jsx';
@@ -19,6 +20,7 @@ import AutomationConsole from './AutomationConsole';
 // Navigation items (relative to router basename)
 const navigationItems = [
   { to: '/dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+  { to: 'intake-lanes', icon: <Layers size={18} />, label: 'Intake Lanes' },
   { to: 'capture', icon: <Target size={18} />, label: 'Capture Board' },
   { to: 'flowboard', icon: <LayoutGrid size={18} />, label: 'Flow Board' },
   { to: 'govcon-inbox', icon: <Inbox size={18} />, label: 'GovCon Inbox' },

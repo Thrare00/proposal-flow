@@ -2,7 +2,7 @@ import { createId, getDb, nowIso, updateDb, appendHealthEvent } from './automati
 import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { appendStatusUpdate, updateTrackerLine } from './morpheus-bridge.js';
-import { normalizeProposal } from '../shared/proposalNormalization.js';
+import { normalizeProposal, deriveIntakeLane } from '../shared/proposalNormalization.js';
 import { buildStageHandoff, validateStageOutputs } from '../shared/proposalWorkflow.js';
 import { executeTwentyExecution } from './twenty-execution.js';
 import { dispatchGmailMessage } from './gmail-dispatch.js';
@@ -1762,6 +1762,16 @@ export function runHousekeepingPass() {
         proposal.metadata.fitReasons = fit.fitReasons;
         proposal.metadata.fitAlgorithm = 'v2';
         scored++;
+      }
+
+      // Backfill intakeLane if not yet set. Hard gates (award/archive) always override.
+      const hardLane = deriveIntakeLane(proposal);
+      if (hardLane === 'award_intel' || hardLane === 'archive') {
+        // Always apply hard gates regardless of existing lane
+        proposal.intakeLane = hardLane;
+      } else if (!proposal.intakeLane && hardLane) {
+        // Only backfill — never overwrite a manually-set lane
+        proposal.intakeLane = hardLane;
       }
     }
 

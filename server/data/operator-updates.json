@@ -1,5 +1,1621 @@
 [
   {
+    "id": "op-809af35c-7fb2-4446-879c-b34a64f420f8",
+    "ts": "2026-06-11T17:07:08.649Z",
+    "hour": "2026-06-11T17",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T17:07:08.635040+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-af897eab-5c8e-4572-b26a-d42f7f38e3b8",
+    "ts": "2026-06-11T16:07:32.015Z",
+    "hour": "2026-06-11T16",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T16:07:32.000697+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-c644a89a-c8c3-48ad-b7a9-d8d48e9396ff",
+    "ts": "2026-06-11T15:07:15.642Z",
+    "hour": "2026-06-11T15",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T15:07:15.627829+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-d9aaf390-6e75-420e-bf47-3a45e065c9fc",
+    "ts": "2026-06-11T14:07:12.063Z",
+    "hour": "2026-06-11T14",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T14:07:12.047493+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-db5b3ef4-bd6f-46b9-ae72-d73be4a4e2c5",
+    "ts": "2026-06-11T13:34:02.715Z",
+    "hour": "2026-06-11T13",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T13:34:02.480293+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-c94325a2-80b7-4887-94ee-7849cafeba59",
+    "ts": "2026-06-11T00:00:10.564Z",
+    "hour": "2026-06-11T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-9ba08135-004e-429c-be90-a00db4be2e64",
+    "ts": "2026-06-10T21:07:11.076Z",
+    "hour": "2026-06-10T21",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T21:07:11.063135+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-587fdcba-a373-4619-84dc-b607ed58656c",
+    "ts": "2026-06-10T21:05:33.017Z",
+    "hour": "2026-06-10T21",
+    "done": [
+      "[run_stage] Proposal stage updated to pre-solicitation (handoff: clean)"
+    ],
+    "queued": [],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-012b052e-fde5-412d-bb90-fef9448354cb",
+    "ts": "2026-06-10T20:07:07.673Z",
+    "hour": "2026-06-10T20",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T20:07:07.659434+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-3bc148e9-0665-4a42-8209-690f3524dbf0",
+    "ts": "2026-06-10T19:07:08.862Z",
+    "hour": "2026-06-10T19",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T19:07:08.847616+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-4637568d-c67c-4b7b-8e5b-063748e7384b",
+    "ts": "2026-06-10T18:07:09.362Z",
+    "hour": "2026-06-10T18",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T18:07:09.346256+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-c12f0b59-9837-4c77-a502-d20a0cdf7676",
+    "ts": "2026-06-10T17:07:09.075Z",
+    "hour": "2026-06-10T17",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T17:07:09.059944+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-bbbad5a6-10e1-41b4-9609-c12daa890dc7",
+    "ts": "2026-06-10T16:07:33.426Z",
+    "hour": "2026-06-10T16",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T16:07:33.412090+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-a694507a-cfd5-4a69-ac03-0ee197a35f5b",
+    "ts": "2026-06-10T15:07:24.672Z",
+    "hour": "2026-06-10T15",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T15:07:24.657563+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-a8dd627f-7c4c-4861-967a-27746aa02831",
+    "ts": "2026-06-10T14:07:13.456Z",
+    "hour": "2026-06-10T14",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T14:07:13.440860+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-6cb92125-7627-408f-bd36-6179d0d4c960",
+    "ts": "2026-06-10T13:07:09.448Z",
+    "hour": "2026-06-10T13",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (6 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-011: RingCentral payment method"
+      },
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-10T13:07:09.288101+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-29ca6e9b-4582-4e02-8738-6c8f5089c383",
+    "ts": "2026-06-10T04:00:16.037Z",
+    "hour": "2026-06-10T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-1ae99f4b-ec5b-49b2-b1aa-6e93c2452d73",
+    "ts": "2026-06-09T21:07:07.728Z",
+    "hour": "2026-06-09T21",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE at EOD)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T21:07:07.711197+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-a92dc6ff-9529-4851-80df-d6a81fdce85b",
+    "ts": "2026-06-09T20:07:15.757Z",
+    "hour": "2026-06-09T20",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T20:07:15.742540+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-f8e156c7-b102-4264-82a2-fac35a5d3038",
+    "ts": "2026-06-09T19:07:16.808Z",
+    "hour": "2026-06-09T19",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T19:07:16.793149+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-27826b25-f896-4387-a8e1-c0130e1f130e",
+    "ts": "2026-06-09T18:07:08.071Z",
+    "hour": "2026-06-09T18",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T18:07:08.055470+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-9ce9510e-5774-4e14-8f59-e44c9f228a0f",
+    "ts": "2026-06-09T17:07:18.628Z",
+    "hour": "2026-06-09T17",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T17:07:18.611947+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-1edfd26d-5914-469a-acf3-bc2d2bb1c45f",
+    "ts": "2026-06-09T16:09:48.355Z",
+    "hour": "2026-06-09T16",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T16:09:48.340573+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-7da40f22-f502-4479-a4a1-5f5fc0a4a716",
+    "ts": "2026-06-09T15:07:07.052Z",
+    "hour": "2026-06-09T15",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T15:07:07.036619+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-a07d236d-efed-4f55-a505-123786623df0",
+    "ts": "2026-06-09T14:07:09.155Z",
+    "hour": "2026-06-09T14",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T14:07:09.140089+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-4c946a1c-6bc2-4d38-b46b-b695ad3152c4",
+    "ts": "2026-06-09T13:07:07.705Z",
+    "hour": "2026-06-09T13",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (5 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-09T13:07:07.673511+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-af90d4f2-0172-4664-a66d-38451088b56a",
+    "ts": "2026-06-09T00:00:07.749Z",
+    "hour": "2026-06-09T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-22685704-ca17-4811-bc21-17aa8def8865",
+    "ts": "2026-06-08T21:07:13.342Z",
+    "hour": "2026-06-08T21",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "CloudNSite sales-role posting",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T21:07:13.326712+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-cb903dc9-1276-4c68-a49f-1476aa5f7a51",
+    "ts": "2026-06-08T20:07:09.700Z",
+    "hour": "2026-06-08T20",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T20:07:09.682303+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-776fa3f9-13b5-46cf-ab29-ecedf86c79f3",
+    "ts": "2026-06-08T19:07:20.237Z",
+    "hour": "2026-06-08T19",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T19:07:20.221168+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-ce629022-68a0-40d5-9e51-44bcf6d158cb",
+    "ts": "2026-06-08T18:07:08.468Z",
+    "hour": "2026-06-08T18",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T18:07:08.452584+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-c3324936-d606-4046-9bdf-0579bda9dace",
+    "ts": "2026-06-08T17:07:22.553Z",
+    "hour": "2026-06-08T17",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T17:07:22.338089+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-64472492-bda0-4d8e-aa4b-d1f4f1bd837c",
+    "ts": "2026-06-08T16:09:49.846Z",
+    "hour": "2026-06-08T16",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T16:09:49.831509+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-d3ee724e-4419-4fa2-87da-73a41c44f745",
+    "ts": "2026-06-08T15:07:14.994Z",
+    "hour": "2026-06-08T15",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T15:07:14.979675+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-cead5dbb-a3c1-4267-bd87-df540734a14b",
+    "ts": "2026-06-08T14:09:05.243Z",
+    "hour": "2026-06-08T14",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T14:09:05.227880+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-b8c5145c-26b7-4d4a-9657-77f4538090b7",
+    "ts": "2026-06-08T13:07:10.276Z",
+    "hour": "2026-06-08T13",
+    "done": [
+      "GDOT vendor association: APPROVED 2026-05-29",
+      "GDOT prequalification App #2269: SUBMITTED 2026-05-30",
+      "GDOT Form 478 package: FILLED outputs produced 2026-05-31 00:46 EDT in Downloads (GDOT-Form478-RareEarth-FILLED.pdf, GDOT-Form478-RareEarth-FILLED.docx); remaining human-signature/notary/date fields still open.",
+      "Cherokee County Schools Bonfire: COI uploaded by Eric 2026-05-29. Gate closed.",
+      "BidNet RFP 26-008 City of Fairburn (Retention Ponds): EXCLUDED"
+    ],
+    "queued": [
+      "BidNet B-2622LM: 2026-06-08",
+      "Pierce invoice due date: 2026-06-04 (4 DAYS PAST DUE)",
+      "GDOT App #2271 submission lane",
+      "MBDA Rural Business Center grant: 2026-06-29",
+      "Bonfire/BidNet Georgia B-2622LM pressure washing",
+      "Pierce Prescott $10K invoice",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "GDOT Form 478 package"
+      },
+      {
+        "text": "RingCentral billing"
+      },
+      {
+        "text": "BLKR-011: RingCentral payment method update"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-08T13:07:10.259741+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-32a2b77d-311c-4c0f-8fc1-823b6441c8a1",
+    "ts": "2026-06-08T12:30:47.178Z",
+    "hour": "2026-06-08T12",
+    "done": [
+      "[run_stage] Proposal stage updated to pre-solicitation (handoff: clean)"
+    ],
+    "queued": [],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-4cd9cfe7-91a2-404f-a46a-2f370ee4f30b",
+    "ts": "2026-06-08T09:50:11.990Z",
+    "hour": "2026-06-08T09",
+    "done": [
+      "[run_stage] Proposal stage updated to pre-solicitation (handoff: clean)"
+    ],
+    "queued": [],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-d65e2fd1-2922-4744-b9c6-3fd3a0944efa",
+    "ts": "2026-06-08T05:01:09.061Z",
+    "hour": "2026-06-08T05",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-2a56e9c7-3b48-4791-82d4-96185960dc65",
+    "ts": "2026-06-06T00:00:10.994Z",
+    "hour": "2026-06-06T00",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
     "id": "op-a8e39f40-b7d7-4513-95bf-96bfc4c15bac",
     "ts": "2026-06-05T07:46:33.493Z",
     "hour": "2026-06-05T07",

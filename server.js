@@ -44,7 +44,7 @@ async function safeRunWorkerPass() {
     return { done: [], failed: [{ action: 'worker_pass', error: error.message }] };
   }
 }
-import { normalizeProposal } from './shared/proposalNormalization.js';
+import { normalizeProposal, deriveIntakeLane, INTAKE_LANES } from './shared/proposalNormalization.js';
 import {
   getAttachmentAbsolutePath,
   getAttachmentContentType,
@@ -541,6 +541,68 @@ app.get(apiPath('/health'), (req, res) => {
 app.get(apiPath('/proposals'), (req, res) => {
   const db = getDb();
   res.json(db.proposals.map(sanitizeProposal));
+});
+
+// ─── Intake lanes view — proposals bucketed by intakeLane ────────────────────
+// Returns { lanes: { active_pursuit: [...], review_queue: [...], ... }, counts: {...} }
+app.get(apiPath('/proposals/by-lane'), (req, res) => {
+  const db = getDb();
+  const buckets = Object.fromEntries(INTAKE_LANES.map((l) => [l, []]));
+  buckets.unclassified = [];
+
+  for (const p of db.proposals) {
+    const sp = sanitizeProposal(p);
+    const lane = INTAKE_LANES.includes(p.intakeLane) ? p.intakeLane : (deriveIntakeLane(p) ?? null);
+    if (lane) {
+      buckets[lane].push(sp);
+    } else {
+      buckets.unclassified.push(sp);
+    }
+  }
+
+  const counts = Object.fromEntries(
+    Object.entries(buckets).map(([k, v]) => [k, v.length])
+  );
+  res.json({ lanes: buckets, counts });
+});
+
+// ─── Update a proposal's intake lane ────────────────────────────────────────
+app.patch(apiPath('/proposals/:id/lane'), (req, res) => {
+  const { id } = req.params;
+  const { intakeLane } = req.body || {};
+  if (!INTAKE_LANES.includes(intakeLane)) {
+    return res.status(400).json({ ok: false, error: `intakeLane must be one of: ${INTAKE_LANES.join(', ')}` });
+  }
+  let updated = null;
+  updateDb((db) => {
+    const p = db.proposals.find((item) => item.id === id);
+    if (!p) return db;
+    p.intakeLane = intakeLane;
+    p.updatedAt = nowIso();
+    updated = sanitizeProposal(p);
+    return db;
+  });
+  if (!updated) return res.status(404).json({ ok: false, error: 'Proposal not found' });
+  res.json(updated);
+});
+
+// ─── Bulk archive — move award intel + expired to archive lane ───────────────
+app.post(apiPath('/proposals/bulk-archive'), (req, res) => {
+  const archived = [];
+  updateDb((db) => {
+    const ts = nowIso();
+    for (const p of db.proposals) {
+      if (p.intakeLane === 'archive') continue; // already archived
+      const derivedLane = deriveIntakeLane(p);
+      if (derivedLane === 'archive' || derivedLane === 'award_intel') {
+        p.intakeLane = derivedLane;
+        p.updatedAt = ts;
+        archived.push(p.id);
+      }
+    }
+    return db;
+  });
+  res.json({ ok: true, archived: archived.length, ids: archived });
 });
 
 // ─── Prune scan  - must be before :id route ──────────────────────────────────

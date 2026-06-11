@@ -30,7 +30,6 @@ const CadenceSettings = lazy(() => import('../pages/CadenceSettings'));
 const Directories = lazy(() => import('../pages/Directories'));
 const SystemHealth = lazy(() => import('../pages/SystemHealth'));
 const SettingsTabs = lazy(() => import('../pages/SettingsTabs'));
-const CeoActions = lazy(() => import('../pages/CeoActions'));
 const CeoActionsTabs = lazy(() => import('../pages/CeoActionsTabs'));
 const FlowBoardTabs = lazy(() => import('../pages/FlowBoardTabs'));
 const ProposalsTabs = lazy(() => import('../pages/ProposalsTabs'));
@@ -49,7 +48,6 @@ const OperatorUpdates = lazy(() => import('../pages/OperatorUpdates'));
 
 // Guides & Help
 const AIAgentGuide = lazy(() => import('../pages/AIAgentGuide'));
-const Guide = lazy(() => import('../pages/Guide'));
 const GettingStarted = lazy(() => import('../pages/GettingStarted'));
 const ProposalDevelopmentGuide = lazy(() => import('../pages/ProposalDevelopmentGuide'));
 const FederalProposalGuide = lazy(() => import('../pages/FederalProposalGuide'));
