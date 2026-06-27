@@ -945,7 +945,7 @@ app.patch(apiPath('/proposals/:id'), (req, res) => {
           payload: {
             proposalId: updatedProposal.id,
             opportunityId: twentyOppId,
-            opportunityUpdate: { stage: twentyStage },
+            update: { stage: twentyStage },
             notes: [{
               title: `Stage auto-advanced to ${updatedProposal.status}`,
               body: `All tasks for the previous stage were completed. Proposal automatically advanced to **${updatedProposal.status}**.`,
@@ -1210,7 +1210,7 @@ app.post(apiPath('/proposals/:id/compliance-matrix'), async (req, res) => {
       }).filter(Boolean)
     );
     const dirMatchesProposal = (dir) => {
-      if (proposalFileIds.size === 0) return true; // no file IDs extracted — allow all (safe fallback)
+      if (proposalFileIds.size === 0) return false; // no file IDs — skip all opp dirs to prevent cross-contamination
       return [...proposalFileIds].some(fid => dir.toLowerCase().includes(fid));
     };
 
@@ -4293,6 +4293,8 @@ const server = app.listen(PORT, HOST, () => {
   App:         http://localhost:${PORT}${BASE_PATH}
   API:         http://localhost:${PORT}${apiPath()}
   Automation:  http://localhost:${PORT}${apiPath('/automation')}?fn=getHealth
+  CRM Bridge:  http://localhost:${PORT}${apiPath('/crm')}/status
+  Twenty CRM:  ${isTwentyConfigured() ? 'configured' : 'NOT configured (TWENTY_API_TOKEN missing)'}
   LLM:         ${getLlmStatus()}
   ==============================
   `);
