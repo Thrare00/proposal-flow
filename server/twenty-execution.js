@@ -47,7 +47,10 @@ function buildNoteTitle(note) {
 
 function normalizeOpportunityUpdate(input, errors) {
   const update = input.update && typeof input.update === 'object' ? input.update : {};
-  const merged = { ...update };
+  const opportunityUpdate = input.opportunityUpdate && typeof input.opportunityUpdate === 'object'
+    ? input.opportunityUpdate
+    : {};
+  const merged = { ...opportunityUpdate, ...update };
 
   for (const field of OPPORTUNITY_UPDATE_FIELDS) {
     if (input[field] !== undefined && merged[field] === undefined) {

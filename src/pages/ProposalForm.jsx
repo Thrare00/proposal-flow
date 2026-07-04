@@ -6,15 +6,15 @@ import { normalizeProposalType } from '../../shared/proposalNormalization.js';
 import { PURSUIT_POSTURES, getRecommendedWindows } from '../lib/pursuitTiming.js';
 
 // Confirmation Dialog Component
-const ConfirmationDialog = ({ 
-  isOpen, 
-  onConfirm, 
-  onCancel, 
-  title, 
-  message, 
-  confirmText = 'Confirm', 
+const ConfirmationDialog = ({
+  isOpen,
+  onConfirm,
+  onCancel,
+  title,
+  message,
+  confirmText = 'Confirm',
   cancelText = 'Cancel',
-  variant = 'default' 
+  variant = 'default',
 }) => {
   const dialogRef = useRef(null);
   const confirmButtonRef = useRef(null);
@@ -42,19 +42,19 @@ const ConfirmationDialog = ({
   const variantClasses = {
     default: 'bg-blue-600 hover:bg-blue-700',
     danger: 'bg-red-600 hover:bg-red-700',
-    warning: 'bg-yellow-600 hover:bg-yellow-700'
+    warning: 'bg-yellow-600 hover:bg-yellow-700',
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="dialog-title"
     >
-      <div 
+      <div
         ref={dialogRef}
-        className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+        className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-slate-900"
         onKeyDown={(e) => e.stopPropagation()}
       >
         <div className="flex items-start">
@@ -64,11 +64,11 @@ const ConfirmationDialog = ({
             <AlertTriangle className={`h-6 w-6 ${variant === 'danger' ? 'text-red-600' : 'text-blue-600'}`} aria-hidden="true" />
           </div>
           <div className="ml-4">
-            <h3 id="dialog-title" className="text-lg font-medium text-gray-900">
+            <h3 id="dialog-title" className="text-lg font-medium text-slate-900 dark:text-slate-100">
               {title}
             </h3>
             <div className="mt-2">
-              <p className="text-sm text-gray-600">{message}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">{message}</p>
             </div>
           </div>
         </div>
@@ -77,14 +77,14 @@ const ConfirmationDialog = ({
             type="button"
             ref={confirmButtonRef}
             onClick={onConfirm}
-            className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white ${variantClasses[variant] || variantClasses.default} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm`}
+            className={`inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm ${variantClasses[variant] || variantClasses.default}`}
           >
             {confirmText}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+            className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 sm:col-start-1 sm:mt-0 sm:text-sm"
           >
             {cancelText}
           </button>
@@ -319,23 +319,23 @@ const ProposalForm = () => {
         </Link>
       </div>
       
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-800">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white/95 shadow backdrop-blur dark:border-slate-700 dark:bg-slate-900/95">
+        <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
+          <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-100">
             {isEditing ? 'Edit Proposal' : 'New Proposal'}
           </h2>
         </div>
         
         <form onSubmit={handleSubmit} className="p-6" noValidate>
           {errors.form && (
-            <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md" role="alert">
+            <div className="mb-4 rounded-md bg-red-50 p-4 text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
               {errors.form}
             </div>
           )}
           
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="title" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -344,8 +344,8 @@ const ProposalForm = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm ${
-                  errors.title ? 'border-red-300' : ''
+                className={`mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 ${
+                  errors.title ? 'border-red-300 dark:border-red-500' : ''
                 }`}
                 aria-invalid={!!errors.title}
                 aria-describedby={errors.title ? 'title-error' : undefined}
@@ -359,7 +359,7 @@ const ProposalForm = () => {
             </div>
             
             <div>
-              <label htmlFor="agency" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="agency" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Agency <span className="text-red-500">*</span>
               </label>
               <input
@@ -368,8 +368,8 @@ const ProposalForm = () => {
                 name="agency"
                 value={formData.agency}
                 onChange={handleChange}
-                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm ${
-                  errors.agency ? 'border-red-300' : ''
+                className={`mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 ${
+                  errors.agency ? 'border-red-300 dark:border-red-500' : ''
                 }`}
                 aria-invalid={!!errors.agency}
                 aria-describedby={errors.agency ? 'agency-error' : undefined}
@@ -383,7 +383,7 @@ const ProposalForm = () => {
             </div>
             
             <div>
-              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="dueDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Due Date <span className="text-red-500">*</span>
               </label>
               <input
@@ -393,8 +393,8 @@ const ProposalForm = () => {
                 value={formData.dueDate}
                 onChange={handleChange}
                 min={new Date().toISOString().split('T')[0]}
-                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm ${
-                  errors.dueDate ? 'border-red-300' : ''
+                className={`mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 ${
+                  errors.dueDate ? 'border-red-300 dark:border-red-500' : ''
                 }`}
                 aria-invalid={!!errors.dueDate}
                 aria-describedby={errors.dueDate ? 'duedate-error' : undefined}
@@ -408,7 +408,7 @@ const ProposalForm = () => {
             </div>
             
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="status" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Status
               </label>
               <select
@@ -416,7 +416,7 @@ const ProposalForm = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
                 aria-label="Select proposal status"
               >
                 <option value="intake">Intake</option>
@@ -433,7 +433,7 @@ const ProposalForm = () => {
             </div>
             
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="type" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Type
               </label>
               <select
@@ -441,7 +441,7 @@ const ProposalForm = () => {
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
                 aria-label="Select proposal type"
               >
                 <option value="federal">Federal</option>
@@ -451,7 +451,7 @@ const ProposalForm = () => {
             </div>
 
             <div>
-              <label htmlFor="pursuitPosture" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="pursuitPosture" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Pursuit Posture
               </label>
               <select
@@ -459,7 +459,7 @@ const ProposalForm = () => {
                 name="pursuitPosture"
                 value={formData.pursuitPosture}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
               >
                 {PURSUIT_POSTURES.map((posture) => (
                   <option key={posture.value} value={posture.value}>{posture.label}</option>
@@ -468,45 +468,45 @@ const ProposalForm = () => {
             </div>
 
             <div>
-              <label htmlFor="intentToBidDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="intentToBidDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Intent to Bid Date
               </label>
-              <input type="date" id="intentToBidDate" name="intentToBidDate" value={formData.intentToBidDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+              <input type="date" id="intentToBidDate" name="intentToBidDate" value={formData.intentToBidDate} onChange={handleChange} className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" />
             </div>
 
             <div>
-              <label htmlFor="teamingStartDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="teamingStartDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Planned Teaming Start
               </label>
-              <input type="date" id="teamingStartDate" name="teamingStartDate" value={formData.teamingStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+              <input type="date" id="teamingStartDate" name="teamingStartDate" value={formData.teamingStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" />
             </div>
 
             <div>
-              <label htmlFor="primeOutreachStartDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="primeOutreachStartDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Prime Outreach Start
               </label>
-              <input type="date" id="primeOutreachStartDate" name="primeOutreachStartDate" value={formData.primeOutreachStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+              <input type="date" id="primeOutreachStartDate" name="primeOutreachStartDate" value={formData.primeOutreachStartDate} onChange={handleChange} className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" />
             </div>
 
             <div>
-              <label htmlFor="primeOutreachEndDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="primeOutreachEndDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Prime Outreach End
               </label>
-              <input type="date" id="primeOutreachEndDate" name="primeOutreachEndDate" value={formData.primeOutreachEndDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" />
+              <input type="date" id="primeOutreachEndDate" name="primeOutreachEndDate" value={formData.primeOutreachEndDate} onChange={handleChange} className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" />
             </div>
             
             <div className="sm:col-span-2">
-              <label htmlFor="solicitationUrl" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="solicitationUrl" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Fetch Solicitation from URL
               </label>
-              <p className="text-xs text-gray-500 mb-1">Paste a SAM.gov, beta.sam.gov, or other solicitation URL to auto-import text</p>
+              <p className="mb-1 text-xs text-slate-500 dark:text-slate-400">Paste a SAM.gov, beta.sam.gov, or other solicitation URL to auto-import text</p>
               <div className="flex gap-2 mt-1">
                 <input
                   type="url"
                   id="solicitationUrl"
                   value={solicitationUrl}
                   onChange={(e) => setSolicitationUrl(e.target.value)}
-                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                  className="flex-1 rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
                   placeholder="https://sam.gov/opp/..."
                 />
                 <button
@@ -531,7 +531,7 @@ const ProposalForm = () => {
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="notes" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Notes
               </label>
               <textarea
@@ -540,7 +540,7 @@ const ProposalForm = () => {
                 rows={4}
                 value={formData.notes}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border border-slate-300 bg-white text-slate-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
                 placeholder="Add any additional notes or details about this proposal..."
                 aria-label="Proposal notes"
               />
@@ -575,7 +575,7 @@ const ProposalForm = () => {
                     navigate(isEditing ? `/proposals/${id}` : '/dashboard');
                   }
                 }}
-                className="inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
               >
                 <X size={16} className="mr-2" />
                 Cancel
@@ -634,14 +634,14 @@ const ProposalForm = () => {
       
       {/* Unsaved Changes Prompt */}
       {formIsDirty && (
-        <div className="fixed bottom-0 left-0 right-0 bg-yellow-50 border-t border-yellow-200 p-4 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-yellow-200 bg-yellow-50 p-4 shadow-lg dark:border-yellow-900/40 dark:bg-yellow-950/40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
               <div className="flex-1 flex items-center">
                 <div className="flex-shrink-0 pt-0.5">
                   <AlertTriangle className="h-5 w-5 text-yellow-400" aria-hidden="true" />
                 </div>
-                <p className="ml-3 text-sm text-yellow-700">
+                <p className="ml-3 text-sm text-yellow-700 dark:text-yellow-200">
                   <span>You have unsaved changes.</span>
                 </p>
               </div>
@@ -652,14 +652,14 @@ const ProposalForm = () => {
                     setFormData(JSON.parse(initialFormData.current));
                     setFormIsDirty(false);
                   }}
-                  className="mr-3 text-sm font-medium text-yellow-700 hover:text-yellow-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  className="mr-3 text-sm font-medium text-yellow-700 hover:text-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 dark:text-yellow-200 dark:hover:text-yellow-100"
                 >
                   Discard Changes
                 </button>
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  className="rounded-md border border-transparent bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                 >
                   Save Changes
                 </button>

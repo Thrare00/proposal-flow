@@ -40,6 +40,8 @@ export const OBJECTION_TYPES = [
   'other',
 ];
 
+// Growth-layer internal temps (used for urgency modeling).
+// Canonical CRM relationship temps are in shared/crm-constants.js: cold, warm, active, trusted
 export const RELATIONSHIP_TEMPS = ['cold', 'warm', 'hot', 'compounding', 'dormant'];
 
 export const ASK_TYPES = [

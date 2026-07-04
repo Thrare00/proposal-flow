@@ -332,7 +332,7 @@ const Reminders = () => {
       if (!proposal || !proposal.tasks) return [];
       
       return proposal.tasks
-        .filter(task => task && !task.completed)
+        .filter(task => task && !task.completed && (task.owner || '').toLowerCase() !== 'morpheus')
         .map(task => {
           const dueDate = task.dueDate || task.due_date;
           const due = dueDate ? new Date(dueDate) : null;

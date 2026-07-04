@@ -3,6 +3,85 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import LoadingSpinner from '../components/ui/loading-spinner';
 
+// Shared with src/main.jsx's top-level ErrorBoundary — same key/regex so only ONE
+// auto-reload is ever attempted per session, no matter which boundary catches the error.
+const CHUNK_ERROR_REGEX = /Loading chunk|dynamically imported module|Failed to fetch/i;
+const CHUNK_RELOAD_KEY = 'pf_chunk_reload_attempted';
+
+function isChunkLoadError(error) {
+  return CHUNK_ERROR_REGEX.test(error?.message || '');
+}
+
+function hasAlreadyAttemptedReload() {
+  try {
+    return sessionStorage.getItem(CHUNK_RELOAD_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markReloadAttempted() {
+  try {
+    sessionStorage.setItem(CHUNK_RELOAD_KEY, '1');
+  } catch {
+    // sessionStorage unavailable (private mode, etc.) — fall through to fallback UI
+  }
+}
+
+// Route-level error boundary: catches lazy/chunk-load failures for a single route
+// so one stale/missing chunk doesn't take down the whole app shell. On a recognized
+// chunk-load error it reloads the page ONCE (session-guarded); otherwise it renders
+// a small branded fallback.
+class RouteErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[route] Error caught by RouteErrorBoundary:', error, errorInfo);
+
+    if (isChunkLoadError(error) && !hasAlreadyAttemptedReload()) {
+      markReloadAttempted();
+      window.location.reload();
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return React.createElement(
+        'div',
+        { className: 'flex flex-col items-center justify-center min-h-screen gap-4 text-center px-4' },
+        React.createElement(
+          'h2',
+          { className: 'text-xl font-semibold text-gray-800' },
+          'Something went wrong'
+        ),
+        React.createElement(
+          'p',
+          { className: 'text-gray-500 max-w-sm' },
+          isChunkLoadError(this.state.error)
+            ? 'A newer version of Proposal Flow may be available.'
+            : 'This page failed to load.'
+        ),
+        React.createElement(
+          'button',
+          {
+            onClick: () => window.location.reload(),
+            className: 'px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors',
+          },
+          'Reload'
+        )
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // Lazy load page components
 const Layout = lazy(() => import('../components/Layout'));
 
@@ -17,7 +96,6 @@ const ProposalForm = lazy(() => import('../pages/ProposalForm'));
 const ProposalList = lazy(() => import('../pages/ProposalList'));
 
 // Tools & Features
-const Calendar = lazy(() => import('../pages/Calendar'));
 const Reminders = lazy(() => import('../pages/Reminders'));
 const FlowBoard = lazy(() => import('../pages/FlowBoard'));
 const Reports = lazy(() => import('../pages/Reports'));
@@ -30,21 +108,17 @@ const CadenceSettings = lazy(() => import('../pages/CadenceSettings'));
 const Directories = lazy(() => import('../pages/Directories'));
 const SystemHealth = lazy(() => import('../pages/SystemHealth'));
 const SettingsTabs = lazy(() => import('../pages/SettingsTabs'));
-const CeoActionsTabs = lazy(() => import('../pages/CeoActionsTabs'));
 const FlowBoardTabs = lazy(() => import('../pages/FlowBoardTabs'));
 const ProposalsTabs = lazy(() => import('../pages/ProposalsTabs'));
 
 // Capture Board (pre-solicitation intelligence)
 const CaptureBoardTabs = lazy(() => import('../pages/CaptureBoardTabs'));
 
-// Intake Lanes — score-gated routing view
-const IntakeLanes = lazy(() => import('../pages/IntakeLanes'));
-
 // GovCon Inbox
 const GovConInbox = lazy(() => import('../pages/GovConInbox'));
 
-// Operator Updates
-const OperatorUpdates = lazy(() => import('../pages/OperatorUpdates'));
+// Past Performance Library
+const PastPerformanceLibrary = lazy(() => import('../pages/PastPerformanceLibrary'));
 
 // Guides & Help
 const AIAgentGuide = lazy(() => import('../pages/AIAgentGuide'));
@@ -62,12 +136,18 @@ const Loading = () => {
   );
 };
 
-// Wrapper component for lazy loading
+// Wrapper component for lazy loading — guarded by RouteErrorBoundary so a chunk-load
+// failure (e.g. a stale route chunk 404ing after a redeploy) is caught instead of
+// surfacing as an unhandled promise rejection.
 const LazyComponent = ({ component: Component }) => {
   return React.createElement(
-    Suspense,
-    { fallback: React.createElement(Loading) },
-    React.createElement(Component)
+    RouteErrorBoundary,
+    null,
+    React.createElement(
+      Suspense,
+      { fallback: React.createElement(Loading) },
+      React.createElement(Component)
+    )
   );
 };
 
@@ -118,10 +198,12 @@ const routes = [
         ],
       },
 
-      // Intake Lanes — score-gated routing: Active Pursuit / Review Queue / Watchlist / Award Intel / Archive
+      // Intake Lanes — retired; absorbed into the Capture Board funnel.
+      // Redirect old links to /capture. (IntakeLanes.jsx page file kept on disk but no
+      // longer imported/lazy-loaded from here — nothing renders it.)
       {
         path: 'intake-lanes',
-        element: React.createElement(LazyComponent, { component: IntakeLanes }),
+        element: React.createElement(Navigate, { to: '/capture', replace: true }),
       },
 
       // Capture Board — pre-solicitation intelligence, bid/no-bid, dossier, compliance, knowledge
@@ -130,11 +212,13 @@ const routes = [
         element: React.createElement(LazyComponent, { component: CaptureBoardTabs }),
       },
 
-      // Tools & Features
+      // Calendar — retired; owner uses an external calendar API instead of an in-app page.
       {
         path: 'calendar',
-        element: React.createElement(LazyComponent, { component: Calendar }),
+        element: React.createElement(Navigate, { to: '/dashboard', replace: true }),
       },
+
+      // Tools & Features
       {
         path: 'reminders',
         element: React.createElement(LazyComponent, { component: Reminders }),
@@ -170,10 +254,16 @@ const routes = [
         element: React.createElement(LazyComponent, { component: GovConInbox }),
       },
 
-      // Operator Updates (hourly cadence)
+      // Operator Updates — retired; content relocated to Discord notifications.
       {
         path: 'operator-updates',
-        element: React.createElement(LazyComponent, { component: OperatorUpdates }),
+        element: React.createElement(Navigate, { to: '/dashboard', replace: true }),
+      },
+
+      // Past Performance Library
+      {
+        path: 'past-performance',
+        element: React.createElement(LazyComponent, { component: PastPerformanceLibrary }),
       },
 
       // Top-level utility pages
@@ -181,9 +271,10 @@ const routes = [
         path: 'directories',
         element: React.createElement(LazyComponent, { component: Directories }),
       },
+      // CEO Actions ("Command Center") — retired; notifications moved to Discord.
       {
         path: 'ceo-actions',
-        element: React.createElement(LazyComponent, { component: CeoActionsTabs }),
+        element: React.createElement(Navigate, { to: '/dashboard', replace: true }),
       },
 
       // Settings & Configuration

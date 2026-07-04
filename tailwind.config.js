@@ -74,10 +74,26 @@ module.exports = {
           900: '#881337',
           950: '#4C0519',
         },
+        // Rare Earth brand tokens
+        rare: {
+          crimson: '#CC1111',
+          'crimson-dark': '#8F0C0C',
+          lime: '#6ABF1E',
+          'lime-dark': '#4B8A15',
+          ink: '#1A1A1A',
+          dark: '#111111',
+          cream: '#FAF8F5',
+          gray: '#6B6B6B',
+          'gray-light': '#E8E6E3',
+          white: '#FFFFFF',
+          gold: '#D4A84B',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         serif: ['Merriweather', 'serif'],
+        'rare-serif': ['"Bookman Old Style"', 'Georgia', 'serif'],
+        'rare-sans': ['"Century Gothic"', '"Avenir Next"', '"Trebuchet MS"', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

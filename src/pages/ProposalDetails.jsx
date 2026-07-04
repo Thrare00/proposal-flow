@@ -158,10 +158,10 @@ const ProposalDetails = () => {
 
   // Utility: return an icon for a given MIME type/extension
   const getFileIcon = (fileType) => {
-    if (!fileType) return <File className="h-5 w-5 text-gray-400" />;
+    if (!fileType) return <File className="h-5 w-5 text-slate-400 dark:text-slate-500" />;
     const type = fileType.split('/')[0];
     const extension = fileType.split('/').pop();
-    const iconProps = { className: 'h-5 w-5 text-gray-400' };
+    const iconProps = { className: 'h-5 w-5 text-slate-400 dark:text-slate-500' };
     switch (type) {
       case 'image':
         return <FileImage {...iconProps} />;
@@ -370,9 +370,9 @@ const ProposalDetails = () => {
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{proposal.title}</h1>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{proposal.title}</h1>
               {proposal.referenceNumber && (
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Ref: {proposal.referenceNumber}
                 </p>
               )}
@@ -412,18 +412,18 @@ const ProposalDetails = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Agency/Client</h3>
+              <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">Agency/Client</h3>
               <div className="flex items-center">
-                <Building size={18} className="text-gray-400 mr-2" />
-                <p className="text-gray-900">{proposal.agency || 'Not specified'}</p>
+                <Building size={18} className="mr-2 text-slate-400 dark:text-slate-500" />
+                <p className="text-slate-900 dark:text-slate-100">{proposal.agency || 'Not specified'}</p>
               </div>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Due Date</h3>
+              <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">Due Date</h3>
               <div className="flex items-center">
-                <Clock size={18} className={`mr-2 ${isProposalOverdue ? 'text-error-500' : 'text-gray-400'}`} />
-                <p className={`${isProposalOverdue ? 'text-error-600 font-medium' : 'text-gray-900'}`}>
+                <Clock size={18} className={`mr-2 ${isProposalOverdue ? 'text-error-500' : 'text-slate-400 dark:text-slate-500'}`} />
+                <p className={`${isProposalOverdue ? 'text-error-600 font-medium' : 'text-slate-900 dark:text-slate-100'}`}>
                   {formatDueDate(proposal.dueDate)}
                   {isProposalOverdue && (
                     <span className="ml-1 text-error-500">(Overdue)</span>
@@ -434,8 +434,8 @@ const ProposalDetails = () => {
 
             {proposal.budget && (
               <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Budget</h3>
-                <p className="text-gray-900">
+                <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">Budget</h3>
+                <p className="text-slate-900 dark:text-slate-100">
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: proposal.currency || 'USD',
@@ -448,8 +448,8 @@ const ProposalDetails = () => {
 
             {proposal.contactName && (
               <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Contact</h3>
-                <p className="text-gray-900">{proposal.contactName}</p>
+                <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">Contact</h3>
+                <p className="text-slate-900 dark:text-slate-100">{proposal.contactName}</p>
                 {proposal.contactEmail && (
                   <a
                     href={`mailto:${proposal.contactEmail}`}
@@ -459,25 +459,25 @@ const ProposalDetails = () => {
                   </a>
                 )}
                 {proposal.contactPhone && (
-                  <p className="text-gray-600 text-sm">{proposal.contactPhone}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{proposal.contactPhone}</p>
                 )}
               </div>
             )}
 
             {proposal.submissionDate && (
               <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
+                <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">
                   {isFinalState ? 'Submitted On' : 'Expected Submission'}
                 </h3>
-                <p className="text-gray-900">
+                <p className="text-slate-900 dark:text-slate-100">
                   {formatDate(proposal.submissionDate, 'Not specified')}
                 </p>
               </div>
             )}
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Created</h3>
-              <p className="text-gray-900">
+              <h3 className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">Created</h3>
+              <p className="text-slate-900 dark:text-slate-100">
                 {formatDate(proposal.createdAt, 'N/A')}
               </p>
             </div>
@@ -485,9 +485,9 @@ const ProposalDetails = () => {
 
           {proposal.notes && (
             <div className="mt-6">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Notes</h3>
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-gray-700 whitespace-pre-line">
+              <h3 className="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">Notes</h3>
+              <div className="rounded-md bg-slate-50 p-4 dark:bg-slate-800/70">
+                <p className="whitespace-pre-line text-slate-700 dark:text-slate-200">
                   {proposal.notes}
                 </p>
               </div>
@@ -495,10 +495,10 @@ const ProposalDetails = () => {
           )}
         </CardContent>
 
-        <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+        <div className="border-t border-slate-200 bg-slate-50 px-6 py-4 dark:border-slate-700 dark:bg-slate-900/70">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between">
             <div className="mb-4 sm:mb-0">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">
+              <h3 className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-200">
                 Workflow Status
               </h3>
               <div className="flex items-center">
@@ -513,14 +513,14 @@ const ProposalDetails = () => {
                         <div className={`h-0.5 w-8 ${
                           index <= STATUS_OPTIONS.findIndex((s) => s.value === proposal.status)
                             ? 'bg-primary-500'
-                            : 'bg-gray-200'
+                            : 'bg-slate-200 dark:bg-slate-700'
                         }`} />
                       )}
                       <div
                         className={`h-6 w-6 rounded-full flex items-center justify-center ${
                           index <= STATUS_OPTIONS.findIndex((s) => s.value === proposal.status)
                             ? 'bg-primary-500 text-white'
-                            : 'bg-gray-200 text-gray-500'
+                            : 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300'
                         }`}
                       >
                         {index < STATUS_OPTIONS.findIndex((s) => s.value === proposal.status) ? (
@@ -591,7 +591,7 @@ const ProposalDetails = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between">
             <div>
               <h2 className="text-xl font-bold">Files & Attachments</h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 {proposal.files?.length || 0} {proposal.files?.length === 1 ? 'file' : 'files'} attached
               </p>
             </div>
@@ -613,9 +613,9 @@ const ProposalDetails = () => {
 
         <CardContent>
           {isFileUploading && (
-            <div className="mb-4 p-3 bg-blue-50 rounded-md flex items-center">
+            <div className="mb-4 flex items-center rounded-md bg-blue-50 p-3 dark:bg-blue-950/30">
               <Loader2 className="h-4 w-4 text-blue-500 animate-spin mr-2" />
-              <span className="text-sm text-blue-700">Uploading files, please wait...</span>
+              <span className="text-sm text-blue-700 dark:text-blue-200">Uploading files, please wait...</span>
             </div>
           )}
 
@@ -624,15 +624,15 @@ const ProposalDetails = () => {
               {proposal.files.map((file) => (
                 <div
                   key={file.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-md transition-colors"
+                  className="flex items-center justify-between rounded-md p-3 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 >
                   <div className="flex items-center min-w-0">
-                    <div className="p-2 bg-gray-100 rounded-md mr-3">
+                    <div className="mr-3 rounded-md bg-slate-100 p-2 dark:bg-slate-800">
                       {getFileIcon(file.type)}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{file.filename}</p>
-                      <div className="flex items-center text-xs text-gray-500 space-x-3">
+                      <p className="truncate font-medium text-slate-900 dark:text-slate-100">{file.filename}</p>
+                      <div className="flex items-center space-x-3 text-xs text-slate-500 dark:text-slate-400">
                         <span>{formatFileSize(file.size)}</span>
                         <span>•</span>
                         <span>Uploaded {formatDate(file.createdAt, 'N/A')}</span>
@@ -644,7 +644,7 @@ const ProposalDetails = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => window.open(file.url, '_blank')}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-100"
                     >
                       <Download size={16} className="mr-1" />
                       <span className="sr-only">Download</span>
@@ -653,7 +653,7 @@ const ProposalDetails = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteFile(file.id)}
-                      className="text-gray-500 hover:text-red-600"
+                      className="text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
                     >
                       <Trash2 size={16} className="mr-1" />
                       <span className="sr-only">Delete</span>
@@ -663,10 +663,10 @@ const ProposalDetails = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-md">
-              <FileText size={48} className="mx-auto text-gray-300 mb-3" />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">No files yet</h3>
-              <p className="text-sm text-gray-500 mb-4">
+            <div className="rounded-md border-2 border-dashed border-slate-200 py-8 text-center dark:border-slate-700">
+              <FileText size={48} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+              <h3 className="mb-1 text-lg font-medium text-slate-900 dark:text-slate-100">No files yet</h3>
+              <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
                 Upload files to keep them organized with this proposal
               </p>
               <label className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 cursor-pointer">

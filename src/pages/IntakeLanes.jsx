@@ -56,7 +56,7 @@ const LANE_ORDER = LANES.map((l) => l.id);
 
 // ── Score badge ───────────────────────────────────────────────────────────────
 function ScoreBadge({ score }) {
-  if (score == null) return <span className="text-xs text-gray-400">—</span>;
+  if (score == null) return <span className="text-xs text-slate-400 dark:text-slate-500">—</span>;
   const n = Number(score);
   const cls =
     n >= 65 ? 'bg-green-100 text-green-800 border-green-200' :
@@ -75,12 +75,12 @@ function FitFlags({ flags }) {
   return (
     <div className="flex flex-wrap gap-1 mt-1">
       {flags.slice(0, 4).map((f) => (
-        <span key={f} className="text-[10px] bg-blue-50 text-blue-700 border border-blue-100 px-1.5 py-0.5 rounded">
+        <span key={f} className="rounded border border-blue-100 bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-300">
           {String(f).replace(/^(service|geo|agency|keyword):/, '')}
         </span>
       ))}
       {flags.length > 4 && (
-        <span className="text-[10px] text-gray-400">+{flags.length - 4}</span>
+        <span className="text-[10px] text-slate-400 dark:text-slate-500">+{flags.length - 4}</span>
       )}
     </div>
   );
@@ -122,12 +122,12 @@ function ProposalCard({ proposal, lane, onMoveLane }) {
   }
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${lane.borderCls} p-3 relative`}>
+    <div className={`relative rounded-lg border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/95 ${lane.borderCls}`}>
       {/* Title + score */}
       <div className="flex items-start justify-between gap-2 mb-1">
         <Link
           to={`/proposals/${proposal.id}`}
-          className="text-sm font-medium text-gray-900 hover:text-blue-700 line-clamp-2 flex-1"
+          className="line-clamp-2 flex-1 text-sm font-medium text-slate-900 hover:text-blue-700 dark:text-slate-100"
         >
           {proposal.title}
         </Link>
@@ -135,7 +135,7 @@ function ProposalCard({ proposal, lane, onMoveLane }) {
       </div>
 
       {/* Agency + deadline */}
-      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-gray-500 mb-1">
+      <div className="mb-1 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-slate-500 dark:text-slate-400">
         {proposal.agency && proposal.agency !== 'Unknown Agency' && (
           <span className="truncate max-w-[140px]">{proposal.agency}</span>
         )}
@@ -149,7 +149,7 @@ function ProposalCard({ proposal, lane, onMoveLane }) {
 
       {/* Service line */}
       {serviceLine && (
-        <div className="text-[11px] text-blue-700 mb-1">
+        <div className="mb-1 text-[11px] text-blue-700 dark:text-blue-300">
           {serviceLine}
         </div>
       )}
@@ -162,20 +162,20 @@ function ProposalCard({ proposal, lane, onMoveLane }) {
         <button
           onClick={() => setShowMoveMenu((v) => !v)}
           disabled={moving}
-          className="text-[11px] text-gray-500 hover:text-gray-800 border border-gray-200 rounded px-2 py-0.5 hover:bg-gray-50 disabled:opacity-40"
+          className="rounded border border-slate-200 px-2 py-0.5 text-[11px] text-slate-500 hover:bg-slate-50 hover:text-slate-800 disabled:opacity-40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
         >
           {moving ? 'Moving…' : 'Move to…'}
         </button>
         {moveError && (
-          <span className="text-[10px] text-red-600">{moveError}</span>
+          <span className="text-[10px] text-red-600 dark:text-red-300">{moveError}</span>
         )}
         {showMoveMenu && (
-          <div className="absolute left-0 top-6 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-44">
+          <div className="absolute left-0 top-6 z-20 w-44 rounded-lg border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
             {otherLanes.map((l) => (
               <button
                 key={l.id}
                 onClick={() => moveTo(l.id)}
-                className="block w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+                className="block w-full px-3 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 <span className={`inline-block w-2 h-2 rounded-full mr-2 ${l.dotCls}`} />
                 {l.label}
@@ -202,9 +202,9 @@ function LaneColumn({ lane, proposals, onMoveLane }) {
       </div>
 
       {/* Cards */}
-      <div className="flex-1 bg-gray-50 rounded-b-lg border border-t-0 border-gray-200 p-2 space-y-2 min-h-[120px]">
+      <div className="min-h-[120px] flex-1 space-y-2 rounded-b-lg border border-t-0 border-slate-200 bg-slate-50/90 p-2 dark:border-slate-700 dark:bg-slate-950/40">
         {proposals.length === 0 ? (
-          <div className="text-center py-6 text-xs text-gray-400">Empty</div>
+          <div className="py-6 text-center text-xs text-slate-400 dark:text-slate-500">Empty</div>
         ) : (
           proposals.map((p) => (
             <ProposalCard key={p.id} proposal={p} lane={lane} onMoveLane={onMoveLane} />
@@ -265,7 +265,7 @@ export default function IntakeLanes() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[40vh] text-gray-400 text-sm">
+      <div className="flex min-h-[40vh] items-center justify-center text-sm text-slate-400 dark:text-slate-500">
         Loading intake lanes…
       </div>
     );
@@ -289,8 +289,8 @@ export default function IntakeLanes() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Intake Lanes</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Intake Lanes</h1>
+          <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
             Score-gated routing — every solicitation earns its lane before entering pursuit.
           </p>
         </div>
@@ -303,13 +303,13 @@ export default function IntakeLanes() {
           <button
             onClick={handleBulkArchive}
             disabled={archiving}
-            className="text-sm px-3 py-1.5 rounded border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 disabled:opacity-40"
+            className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
           >
             {archiving ? 'Archiving…' : 'Auto-archive stale'}
           </button>
           <button
             onClick={load}
-            className="text-sm px-3 py-1.5 rounded border border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
+            className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
           >
             Refresh
           </button>
@@ -328,10 +328,10 @@ export default function IntakeLanes() {
           <button
             key={lane.id}
             onClick={() => setActiveLane(lane.id)}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
               activeLane === lane.id
                 ? 'border-blue-600 text-blue-700'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-200'
             }`}
           >
             <span className={`w-2 h-2 rounded-full ${lane.dotCls}`} />
@@ -345,13 +345,13 @@ export default function IntakeLanes() {
 
       {/* Active lane description */}
       {currentLane && (
-        <p className="text-sm text-gray-500">{currentLane.description}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">{currentLane.description}</p>
       )}
 
       {/* Card grid for active lane */}
       {currentProposals.length === 0 ? (
-        <div className="text-center py-16 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-          <p className="text-sm text-gray-400">No proposals in this lane.</p>
+        <div className="rounded-lg border-2 border-dashed border-slate-200 bg-slate-50/90 py-16 text-center dark:border-slate-700 dark:bg-slate-950/40">
+          <p className="text-sm text-slate-400 dark:text-slate-500">No proposals in this lane.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

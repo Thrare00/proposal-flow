@@ -290,14 +290,20 @@ export function createProposalFromSolicitation(payload) {
   const proposalId = createId('proposal');
   const dueDate = payload.dueDate || payload.due_date || new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
 
+  const solicitationTextRaw = payload.solicitationTextRaw || payload.solicitationText || '';
+  const intakeAnalysis = payload.intakeAnalysis && typeof payload.intakeAnalysis === 'object' ? payload.intakeAnalysis : {};
+  const rankingMetadata = payload.rankingMetadata && typeof payload.rankingMetadata === 'object' ? payload.rankingMetadata : {};
+  const awardIntel = payload.awardIntel && typeof payload.awardIntel === 'object' ? payload.awardIntel : null;
+
   return normalizeProposal({
     id: proposalId,
     title: payload.title || payload.solicitationTitle || 'Untitled Solicitation',
     agency: payload.agency || 'Unknown Agency',
     dueDate,
     status: 'intake',
-    notes: payload.notes || payload.solicitationText || '',
+    notes: payload.notes || '',
     solicitationText: payload.solicitationText || '',
+    solicitationTextRaw,
     source: 'automation',
     type: payload.type || 'federal',
     createdAt,
@@ -319,6 +325,9 @@ export function createProposalFromSolicitation(payload) {
     metadata: {
       solicitationNumber: payload.solicitationNumber || '',
       sourceType: 'solicitation',
+      intakeAnalysis,
+      rankingMetadata,
+      awardIntel,
       draftOverviewStatus: 'pending',
       proposalDraftStatus: 'pending',
       workflowSteps: [
@@ -511,6 +520,11 @@ function recordTwentyExecutionOnProposal(job, executionResult) {
       title: n.title,
       linkedTargets: n.linkedTargets || [],
     }));
+    const lastOpportunityUpdate = executionResult?.applied?.opportunityUpdate
+      || executionResult?.payload?.update
+      || job.payload?.update
+      || job.payload?.opportunityUpdate
+      || null;
 
     proposal.metadata.twentyExecution = {
       lastJobId: job.id,
@@ -529,6 +543,11 @@ function recordTwentyExecutionOnProposal(job, executionResult) {
       errors: executionResult?.errors || [],
       appliedTaskIds: appliedTasks,
       appliedNoteIds: appliedNotes,
+      nextAction: lastOpportunityUpdate?.nextAction || '',
+      nextActionDate: lastOpportunityUpdate?.nextActionDate || null,
+      blockerStatus: lastOpportunityUpdate?.blockerStatus || 'none',
+      priority: lastOpportunityUpdate?.priority || null,
+      stage: lastOpportunityUpdate?.stage || null,
       opportunityUpdate: executionResult?.applied?.opportunityUpdate || null,
     };
     proposal.updatedAt = nowIso();
@@ -584,14 +603,16 @@ async function processJob(job) {
           url: job.payload?.sourceUrl || '',
           stage: 'intake',
           createdAt: proposal.createdAt,
+          deliveryModel: job.payload?.rankingMetadata?.deliveryModel || 'unknown',
+          losRisk: job.payload?.rankingMetadata?.losRisk || 'unknown',
           metrics: {
-            Profitability: 70,
-            StrategicFit: 70,
-            Competition: 50,
-            SubcontractingPotential: 40,
-            LikelihoodOfAward: 60,
-            RelationshipLeverage: 40,
-            PastPerformanceMatch: 60,
+            Profitability: Number(job.payload?.rankingMetadata?.profitability ?? 70),
+            StrategicFit: Number(job.payload?.rankingMetadata?.strategicFit ?? 70),
+            Competition: Number(job.payload?.rankingMetadata?.competition ?? 50),
+            SubcontractingPotential: Number(job.payload?.rankingMetadata?.subcontractingPotential ?? 40),
+            LikelihoodOfAward: Number(job.payload?.rankingMetadata?.likelihoodOfAward ?? 60),
+            RelationshipLeverage: Number(job.payload?.rankingMetadata?.relationshipLeverage ?? 40),
+            PastPerformanceMatch: Number(job.payload?.rankingMetadata?.pastPerformanceMatch ?? 60),
           },
         });
         result = {
@@ -661,10 +682,19 @@ async function processJob(job) {
           title: opportunity.title,
           agency: opportunity.agency,
           dueDate: opportunity.dueDate,
-          notes: opportunity.summary,
-          solicitationText: opportunity.summary,
+          notes: '',
+          solicitationText: '',
+          solicitationTextRaw: opportunity.summary || '',
           sourceUrl: opportunity.url,
           solicitationNumber: opportunity.id,
+          intakeAnalysis: {
+            fitScore: opportunity.fitScore,
+            fitDecision: opportunity.fitDecision,
+            fitReasons: opportunity.fitReasons,
+          },
+          rankingMetadata: {
+            source: opportunity.portalName || 'watcher',
+          },
         });
 
         proposal.metadata.sourceOpportunityId = opportunity.id;
@@ -1746,6 +1776,37 @@ export function runHousekeepingPass() {
           appendWorkflowStep(proposal, {
             stage: 'closed',
             label: 'Housekeeping: auto-closed (award notice detected in notes)',
+          });
+        }
+      }
+
+      // Auto-close proposals past their due date (not submitted, not already closed)
+      if (proposal.dueDate && proposal.status !== 'closed' && proposal.status !== 'submitted') {
+        const dueMs = new Date(proposal.dueDate).getTime();
+        const nowMs = new Date(timestamp).getTime();
+        if (dueMs < nowMs) {
+          proposal.status = 'closed';
+          proposal.outcomeStatus = 'expired';
+          proposal.updatedAt = timestamp;
+          appendWorkflowStep(proposal, {
+            stage: 'closed',
+            label: `Housekeeping: auto-closed (due date ${proposal.dueDate.slice(0, 10)} has passed)`,
+          });
+        }
+      }
+
+      // Clear tasks on closed proposals — no reason to track them
+      if (proposal.status === 'closed' && Array.isArray(proposal.tasks) && proposal.tasks.length > 0) {
+        const incomplete = proposal.tasks.filter(t => !t.completed);
+        if (incomplete.length > 0) {
+          for (const task of incomplete) {
+            task.completed = true;
+            task.status = 'closed';
+            task.completedAt = timestamp;
+          }
+          appendWorkflowStep(proposal, {
+            stage: 'closed',
+            label: `Housekeeping: marked ${incomplete.length} tasks complete (proposal closed)`,
           });
         }
       }

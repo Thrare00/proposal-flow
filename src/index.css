@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Rare Earth brand tokens */
+  --rare-crimson: #CC1111;
+  --rare-crimson-dark: #8F0C0C;
+  --rare-lime: #6ABF1E;
+  --rare-lime-dark: #4B8A15;
+  --rare-ink: #1A1A1A;
+  --rare-dark: #111111;
+  --rare-cream: #FAF8F5;
+  --rare-gray: #6B6B6B;
+  --rare-gray-light: #E8E6E3;
+  --rare-white: #FFFFFF;
+  --rare-gold: #D4A84B;
+
+  --rare-font-serif: "Bookman Old Style", "Georgia", serif;
+  --rare-font-sans: "Century Gothic", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
 @layer base {
   html {
     @apply scroll-smooth;
@@ -44,7 +62,7 @@
   }
   
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 dark:bg-primary-900 dark:hover:bg-primary-800;
+    @apply bg-rare-crimson hover:bg-rare-crimson-dark text-white focus:ring-rare-crimson dark:bg-rare-crimson-dark dark:hover:bg-rare-crimson;
   }
   
   .btn-secondary {
@@ -368,4 +386,32 @@
 .dark .desktop-content-frame {
   background: rgba(7, 12, 22, 0.3);
   border-color: rgba(148, 163, 184, 0.12);
+}
+
+/* Rare Earth wordmark */
+.rare-wordmark {
+  font-family: var(--rare-font-serif);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.rare-wordmark .rare-word-primary {
+  color: var(--rare-crimson);
+}
+
+.rare-wordmark .rare-word-secondary {
+  color: var(--rare-lime);
+}
+
+/* Momentum strip progress fills */
+.momentum-fill {
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1), height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.momentum-node-active {
+  box-shadow: 0 0 0 2px var(--rare-lime), 0 0 14px rgba(106, 191, 30, 0.45);
+}
+
+.momentum-node-urgent {
+  box-shadow: 0 0 0 2px var(--rare-crimson), 0 0 14px rgba(204, 17, 17, 0.4);
 }

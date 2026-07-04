@@ -2,7 +2,7 @@ import React from "react";
 
 export function Card({ className = "", children, ...props }) {
   return (
-    <div className={`rounded-xl border shadow-sm bg-white dark:bg-slate-900 dark:border-slate-700 ${className}`} {...props}>
+    <div className={`rounded-xl border border-white/60 bg-white/90 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/90 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -10,7 +10,7 @@ export function Card({ className = "", children, ...props }) {
 
 export function CardHeader({ className = "", children, ...props }) {
   return (
-    <div className={`p-4 border-b ${className}`} {...props}>
+    <div className={`border-b border-slate-200/80 p-4 dark:border-slate-700 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -26,7 +26,7 @@ export function CardTitle({ className = "", children, ...props }) {
 
 export function CardDescription({ className = "", children, ...props }) {
   return (
-    <p className={`text-sm text-gray-500 ${className}`} {...props}>
+    <p className={`text-sm text-slate-500 dark:text-slate-400 ${className}`} {...props}>
       {children}
     </p>
   );
@@ -42,7 +42,7 @@ export function CardContent({ className = "", children, ...props }) {
 
 export function CardFooter({ className = "", children, ...props }) {
   return (
-    <div className={`p-4 border-t ${className}`} {...props}>
+    <div className={`border-t border-slate-200/80 p-4 dark:border-slate-700 ${className}`} {...props}>
       {children}
     </div>
   );

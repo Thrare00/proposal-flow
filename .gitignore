@@ -27,3 +27,4 @@ dist-ssr
 # Secrets / tokens
 server/data/google-token.json
 server/google-auth.js
+server/data/attachments/

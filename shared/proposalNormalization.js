@@ -72,8 +72,20 @@ export function normalizeProposalMetadata(metadata = {}, proposal = {}) {
   };
 
   if (!normalizedMetadata.sourceType) {
-    normalizedMetadata.sourceType = proposal.solicitationText ? 'solicitation' : 'manual';
+    normalizedMetadata.sourceType = (proposal.solicitationTextRaw || proposal.solicitationText) ? 'solicitation' : 'manual';
   }
+
+  normalizedMetadata.intakeAnalysis = normalizedMetadata.intakeAnalysis && typeof normalizedMetadata.intakeAnalysis === 'object'
+    ? { ...normalizedMetadata.intakeAnalysis }
+    : {};
+
+  normalizedMetadata.rankingMetadata = normalizedMetadata.rankingMetadata && typeof normalizedMetadata.rankingMetadata === 'object'
+    ? { ...normalizedMetadata.rankingMetadata }
+    : {};
+
+  normalizedMetadata.awardIntel = normalizedMetadata.awardIntel && typeof normalizedMetadata.awardIntel === 'object'
+    ? { ...normalizedMetadata.awardIntel }
+    : normalizedMetadata.awardIntel || null;
 
   const resolvedPosture = normalizePosture(
     normalizedMetadata.pursuitPosture
@@ -135,6 +147,21 @@ export const INTAKE_LANES = Object.freeze([
  * Returns null if still unclassified (housekeeping will backfill once scored).
  * Does NOT override a value already present — call only when intakeLane is null/unknown.
  */
+// A NOGO / no-bid / declined decision retires an opportunity. Any of these
+// signals means the item should drop off the active board (→ archive lane).
+export function isNoGoOutcome(proposal = {}) {
+  const meta = proposal.metadata || {};
+  const oc = String(proposal.outcomeStatus || '').toLowerCase();
+  if (['no_bid', 'no-bid', 'nobid', 'lost', 'declined', 'rejected'].includes(oc)) return true;
+  if (String(proposal.status || '').toLowerCase() === 'declined') return true;
+  const decisions = Array.isArray(meta.decisions) ? meta.decisions : [];
+  return decisions.some((d) =>
+    ['no_go', 'no-go', 'nogo', 'no_bid', 'no-bid', 'rejected', 'declined'].includes(
+      String(d && d.decision || '').toLowerCase()
+    )
+  );
+}
+
 export function deriveIntakeLane(proposal) {
   const meta = proposal.metadata || {};
   const notesLower = (proposal.notes || '').toLowerCase();
@@ -149,6 +176,9 @@ export function deriveIntakeLane(proposal) {
     combined.includes('awarded to') ||
     combined.includes('contract award')
   ) return 'award_intel';
+
+  // Hard gate: NOGO/no-bid/declined → archive (keeps NOGO'd items off the active board)
+  if (isNoGoOutcome(proposal)) return 'archive';
 
   // Hard gate: archive
   if (proposal.status === 'closed' || proposal.status === 'submitted') return 'archive';
@@ -175,6 +205,9 @@ export function normalizeProposal(proposal = {}) {
     status: normalizeProposalStatus(proposal.status),
     notes: typeof proposal.notes === 'string' ? proposal.notes : '',
     solicitationText: typeof proposal.solicitationText === 'string' ? proposal.solicitationText : '',
+    solicitationTextRaw: typeof proposal.solicitationTextRaw === 'string'
+      ? proposal.solicitationTextRaw
+      : (typeof proposal.solicitationText === 'string' ? proposal.solicitationText : ''),
     type: normalizeProposalType(proposal.type),
     createdAt: proposal.createdAt || timestamp,
     updatedAt: proposal.updatedAt || proposal.createdAt || timestamp,

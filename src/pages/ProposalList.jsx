@@ -118,7 +118,7 @@ export function ProposalList() {
   // Show error state
   if (error) {
     return (
-      <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+      <div className="mb-6 border-l-4 border-red-400 bg-red-50 p-4 dark:border-red-900/40 dark:bg-red-950/40">
         <div className="flex">
           <div className="flex-shrink-0">
             <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -126,7 +126,7 @@ export function ProposalList() {
             </svg>
           </div>
           <div className="ml-3">
-            <p className="text-sm text-red-700">{error}</p>
+            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
           </div>
         </div>
       </div>
@@ -137,7 +137,7 @@ export function ProposalList() {
     <div className="space-y-6">
       {/* Header with title and actions */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <h1 className="text-2xl font-bold text-gray-900">Proposals</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Proposals</h1>
         <Button 
           to="/proposals/new" 
           className="w-full md:w-auto"
@@ -148,13 +148,13 @@ export function ProposalList() {
       </div>
 
       {/* Filters and search */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/95">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <div className="md:col-span-2">
             <label htmlFor="search" className="sr-only">Search proposals</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <svg className="h-5 w-5 text-slate-400 dark:text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                 </svg>
               </div>
@@ -164,7 +164,7 @@ export function ProposalList() {
                 id="search"
                 value={filters.search}
                 onChange={handleFilterChange}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="block w-full rounded-md border border-slate-300 bg-white py-2 pl-10 pr-3 leading-5 text-slate-900 placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-400"
                 placeholder="Search by title, agency, or ID"
               />
             </div>
@@ -177,7 +177,7 @@ export function ProposalList() {
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
-              className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              className="block w-full rounded-md border border-slate-300 bg-white py-2 pl-3 pr-10 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
             >
               <option value="all">All Statuses</option>
               {statusOptions.map(status => (
@@ -192,18 +192,18 @@ export function ProposalList() {
             <button
               type="button"
               onClick={() => toggleSortOrder('dueDate')}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full justify-center"
+              className="inline-flex w-full items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               {filters.sortBy === 'dueDate' && filters.sortOrder === 'asc' ? (
                 <>
-                  <svg className="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="-ml-1 mr-2 h-5 w-5 text-slate-400 dark:text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   Sort by Due Date
                 </>
               ) : (
                 <>
-                  <svg className="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="-ml-1 mr-2 h-5 w-5 text-slate-400 dark:text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
                   </svg>
                   Sort by Due Date
@@ -215,17 +215,17 @@ export function ProposalList() {
       </div>
 
       {/* Results count */}
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-slate-500 dark:text-slate-400">
         Showing <span className="font-medium">{proposals.length}</span> of <span className="font-medium">{initialProposals.length}</span> proposals
       </div>
 
       {/* Proposals grid */}
       {proposals.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {proposals.map((proposal) => (
             <Card key={proposal.id} className="h-full flex flex-col">
               <CardHeader>
-                <h2 className="text-lg font-semibold text-gray-900 line-clamp-2" title={proposal.title}>
+                <h2 className="line-clamp-2 text-lg font-semibold text-slate-900 dark:text-slate-100" title={proposal.title}>
                   {proposal.title}
                 </h2>
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -238,22 +238,22 @@ export function ProposalList() {
               <CardContent className="flex-1 flex flex-col">
                 <div className="space-y-2 mb-4">
                   {proposal.agency && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       <span className="font-medium">Agency:</span> {proposal.agency}
                     </p>
                   )}
                   {proposal.dueDate && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       <span className="font-medium">Due:</span> {formatDate(proposal.dueDate, 'N/A')}
                     </p>
                   )}
                   {proposal.type && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       <span className="font-medium">Type:</span> {proposal.type}
                     </p>
                   )}
                 </div>
-                <div className="mt-auto pt-4 border-t border-gray-100">
+                <div className="mt-auto border-t border-slate-100 pt-4 dark:border-slate-800">
                   <Button 
                     as={Link}
                     to={`/proposals/${proposal.id}`} 
@@ -269,9 +269,9 @@ export function ProposalList() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-300">
+        <div className="rounded-lg border-2 border-dashed border-slate-300 bg-white/95 py-12 text-center dark:border-slate-700 dark:bg-slate-900/95">
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -284,8 +284,8 @@ export function ProposalList() {
               d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
             />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No proposals found</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <h3 className="mt-2 text-sm font-medium text-slate-900 dark:text-slate-100">No proposals found</h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {filters.status !== 'all' || filters.search
               ? 'Try adjusting your search or filter to find what you\'re looking for.'
               : 'Get started by creating a new proposal.'}

@@ -7,6 +7,11 @@
  */
 
 import { MILESTONES, DECISION_MAKER_STATUSES } from './growth-constants.js';
+import {
+  normalizeFunnelStage,
+  BLOCKER_STATUSES,
+  RESPONSE_STATUSES,
+} from '../../shared/crm-constants.js';
 
 const TIMEOUT_MS = 5000;
 const HEALTH_TTL_MS = 30_000;
@@ -142,6 +147,7 @@ export async function getOpportunities(limit = 100) {
           id name amount { amountMicros currencyCode } stage closeDate
           company { id name }
           pointOfContact { id name { firstName lastName } }
+          owner { id name { firstName lastName } }
           pursuitType source sourceRef priority
           nextAction nextActionDate blockerStatus
           fitScore strategicScore
@@ -242,20 +248,6 @@ function inferDecisionMakerFromTitle(title) {
 }
 
 function normalizeOpportunity(opportunity) {
-  const stageMap = {
-    WON: 'awarded',
-    LOST: 'lost',
-    LEAD: 'lead',
-    QUALIFIED: 'qualified',
-    MEETING_SCHEDULED: 'qualified',
-    PROPOSAL_SENT: 'proposal_sent',
-    NEW: 'lead',
-    SCREENING: 'qualified',
-    MEETING: 'qualified',
-    PROPOSAL: 'proposal_sent',
-    CUSTOMER: 'awarded',
-  };
-
   const amount = opportunity.amount;
   const estimatedValue = amount?.amountMicros
     ? Number(amount.amountMicros) / 1_000_000
@@ -270,6 +262,9 @@ function normalizeOpportunity(opportunity) {
       : '',
   });
 
+  const rawStage = opportunity.stage || 'NEW';
+  const funnelStage = normalizeFunnelStage(rawStage);
+
   return {
     id: opportunity.id,
     company_id: opportunity.company?.id || null,
@@ -280,31 +275,72 @@ function normalizeOpportunity(opportunity) {
     source: opportunity.source || 'twenty',
     source_ref: opportunity.sourceRef || '',
     type: opportunity.pursuitType || 'bid',
-    status: stageMap[opportunity.stage] || opportunity.stage || 'lead',
-    stage: opportunity.stage || 'NEW',
+    stage: rawStage,
+    funnel_stage: funnelStage,
+    response_status: opportunity.responseStatus || inferResponseStatus(funnelStage),
+    relationship_temperature: opportunity.relationshipTemperature || inferRelationshipTemp(funnelStage),
+    blocker_status: opportunity.blockerStatus || 'none',
+    proof_state: opportunity.proofState || 'not_applicable',
     estimated_value: estimatedValue,
     deadline: opportunity.closeDate || null,
     priority: opportunity.priority || 'medium',
     next_action: opportunity.nextAction || '',
     next_action_date: opportunity.nextActionDate || null,
-    blocker_status: opportunity.blockerStatus || 'none',
     fit_score: opportunity.fitScore || null,
     strategic_score: opportunity.strategicScore || null,
     proposal_flow_url: buildProposalFlowUrl(opportunity.id),
     notes: '',
-    owner: '',
+    owner: opportunity.owner?.name
+      ? `${opportunity.owner.name.firstName || ''} ${opportunity.owner.name.lastName || ''}`.trim()
+      : '',
+    owner_id: opportunity.owner?.id || null,
     created_at: opportunity.createdAt,
     updated_at: opportunity.updatedAt,
     _source: 'twenty',
-    currentMilestone: inferMilestoneFromStage(opportunity.stage),
+    currentMilestone: inferMilestoneFromStage(rawStage),
     nextMilestone: null,
-    relationshipTemperature: 'warm',
     askType: inferAskType(opportunity.pursuitType),
     decisionMakerStatus: 'unknown',
     objectionType: null,
     touchCount: 0,
     lastMeaningfulDate: null,
   };
+}
+
+function inferResponseStatus(funnelStage) {
+  const map = {
+    identified: 'uncontacted',
+    intro_sent: 'contacted',
+    engaged: 'replied',
+    qualified: 'replied',
+    proposal_active: 'replied',
+    submitted: 'replied',
+    won: 'won',
+    completed: 'won',
+    nurture: 'won',
+    lost: 'lost',
+    paused: 'no_response',
+    blocked: 'no_response',
+  };
+  return map[funnelStage] || 'uncontacted';
+}
+
+function inferRelationshipTemp(funnelStage) {
+  const map = {
+    identified: 'cold',
+    intro_sent: 'cold',
+    engaged: 'warm',
+    qualified: 'warm',
+    proposal_active: 'active',
+    submitted: 'active',
+    won: 'trusted',
+    completed: 'trusted',
+    nurture: 'warm',
+    lost: 'cold',
+    paused: 'cold',
+    blocked: 'warm',
+  };
+  return map[funnelStage] || 'cold';
 }
 
 function buildProposalFlowUrl(opportunityId) {
@@ -398,15 +434,53 @@ function normalizeActivity(activity) {
     }
   }
 
+  const body = activity.bodyV2?.markdown || activity.body || '';
+  const title = activity.title || '';
+
   return {
     id: activity.id,
-    title: activity.title || '',
-    body: activity.bodyV2?.markdown || activity.body || '',
-    type: 'note',
+    title,
+    body,
+    type: inferActivityType(title, body),
     linked,
     created_at: activity.createdAt,
     _source: 'twenty',
   };
+}
+
+/**
+ * Infer a canonical CRM activity type from note title/body text.
+ * Falls back to 'note' for unclassifiable activities.
+ */
+function inferActivityType(title, body) {
+  const text = `${title} ${body}`.toLowerCase();
+
+  // Inbound signals
+  if (/\b(reply|replied|response received|responded)\b/.test(text)) return 'reply_received';
+  if (/\b(redirect|redirected|forwarded to)\b/.test(text)) return 'redirect_received';
+  if (/\b(bounce|bounced|undeliverable)\b/.test(text)) return 'bounce_received';
+  if (/\b(meeting request|wants to meet|schedule.+meeting)\b/.test(text)) return 'meeting_request_received';
+  if (/\b(docs?.request|request.+doc|send.+capability)\b/.test(text)) return 'docs_request_received';
+  if (/\b(scope.+update|scope.+change|amendment)\b/.test(text)) return 'scope_update_received';
+  if (/\b(award|awarded|selected)\b/.test(text)) return 'award_notice';
+  if (/\b(loss.notice|not.selected|unsuccessful)\b/.test(text)) return 'loss_notice';
+
+  // Outbound signals
+  if (/\b(intro.+email|initial.+email|first.+email|intro.+sent)\b/.test(text)) return 'intro_email';
+  if (/\b(follow.?up.+email|followup.+email|f\/u.+email)\b/.test(text)) return 'follow_up_email';
+  if (/\b(intro.+call|initial.+call|cold.+call)\b/.test(text)) return 'intro_call';
+  if (/\b(voicemail|left.+message|vm)\b/.test(text)) return 'voicemail';
+  if (/\b(intro.+text|initial.+text)\b/.test(text)) return 'intro_text';
+  if (/\b(follow.?up.+text|followup.+text)\b/.test(text)) return 'follow_up_text';
+  if (/\b(portal.+submit|submitted.+portal|registration.+submit)\b/.test(text)) return 'portal_submission';
+  if (/\b(vendor.+packet|capability.+statement.+sent)\b/.test(text)) return 'vendor_packet_sent';
+  if (/\b(quote.+sent|sent.+quote|pricing.+sent)\b/.test(text)) return 'quote_sent';
+  if (/\b(proposal.+submit|submitted.+proposal)\b/.test(text)) return 'proposal_submitted';
+  if (/\b(check.?in|checking.in|touched.base)\b/.test(text)) return 'check_in';
+  if (/\b(review.+request|request.+review|past.performance)\b/.test(text)) return 'review_request';
+  if (/\b(referral|refer)\b/.test(text)) return 'referral_ask';
+
+  return 'note';
 }
 
 export async function createOpportunity({ name, stage = 'NEW', source = 'proposal-flow', sourceRef = '', pursuitType = 'bid', priority = 'medium', closeDate = null, companyId = null }) {

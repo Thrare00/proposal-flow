@@ -44,12 +44,13 @@ async function safeRunWorkerPass() {
     return { done: [], failed: [{ action: 'worker_pass', error: error.message }] };
   }
 }
-import { normalizeProposal, deriveIntakeLane, INTAKE_LANES } from './shared/proposalNormalization.js';
+import { normalizeProposal, deriveIntakeLane, isNoGoOutcome, INTAKE_LANES } from './shared/proposalNormalization.js';
 import {
   getAttachmentAbsolutePath,
   getAttachmentContentType,
 } from './server/attachment-store.js';
 import { importLocalProposalAttachments } from './server/proposal-attachments.js';
+import { notifyProposalUpdate } from './server/discord-notify.js';
 import {
   isLlmAvailable,
   getLlmStatus,
@@ -103,6 +104,7 @@ import { dispatchGmailMessage } from './server/gmail-dispatch.js';
 import { listTemplates, renderTemplate, proposalToContext } from './server/rapid-response-templates.js';
 import { detectStaleInbounds, computeTeamingWindows, getOfficialDispatchSummary } from './server/govcon-alerts.js';
 import { getOperatorUpdates, appendOperatorUpdate, resolveBlockedItem, getOperatorSummary, getUnresolvedBlockers } from './server/operator-updates.js';
+import { getPastPerformance, createPastPerformance, updatePastPerformance, deletePastPerformance } from './server/past-performance-store.js';
 import {
   REVIEW_DECISIONS,
   ensureSubmissionReview,
@@ -837,6 +839,7 @@ app.post(apiPath('/proposals'), (req, res) => {
     }).catch(() => {});
   }
 
+  notifyProposalUpdate(`\uD83C\uDD95 New intake: ${proposal.title || 'Untitled'}${proposal.agency ? ' \u2014 ' + proposal.agency : ''}`);
   res.status(201).json(proposal);
 });
 
@@ -844,12 +847,14 @@ app.patch(apiPath('/proposals/:id'), (req, res) => {
   const proposalId = req.params.id;
   const patch = req.body || {};
   let updatedProposal = null;
+  let prevStatus = null;
 
   updateDb((db) => {
     const proposal = db.proposals.find((item) => item.id === proposalId);
     if (!proposal) {
       return db;
     }
+    prevStatus = proposal.status;
 
     const normalizedPatch = sanitizeProposal({
       ...proposal,
@@ -957,6 +962,9 @@ app.patch(apiPath('/proposals/:id'), (req, res) => {
     }
   }
 
+  if (updatedProposal && updatedProposal.status && updatedProposal.status !== prevStatus) {
+    notifyProposalUpdate(`\uD83D\uDCCB ${updatedProposal.title || 'Proposal'}: ${prevStatus || '?'} \u2192 ${updatedProposal.status}`);
+  }
   res.json(updatedProposal);
 });
 
@@ -985,6 +993,13 @@ app.post(apiPath('/proposals/:id/decisions'), (req, res) => {
     };
     proposal.metadata.decisions.unshift(entry);
     proposal.updatedAt = nowIso();
+
+    // NOGO/no-bid/rejected decision → retire the opportunity off the active board.
+    const decisionLower = String(decision || '').toLowerCase();
+    if (['no_go', 'no-go', 'nogo', 'no_bid', 'no-bid', 'rejected', 'declined'].includes(decisionLower)) {
+      proposal.outcomeStatus = decisionLower.includes('bid') ? 'no_bid' : 'declined';
+      proposal.intakeLane = 'archive';
+    }
 
     // Record in workflow steps for audit trail
     proposal.metadata.workflowSteps = Array.isArray(proposal.metadata.workflowSteps)
@@ -3463,6 +3478,28 @@ app.delete(apiPath('/knowledge-items/:id'), (req, res) => {
   res.status(204).end();
 });
 
+// ── Past Performance ──────────────────────────────────────────────────────────
+app.get(apiPath('/past-performance'), (req, res) => {
+  res.json(getPastPerformance());
+});
+
+app.post(apiPath('/past-performance'), (req, res) => {
+  const record = createPastPerformance(req.body || {});
+  res.status(201).json(record);
+});
+
+app.patch(apiPath('/past-performance/:id'), (req, res) => {
+  const updated = updatePastPerformance(req.params.id, req.body || {});
+  if (!updated) { res.status(404).json({ error: 'Record not found' }); return; }
+  res.json(updated);
+});
+
+app.delete(apiPath('/past-performance/:id'), (req, res) => {
+  const removed = deletePastPerformance(req.params.id);
+  if (!removed) { res.status(404).json({ error: 'Record not found' }); return; }
+  res.status(204).end();
+});
+
 app.post(apiPath('/crm/execution'), requireQueueToken, async (req, res) => {
   await handleTwentyExecutionRequest(req, res);
 });
@@ -3655,17 +3692,48 @@ app.post(apiPath('/proposals/:id/draft-email'), async (req, res) => {
     const fromEmail = useOfficialGovcon
       ? (db.settings?.ownerEmail || 'admin@thrarecontracting.com')
       : (db.settings?.outboundEmail || db.settings?.ownerEmail || 'rareearthcontracting@gmail.com');
-    const mode = useOfficialGovcon ? 'send' : 'draft';
+    // SAFETY: the official/official_govcon lane sends real government
+    // correspondence. It must NEVER auto-send — always create a Gmail draft
+    // for a human to review and send manually. Force transport to 'gmail' so
+    // this bypasses the official-govcon SMTP path in dispatchGmailMessage,
+    // which only supports mode: 'send'.
+    const mode = 'draft';
+    const effectiveTransport = useOfficialGovcon ? 'gmail' : transport;
     const result = await dispatchGmailMessage({
       lane,
       officialGovcon: useOfficialGovcon,
-      transport,
+      transport: effectiveTransport,
       from: fromEmail,
       replyTo: fromEmail,
       to,
       subject,
       text: body,
       mode,
+    });
+
+    const dispatchRecord = {
+      id: createId('dispatch'),
+      type: 'outreach_email',
+      mode: result.mode || mode,
+      to,
+      subject,
+      createdAt: nowIso(),
+      status: result.mode === 'send' ? 'sent' : 'drafted',
+      lane,
+    };
+    updateDb((workingDb) => {
+      const target = workingDb.proposals.find((p) => p.id === proposal.id);
+      if (target) {
+        target.metadata = target.metadata || {};
+        target.metadata.outreachDispatches = Array.isArray(target.metadata.outreachDispatches)
+          ? target.metadata.outreachDispatches
+          : [];
+        target.metadata.outreachDispatches.unshift(dispatchRecord);
+        target.metadata.outreachDispatches = target.metadata.outreachDispatches.slice(0, 50);
+        target.metadata.lastOutreachDispatchAt = dispatchRecord.createdAt;
+        target.updatedAt = dispatchRecord.createdAt;
+      }
+      return workingDb;
     });
 
     res.json({ ok: true, draft: result, rendered: { to, subject, body, lane, officialGovcon: useOfficialGovcon } });

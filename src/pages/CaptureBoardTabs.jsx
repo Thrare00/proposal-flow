@@ -1,13 +1,24 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
-  Radar, Target, Users, Shield, BookOpen, Plus, Trash2,
+  Target, Users, Shield, BookOpen, Plus, Trash2,
   CheckCircle, Circle, ChevronRight, AlertTriangle, FileText,
-  Archive, TrendingUp, Edit2, X, Save,
+  Archive, TrendingUp, X, Save,
 } from 'lucide-react';
 import { createCaptureRecord, createBidNoBidScore } from '../types.js';
-import { getCaptureRecords, createCaptureRecordApi, updateCaptureRecordApi, deleteCaptureRecordApi, getKnowledgeItems, createKnowledgeItemApi, deleteKnowledgeItemApi } from '../lib/api.js';
+import {
+  getCaptureRecords, createCaptureRecordApi, updateCaptureRecordApi, deleteCaptureRecordApi,
+  getKnowledgeItems, createKnowledgeItemApi, deleteKnowledgeItemApi,
+} from '../lib/api.js';
+import { buildApiUrl } from '../lib/runtimeApi.js';
+import { getDaysUntilDue } from '../utils/dateUtils.js';
+import { useProposalContext } from '../contexts/ProposalContext.jsx';
+import PageHeader from '../components/PageHeader.jsx';
+import FunnelHeader from '../components/capture/FunnelHeader.jsx';
+import IntakePoolGrid from '../components/capture/IntakePoolGrid.jsx';
+import DoNextQueue from '../components/capture/DoNextQueue.jsx';
+import BlockedQueue from '../components/capture/BlockedQueue.jsx';
 
-// ── Local-storage helpers (primary store; server synced when available) ────────
+// ── Local-storage helpers (capture-record store; server synced when available) ─
 const CR_KEY = 'pf:capture-records';
 const KI_KEY = 'pf:knowledge-items';
 function loadLS(key, fallback) {
@@ -17,7 +28,10 @@ function saveLS(key, val) {
   try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* no-op */ }
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Pool lanes (pre-award, selectable) ─────────────────────────────────────────
+const POOL_LANES = ['watchlist', 'review_queue', 'active_pursuit'];
+
+// ── Scoring / capture-record constants (preserved) ─────────────────────────────
 const STAGES = [
   { value: 'detected',      label: 'Detected',      cls: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' },
   { value: 'qualifying',    label: 'Qualifying',     cls: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' },
@@ -48,12 +62,10 @@ const KI_TYPES = ['foia', 'protest', 'debrief', 'prior_proposal'];
 const KI_TYPE_LABELS = { foia: 'FOIA', protest: 'Protest', debrief: 'Debrief', prior_proposal: 'Prior Proposal' };
 const COMPLIANCE_STATUSES = ['open', 'addressed', 'waived', 'na'];
 
-// ── Scoring helpers ───────────────────────────────────────────────────────────
 function calcTotal(s) {
   return SCORE_DIMS.reduce((sum, d) => sum + (Number(s[d.key]) || 3), 0);
 }
 function calcPwin(s) {
-  // competitive factors (higher = better) minus incumbent penalty
   const pos = (s.competitiveFit || 3) + (s.pastPerformanceFit || 3) + (s.teamingReadiness || 3) + (s.pricingConfidence || 3) + (s.strategicValue || 3);
   const raw = Math.round(((pos - 5) / 20) * 90 + 5 - (((s.incumbentStrength || 3) - 1) / 4) * 30);
   return Math.max(5, Math.min(95, raw));
@@ -65,13 +77,6 @@ function calcRec(s) {
   return 'no_bid';
 }
 
-function stageInfo(val) { return STAGES.find((s) => s.value === val) || STAGES[0]; }
-
-// ── Small UI helpers ──────────────────────────────────────────────────────────
-function StagePill({ stage }) {
-  const s = stageInfo(stage);
-  return <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${s.cls}`}>{s.label}</span>;
-}
 function RecPill({ rec }) {
   if (!rec) return null;
   return <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${REC_CLS[rec] || ''}`}>{REC_LABELS[rec] || rec}</span>;
@@ -80,7 +85,7 @@ function NoSelection() {
   return (
     <div className="text-center py-16 text-gray-400 dark:text-gray-600">
       <Target size={40} className="mx-auto mb-3 opacity-40" />
-      <p className="text-sm">Select a capture record from the <strong>Pipeline</strong> tab first.</p>
+      <p className="text-sm">Capture an opportunity from the Intake Pool to open its dossier.</p>
     </div>
   );
 }
@@ -88,7 +93,7 @@ function Section({ title, icon: Icon, children }) {
   return (
     <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 mb-4">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-        {Icon && <Icon size={16} className="text-blue-500" />}
+        {Icon && <Icon size={16} className="text-rare-crimson" />}
         <span className="font-semibold text-sm text-gray-800 dark:text-gray-200">{title}</span>
       </div>
       <div className="p-4">{children}</div>
@@ -103,177 +108,10 @@ function Field({ label, children }) {
     </div>
   );
 }
-const inputCls = 'w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
+const inputCls = 'w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-rare-crimson/40';
 const smBtnCls = 'px-2 py-1 text-xs rounded font-medium';
 
-// ── Pipeline Tab ──────────────────────────────────────────────────────────────
-function PipelineTab({ records, selectedId, setSelectedId, onAdd, onDelete, onUpdateStage }) {
-  const [stageFilter, setStageFilter] = useState('all');
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({
-    title: '', agency: '', dueDate: '', rfpDate: '',
-    solicitationNumber: '', setAside: '', sourceUrl: '',
-    naicsCodes: '', pscCodes: '', stage: 'detected', notes: '',
-  });
-
-  const filtered = useMemo(() => {
-    if (stageFilter === 'all') return records;
-    return records.filter((r) => r.stage === stageFilter);
-  }, [records, stageFilter]);
-
-  function handleAdd(e) {
-    e.preventDefault();
-    onAdd({
-      ...form,
-      naicsCodes: form.naicsCodes ? form.naicsCodes.split(',').map((s) => s.trim()).filter(Boolean) : [],
-      pscCodes: form.pscCodes ? form.pscCodes.split(',').map((s) => s.trim()).filter(Boolean) : [],
-    });
-    setForm({ title: '', agency: '', dueDate: '', rfpDate: '', solicitationNumber: '', setAside: '', sourceUrl: '', naicsCodes: '', pscCodes: '', stage: 'detected', notes: '' });
-    setShowForm(false);
-  }
-
-  const counts = useMemo(() => {
-    const c = { all: records.length };
-    STAGES.forEach((s) => { c[s.value] = records.filter((r) => r.stage === s.value).length; });
-    return c;
-  }, [records]);
-
-  return (
-    <div className="space-y-4">
-      {/* Stage filter */}
-      <div className="flex flex-wrap gap-2 items-center">
-        <button onClick={() => setStageFilter('all')} className={`${smBtnCls} ${stageFilter === 'all' ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
-          All ({counts.all})
-        </button>
-        {STAGES.map((s) => (
-          <button key={s.value} onClick={() => setStageFilter(s.value)} className={`${smBtnCls} ${stageFilter === s.value ? s.cls + ' font-bold' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
-            {s.label} ({counts[s.value] || 0})
-          </button>
-        ))}
-        <button onClick={() => setShowForm(!showForm)} className="ml-auto btn btn-primary flex items-center gap-1 text-sm">
-          <Plus size={15} /> New Record
-        </button>
-      </div>
-
-      {/* Add form */}
-      {showForm && (
-        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 p-4">
-          <h3 className="font-semibold text-sm mb-3 text-blue-900 dark:text-blue-200">New Capture Record</h3>
-          <form onSubmit={handleAdd} className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <Field label="Opportunity Title *">
-              <input className={inputCls} required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Environmental Services Support BPA" />
-            </Field>
-            <Field label="Agency">
-              <input className={inputCls} value={form.agency} onChange={(e) => setForm({ ...form, agency: e.target.value })} placeholder="e.g. EPA, DoD, GSA" />
-            </Field>
-            <Field label="Solicitation Number">
-              <input className={inputCls} value={form.solicitationNumber} onChange={(e) => setForm({ ...form, solicitationNumber: e.target.value })} placeholder="e.g. W912HV-25-R-0012" />
-            </Field>
-            <Field label="Set-Aside">
-              <input className={inputCls} value={form.setAside} onChange={(e) => setForm({ ...form, setAside: e.target.value })} placeholder="e.g. 8(a), SDVOSB, WOSB, SB, None" />
-            </Field>
-            <Field label="Submission Due Date">
-              <input className={inputCls} type="date" value={form.dueDate} onChange={(e) => setForm({ ...form, dueDate: e.target.value })} />
-            </Field>
-            <Field label="Expected RFP Date">
-              <input className={inputCls} type="date" value={form.rfpDate} onChange={(e) => setForm({ ...form, rfpDate: e.target.value })} />
-            </Field>
-            <Field label="NAICS Codes (comma-separated)">
-              <input className={inputCls} value={form.naicsCodes} onChange={(e) => setForm({ ...form, naicsCodes: e.target.value })} placeholder="e.g. 562910, 611430" />
-            </Field>
-            <Field label="PSC Codes (comma-separated)">
-              <input className={inputCls} value={form.pscCodes} onChange={(e) => setForm({ ...form, pscCodes: e.target.value })} placeholder="e.g. F999, U099" />
-            </Field>
-            <Field label="Source URL">
-              <input className={inputCls} value={form.sourceUrl} onChange={(e) => setForm({ ...form, sourceUrl: e.target.value })} placeholder="SAM.gov link or agency portal URL" />
-            </Field>
-            <Field label="Stage">
-              <select className={inputCls} value={form.stage} onChange={(e) => setForm({ ...form, stage: e.target.value })}>
-                {STAGES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-              </select>
-            </Field>
-            <div className="md:col-span-2">
-              <Field label="Notes">
-                <textarea className={inputCls} rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Initial notes, source, detection context…" />
-              </Field>
-            </div>
-            <div className="md:col-span-2 flex gap-2">
-              <button type="submit" className="btn btn-primary text-sm">Add Record</button>
-              <button type="button" onClick={() => setShowForm(false)} className="btn btn-secondary text-sm">Cancel</button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Records table */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-400 dark:text-gray-600">
-          <Radar size={36} className="mx-auto mb-2 opacity-40" />
-          <p className="text-sm">No capture records. Add one above.</p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-          <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <tr>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Stage</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Title</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Agency</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Due</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Bid</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Pwin</th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((r) => {
-                const isSelected = r.id === selectedId;
-                return (
-                  <tr
-                    key={r.id}
-                    onClick={() => setSelectedId(r.id === selectedId ? null : r.id)}
-                    className={`border-b border-gray-100 dark:border-gray-700 cursor-pointer transition-colors ${isSelected ? 'bg-blue-50 dark:bg-blue-950' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}`}
-                  >
-                    <td className="px-3 py-2">
-                      <select
-                        value={r.stage}
-                        onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => { e.stopPropagation(); onUpdateStage(r.id, e.target.value); }}
-                        className="text-xs rounded border border-gray-200 dark:border-gray-600 bg-transparent dark:text-gray-300 py-0.5 px-1"
-                      >
-                        {STAGES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-                      </select>
-                    </td>
-                    <td className="px-3 py-2 font-medium text-gray-800 dark:text-gray-200 max-w-xs">
-                      <span className="line-clamp-1">{r.title || r.opportunityId || 'Untitled'}</span>
-                      {r.solicitationNumber && <span className="block text-xs text-gray-400 dark:text-gray-500">{r.solicitationNumber}</span>}
-                    </td>
-                    <td className="px-3 py-2 text-gray-600 dark:text-gray-400">{r.agency || '—'}</td>
-                    <td className="px-3 py-2 text-gray-600 dark:text-gray-400 whitespace-nowrap">{r.dueDate || '—'}</td>
-                    <td className="px-3 py-2"><RecPill rec={r.bidNoBid?.recommendation} /></td>
-                    <td className="px-3 py-2 font-medium text-gray-700 dark:text-gray-300">{r.bidNoBid?.pwin != null ? `${r.bidNoBid.pwin}%` : '—'}</td>
-                    <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
-                      <button onClick={() => onDelete(r.id)} className="text-red-400 hover:text-red-600 dark:hover:text-red-400" title="Delete">
-                        <Trash2 size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {selectedId && (
-        <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
-          <ChevronRight size={12} /> Record selected — view Scorecard, Dossier, and Compliance tabs for details.
-        </p>
-      )}
-    </div>
-  );
-}
-
-// ── Scorecard Tab ─────────────────────────────────────────────────────────────
+// ── Scorecard Tab (drawer) ─────────────────────────────────────────────────────
 function ScorecardTab({ record, onUpdate }) {
   const base = record?.bidNoBid || createBidNoBidScore();
   const [scores, setScores] = useState({ ...base });
@@ -296,7 +134,6 @@ function ScorecardTab({ record, onUpdate }) {
     setScores((prev) => ({ ...prev, [key]: Number(val) }));
     setDirty(true);
   }
-
   function save() {
     const updated = { ...scores, total, recommendation: autoRec, pwin: autoPwin };
     onUpdate(record.id, { bidNoBid: updated });
@@ -305,7 +142,7 @@ function ScorecardTab({ record, onUpdate }) {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div>
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="font-semibold text-gray-800 dark:text-gray-200">{record.title || record.opportunityId}</h3>
@@ -323,14 +160,14 @@ function ScorecardTab({ record, onUpdate }) {
             <div key={dim.key}>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{dim.label}</span>
-                <span className="text-sm font-bold text-blue-600 dark:text-blue-400 w-6 text-right">{scores[dim.key] || 3}</span>
+                <span className="text-sm font-bold text-rare-crimson w-6 text-right">{scores[dim.key] || 3}</span>
               </div>
               <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">{dim.help}</p>
               <input
                 type="range" min="1" max="5" step="1"
                 value={scores[dim.key] || 3}
                 onChange={(e) => setDim(dim.key, e.target.value)}
-                className="w-full accent-blue-600"
+                className="w-full accent-rare-crimson"
               />
               <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500">
                 <span>1 — Weak</span><span>3 — Moderate</span><span>5 — Strong</span>
@@ -343,7 +180,7 @@ function ScorecardTab({ record, onUpdate }) {
       <Section title="Pwin Estimate & Recommendation" icon={Target}>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="rounded-lg bg-gray-50 dark:bg-gray-700 p-3 text-center">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{scores.pwin != null ? scores.pwin : autoPwin}%</div>
+            <div className="text-3xl font-bold text-rare-crimson">{scores.pwin != null ? scores.pwin : autoPwin}%</div>
             <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Pwin Estimate</div>
           </div>
           <div className="rounded-lg bg-gray-50 dark:bg-gray-700 p-3 text-center">
@@ -375,7 +212,7 @@ function ScorecardTab({ record, onUpdate }) {
   );
 }
 
-// ── Dossier Tab ───────────────────────────────────────────────────────────────
+// ── Dossier Tab (drawer) ────────────────────────────────────────────────────────
 function DossierTab({ record, onUpdate }) {
   const [localRec, setLocalRec] = useState(null);
   const [dirty, setDirty] = useState(false);
@@ -386,17 +223,9 @@ function DossierTab({ record, onUpdate }) {
 
   if (!record || !localRec) return <NoSelection />;
 
-  function set(path, value) {
-    setLocalRec((prev) => ({ ...prev, [path]: value }));
-    setDirty(true);
-  }
+  function set(path, value) { setLocalRec((prev) => ({ ...prev, [path]: value })); setDirty(true); }
+  function save() { onUpdate(record.id, localRec); setDirty(false); }
 
-  function save() {
-    onUpdate(record.id, localRec);
-    setDirty(false);
-  }
-
-  // Stakeholders
   function addStakeholder() {
     set('stakeholders', [...(localRec.stakeholders || []), { role: 'CO', name: '', agency: '', notes: '' }]);
   }
@@ -408,11 +237,7 @@ function DossierTab({ record, onUpdate }) {
   function removeStakeholder(i) {
     set('stakeholders', (localRec.stakeholders || []).filter((_, idx) => idx !== i));
   }
-
-  // Array field helper (winThemes, ghostingTargets, teamingGaps)
-  function addToList(key) {
-    set(key, [...(localRec[key] || []), '']);
-  }
+  function addToList(key) { set(key, [...(localRec[key] || []), '']); }
   function updateListItem(key, i, val) {
     const arr = [...(localRec[key] || [])];
     arr[i] = val;
@@ -423,7 +248,7 @@ function DossierTab({ record, onUpdate }) {
   }
 
   return (
-    <div className="max-w-3xl space-y-0">
+    <div className="space-y-0">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="font-semibold text-gray-800 dark:text-gray-200">{localRec.title || localRec.opportunityId}</h3>
@@ -434,7 +259,6 @@ function DossierTab({ record, onUpdate }) {
         </button>
       </div>
 
-      {/* Incumbent */}
       <Section title="Incumbent / Competitor" icon={AlertTriangle}>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Field label="Incumbent Name">
@@ -451,7 +275,6 @@ function DossierTab({ record, onUpdate }) {
         </div>
       </Section>
 
-      {/* Stakeholders */}
       <Section title="Stakeholder Map" icon={Users}>
         {(localRec.stakeholders || []).length === 0
           ? <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">No stakeholders added.</p>
@@ -483,7 +306,6 @@ function DossierTab({ record, onUpdate }) {
         <button onClick={addStakeholder} className="btn btn-secondary text-xs flex items-center gap-1"><Plus size={12} /> Add Stakeholder</button>
       </Section>
 
-      {/* Win Themes */}
       <Section title="Win Themes" icon={Target}>
         <div className="space-y-2 mb-3">
           {(localRec.winThemes || []).map((t, i) => (
@@ -497,7 +319,6 @@ function DossierTab({ record, onUpdate }) {
         <button onClick={() => addToList('winThemes')} className="btn btn-secondary text-xs flex items-center gap-1"><Plus size={12} /> Add Win Theme</button>
       </Section>
 
-      {/* Ghosting Targets */}
       <Section title="Ghosting Targets (Incumbent Weaknesses to Contrast)" icon={ChevronRight}>
         <div className="space-y-2 mb-3">
           {(localRec.ghostingTargets || []).map((t, i) => (
@@ -511,7 +332,6 @@ function DossierTab({ record, onUpdate }) {
         <button onClick={() => addToList('ghostingTargets')} className="btn btn-secondary text-xs flex items-center gap-1"><Plus size={12} /> Add Target</button>
       </Section>
 
-      {/* Teaming Gaps */}
       <Section title="Teaming Gaps" icon={Users}>
         <div className="space-y-2 mb-3">
           {(localRec.teamingGaps || []).map((t, i) => (
@@ -525,7 +345,6 @@ function DossierTab({ record, onUpdate }) {
         <button onClick={() => addToList('teamingGaps')} className="btn btn-secondary text-xs flex items-center gap-1"><Plus size={12} /> Add Gap</button>
       </Section>
 
-      {/* OCI / Pricing */}
       <Section title="OCI, Affiliation & Pricing Notes" icon={Shield}>
         <Field label="OCI / Affiliation / Subcontracting Risks">
           <textarea className={inputCls} rows={3} value={localRec.ociNotes || ''} onChange={(e) => set('ociNotes', e.target.value)} placeholder="OCI risks, SBA affiliation considerations, limitations-on-subcontracting check…" />
@@ -538,7 +357,7 @@ function DossierTab({ record, onUpdate }) {
   );
 }
 
-// ── Compliance Tab ────────────────────────────────────────────────────────────
+// ── Compliance Tab (drawer) ─────────────────────────────────────────────────────
 function ComplianceTab({ record, onUpdate }) {
   const [localRec, setLocalRec] = useState(null);
   const [dirty, setDirty] = useState(false);
@@ -551,10 +370,8 @@ function ComplianceTab({ record, onUpdate }) {
 
   function set(key, value) { setLocalRec((p) => ({ ...p, [key]: value })); setDirty(true); }
   function setPortal(key, value) { set('portalReadiness', { ...(localRec.portalReadiness || {}), [key]: value }); }
-
   function save() { onUpdate(record.id, localRec); setDirty(false); }
 
-  // Compliance matrix
   function addCompItem() {
     set('complianceItems', [...(localRec.complianceItems || []), { id: `ci-${Date.now()}`, section: '', requirement: '', owner: '', status: 'open', notes: '' }]);
   }
@@ -571,7 +388,7 @@ function ComplianceTab({ record, onUpdate }) {
   const portalScore = [portal.samActive, portal.portalIdentified, portal.credentialsConfirmed].filter(Boolean).length;
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="font-semibold text-gray-800 dark:text-gray-200">{localRec.title || localRec.opportunityId}</h3>
@@ -582,7 +399,6 @@ function ComplianceTab({ record, onUpdate }) {
         </button>
       </div>
 
-      {/* Section L/M */}
       <Section title="Section L / M Extraction Notes" icon={FileText}>
         <Field label="Key Evaluation Factors & Subfactors">
           <textarea className={inputCls} rows={4} value={localRec.sectionLMNotes || ''} onChange={(e) => set('sectionLMNotes', e.target.value)} placeholder="Paste or summarize Section L instructions and Section M evaluation criteria…" />
@@ -592,7 +408,6 @@ function ComplianceTab({ record, onUpdate }) {
         </Field>
       </Section>
 
-      {/* Compliance Matrix */}
       <Section title="Compliance Matrix Starter" icon={CheckCircle}>
         <div className="overflow-x-auto mb-3">
           {(localRec.complianceItems || []).length === 0
@@ -632,12 +447,11 @@ function ComplianceTab({ record, onUpdate }) {
         <button onClick={addCompItem} className="btn btn-secondary text-xs flex items-center gap-1"><Plus size={12} /> Add Requirement</button>
       </Section>
 
-      {/* Portal Readiness */}
       <Section title="Portal Readiness" icon={Shield}>
         <div className="mb-3">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${(portalScore / 3) * 100}%` }} />
+              <div className="bg-rare-lime h-2 rounded-full transition-all" style={{ width: `${(portalScore / 3) * 100}%` }} />
             </div>
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{portalScore}/3</span>
           </div>
@@ -648,7 +462,7 @@ function ComplianceTab({ record, onUpdate }) {
           ].map(({ key, label }) => (
             <label key={key} className="flex items-center gap-2 mb-2 cursor-pointer">
               <button onClick={() => setPortal(key, !portal[key])} className="focus:outline-none">
-                {portal[key] ? <CheckCircle size={18} className="text-green-500" /> : <Circle size={18} className="text-gray-300 dark:text-gray-600" />}
+                {portal[key] ? <CheckCircle size={18} className="text-rare-lime" /> : <Circle size={18} className="text-gray-300 dark:text-gray-600" />}
               </button>
               <span className={`text-sm ${portal[key] ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>{label}</span>
             </label>
@@ -662,7 +476,7 @@ function ComplianceTab({ record, onUpdate }) {
   );
 }
 
-// ── Knowledge Tab ─────────────────────────────────────────────────────────────
+// ── Knowledge Library (standalone slide-over) ───────────────────────────────────
 function KnowledgeTab({ items, onAdd, onDelete }) {
   const [kiType, setKiType] = useState('foia');
   const [showForm, setShowForm] = useState(false);
@@ -686,10 +500,9 @@ function KnowledgeTab({ items, onAdd, onDelete }) {
 
   return (
     <div className="space-y-4">
-      {/* Type filter */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         {KI_TYPES.map((t) => (
-          <button key={t} onClick={() => setKiType(t)} className={`${smBtnCls} ${kiType === t ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
+          <button key={t} onClick={() => setKiType(t)} className={`${smBtnCls} ${kiType === t ? 'bg-rare-crimson text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
             {KI_TYPE_LABELS[t]} ({items.filter((k) => k.type === t).length})
           </button>
         ))}
@@ -698,10 +511,9 @@ function KnowledgeTab({ items, onAdd, onDelete }) {
         </button>
       </div>
 
-      {/* Add form */}
       {showForm && (
-        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 p-4">
-          <h3 className="font-semibold text-sm mb-3 text-blue-900 dark:text-blue-200">New {KI_TYPE_LABELS[kiType]} Record</h3>
+        <div className="rounded-xl border border-rare-crimson/20 bg-rare-cream dark:bg-white/5 p-4">
+          <h3 className="font-semibold text-sm mb-3 text-gray-900 dark:text-gray-200">New {KI_TYPE_LABELS[kiType]} Record</h3>
           <form onSubmit={handleAdd} className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <Field label={kiType === 'prior_proposal' ? 'Proposal Title *' : kiType === 'protest' ? 'Case / Docket #' : kiType === 'debrief' ? 'Opportunity Title *' : 'FOIA Request Subject *'}>
               <input className={inputCls} required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
@@ -736,7 +548,6 @@ function KnowledgeTab({ items, onAdd, onDelete }) {
         </div>
       )}
 
-      {/* Items table */}
       {filtered.length === 0
         ? (
           <div className="text-center py-12 text-gray-400 dark:text-gray-600">
@@ -783,56 +594,57 @@ function KnowledgeTab({ items, onAdd, onDelete }) {
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
-const TABS = [
-  { id: 'pipeline',   label: 'Pipeline',   icon: Radar },
-  { id: 'scorecard',  label: 'Scorecard',  icon: TrendingUp },
-  { id: 'dossier',    label: 'Dossier',    icon: Users },
+// ── Slide-over drawer shell ─────────────────────────────────────────────────────
+function Drawer({ open, onClose, title, children, wide }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-40 flex justify-end">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className={`relative z-50 h-full w-full ${wide ? 'max-w-3xl' : 'max-w-2xl'} overflow-y-auto bg-white shadow-modal dark:bg-rare-dark`}>
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-rare-gray-light bg-white px-5 py-3 dark:border-white/10 dark:bg-rare-dark">
+          <h2 className="font-rare-serif text-lg font-bold text-rare-ink dark:text-white">{title}</h2>
+          <button onClick={onClose} className="rounded-md p-1 text-rare-gray hover:text-rare-ink dark:text-white/50 dark:hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="p-5">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+const DRAWER_TABS = [
+  { id: 'scorecard', label: 'Scorecard', icon: TrendingUp },
+  { id: 'dossier', label: 'Dossier', icon: Users },
   { id: 'compliance', label: 'Compliance', icon: Shield },
-  { id: 'knowledge',  label: 'Knowledge',  icon: BookOpen },
 ];
 
+// ── Main Page ───────────────────────────────────────────────────────────────────
 export default function CaptureBoardTabs() {
-  const [tab, setTab] = useState('pipeline');
+  const { proposals, fetchProposals, isLoading } = useProposalContext();
+
+  // Capture-record store (localStorage-primary, server best-effort)
   const [records, setRecords] = useState(() => loadLS(CR_KEY, []));
   const [knowledgeItems, setKnowledgeItems] = useState(() => loadLS(KI_KEY, []));
   const [selectedId, setSelectedId] = useState(null);
+  const [drawerTab, setDrawerTab] = useState('scorecard');
+  const [showKnowledge, setShowKnowledge] = useState(false);
 
   const selected = useMemo(() => records.find((r) => r.id === selectedId) || null, [records, selectedId]);
 
-  // Try to sync from server on mount
   useEffect(() => {
     getCaptureRecords().then((serverRecords) => {
-      if (serverRecords.length > 0) {
-        setRecords(serverRecords);
-        saveLS(CR_KEY, serverRecords);
-      }
+      if (serverRecords.length > 0) { setRecords(serverRecords); saveLS(CR_KEY, serverRecords); }
     });
     getKnowledgeItems().then((serverItems) => {
-      if (serverItems.length > 0) {
-        setKnowledgeItems(serverItems);
-        saveLS(KI_KEY, serverItems);
-      }
+      if (serverItems.length > 0) { setKnowledgeItems(serverItems); saveLS(KI_KEY, serverItems); }
     });
   }, []);
 
-  // Capture record CRUD (localStorage-primary, server best-effort)
-  const addRecord = useCallback((data) => {
-    const now = new Date().toISOString();
-    const base = createCaptureRecord(data.solicitationNumber || `opp-${Date.now()}`);
-    const rec = { ...base, ...data, id: base.id, createdAt: now, updatedAt: now };
-    setRecords((prev) => {
-      const next = [rec, ...prev];
-      saveLS(CR_KEY, next);
-      createCaptureRecordApi(rec).catch(() => {});
-      return next;
-    });
-    setSelectedId(rec.id);
-  }, []);
-
+  // ── Capture-record CRUD ─────────────────────────────────────────────────────
   const updateRecord = useCallback((id, patch) => {
     setRecords((prev) => {
-      const next = prev.map((r) => r.id === id ? { ...r, ...patch, updatedAt: new Date().toISOString() } : r);
+      const next = prev.map((r) => (r.id === id ? { ...r, ...patch, updatedAt: new Date().toISOString() } : r));
       saveLS(CR_KEY, next);
       updateCaptureRecordApi(id, patch).catch(() => {});
       return next;
@@ -849,11 +661,6 @@ export default function CaptureBoardTabs() {
     if (selectedId === id) setSelectedId(null);
   }, [selectedId]);
 
-  const updateStage = useCallback((id, stage) => {
-    updateRecord(id, { stage });
-  }, [updateRecord]);
-
-  // Knowledge item CRUD
   const addKnowledgeItem = useCallback((data) => {
     const now = new Date().toISOString();
     const item = { id: `ki-${Date.now()}`, ...data, createdAt: now, updatedAt: now };
@@ -874,84 +681,235 @@ export default function CaptureBoardTabs() {
     });
   }, []);
 
-  // Summary stats
-  const stats = useMemo(() => ({
-    total: records.length,
-    bid: records.filter((r) => r.bidNoBid?.recommendation === 'bid').length,
-    noBid: records.filter((r) => r.bidNoBid?.recommendation === 'no_bid').length,
-    active: records.filter((r) => r.stage === 'capture_active').length,
-  }), [records]);
+  // ── Lane mutation + capture promotion ───────────────────────────────────────
+  const handleMoveLane = useCallback(async (proposalId, targetLane) => {
+    try {
+      const res = await fetch(buildApiUrl(`/proposals/${proposalId}/lane`), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intakeLane: targetLane }),
+      });
+      if (!res.ok) return false;
+      await fetchProposals();
+      return true;
+    } catch {
+      return false;
+    }
+  }, [fetchProposals]);
+
+  const handleCapture = useCallback(async (proposalId) => {
+    const proposal = proposals.find((p) => p.id === proposalId);
+    // 1) promote lane to active_pursuit
+    await handleMoveLane(proposalId, 'active_pursuit');
+    // 2) create a linked capture record
+    const now = new Date().toISOString();
+    const base = createCaptureRecord(proposal?.solicitationNumber || proposalId);
+    const rec = {
+      ...base,
+      id: base.id,
+      opportunityId: proposalId,
+      title: proposal?.title || 'Untitled',
+      agency: proposal?.agency && proposal.agency !== 'Unknown Agency' ? proposal.agency : '',
+      dueDate: proposal?.dueDate || '',
+      solicitationNumber: proposal?.solicitationNumber || '',
+      naicsCodes: proposal?.naics ? [String(proposal.naics)] : [],
+      stage: 'capture_active',
+      createdAt: now,
+      updatedAt: now,
+    };
+    setRecords((prev) => {
+      const next = [rec, ...prev];
+      saveLS(CR_KEY, next);
+      createCaptureRecordApi(rec).catch(() => {});
+      return next;
+    });
+    setSelectedId(rec.id);
+    setDrawerTab('scorecard');
+  }, [proposals, handleMoveLane]);
+
+  // ── Derivations from real proposal data ─────────────────────────────────────
+  // Intake pool: pre-award lanes with an ACTIVE due date (exclude past-due,
+  // today, and tomorrow — owner rule). fitScore/NAICS filtering lives in the grid.
+  const pool = useMemo(() => {
+    return (proposals || []).filter((p) => {
+      if (!POOL_LANES.includes(p.intakeLane)) return false;
+      const days = getDaysUntilDue(p.dueDate);
+      return typeof days === 'number' && days >= 2;
+    });
+  }, [proposals]);
+
+  const naicsOptions = useMemo(() => {
+    const set = new Set();
+    pool.forEach((p) => {
+      const codes = [p.naics, ...(p.metadata?.naics ? [p.metadata.naics] : [])].filter(Boolean);
+      codes.forEach((c) => set.add(String(c)));
+    });
+    return Array.from(set).sort();
+  }, [pool]);
+
+  const laneCounts = useMemo(() => {
+    const c = { watchlist: 0, review_queue: 0, active_pursuit: 0 };
+    (proposals || []).forEach((p) => {
+      if (c[p.intakeLane] != null) c[p.intakeLane] += 1;
+    });
+    return c;
+  }, [proposals]);
+
+  // Do-Next: incomplete tasks across active_pursuit proposals, sorted by dueDate.
+  const doNext = useMemo(() => {
+    const items = [];
+    (proposals || []).forEach((p) => {
+      if (p.intakeLane !== 'active_pursuit') return;
+      (Array.isArray(p.tasks) ? p.tasks : []).forEach((t) => {
+        if (t.completed) return;
+        items.push({
+          proposalId: p.id,
+          proposalTitle: p.title || 'Untitled',
+          taskId: t.id,
+          taskTitle: t.title || 'Task',
+          owner: t.owner || null,
+          dueDate: t.dueDate || null,
+          stage: p.workflow?.currentStage || p.status || null,
+        });
+      });
+    });
+    items.sort((a, b) => {
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return a.dueDate.localeCompare(b.dueDate);
+    });
+    return items;
+  }, [proposals]);
+
+  // Blocked: derived (metadata.blockers is never populated).
+  const blocked = useMemo(() => {
+    const out = [];
+    (proposals || []).forEach((p) => {
+      if (p.status === 'closed' || p.intakeLane === 'archive') return;
+      const reasons = [];
+
+      // Dirty stage handoffs
+      (Array.isArray(p.stageHandoffs) ? p.stageHandoffs : []).forEach((h) => {
+        if (h.signal && h.signal !== 'clean') {
+          reasons.push({ type: 'handoff', label: `Handoff ${h.from || '?'}→${h.to || '?'}: ${h.signal}` });
+        } else if (Array.isArray(h.outputsMissing) && h.outputsMissing.length > 0) {
+          reasons.push({ type: 'handoff', label: `Missing outputs at ${h.to || 'stage'}: ${h.outputsMissing.join(', ')}` });
+        }
+      });
+
+      // Overdue incomplete tasks
+      (Array.isArray(p.tasks) ? p.tasks : []).forEach((t) => {
+        if (t.completed || !t.dueDate) return;
+        const days = getDaysUntilDue(t.dueDate);
+        if (typeof days === 'number' && days < 0) {
+          reasons.push({ type: 'overdue_task', label: `Overdue: ${t.taskTitle || t.title || 'task'}` });
+        }
+      });
+
+      // Compliance gaps
+      const cs = p.complianceStatus || {};
+      if (cs.blockedRequirementCount > 0) reasons.push({ type: 'compliance', label: `${cs.blockedRequirementCount} blocked requirement(s)` });
+      if (cs.disqualifyingOmissionCount > 0) reasons.push({ type: 'compliance', label: `${cs.disqualifyingOmissionCount} disqualifying omission(s)` });
+      if (cs.unresolvedGapCount > 0) reasons.push({ type: 'compliance', label: `${cs.unresolvedGapCount} unresolved gap(s)` });
+
+      // Explicit blockers (if ever populated)
+      (Array.isArray(p.metadata?.blockers) ? p.metadata.blockers : []).forEach((b) => {
+        reasons.push({ type: 'blocker', label: typeof b === 'string' ? b : (b.label || 'Blocked') });
+      });
+
+      if (reasons.length > 0) {
+        out.push({
+          proposalId: p.id,
+          proposalTitle: p.title || 'Untitled',
+          reasons,
+          since: p.updatedAt || null,
+        });
+      }
+    });
+    return out;
+  }, [proposals]);
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Capture Board</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Pre-solicitation intelligence, bid/no-bid, dossiers, compliance, and knowledge library.</p>
-      </div>
+    <div className="container mx-auto max-w-7xl px-4 py-6">
+      <PageHeader
+        title="Capture Board"
+        subtitle="What to pursue, what to do next, what's blocked"
+        actions={
+          <button
+            onClick={() => setShowKnowledge(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-rare-gray-light bg-white px-3 py-1.5 text-sm font-medium text-rare-ink hover:bg-rare-cream dark:border-white/10 dark:bg-rare-ink dark:text-white dark:hover:bg-white/5"
+          >
+            <BookOpen size={15} /> Knowledge Library
+          </button>
+        }
+      />
 
-      {/* Summary stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        {[
-          { label: 'Total Tracked', value: stats.total, color: 'text-gray-800 dark:text-gray-200' },
-          { label: 'Bid Decisions', value: stats.bid, color: 'text-green-600 dark:text-green-400' },
-          { label: 'No Bid', value: stats.noBid, color: 'text-red-500 dark:text-red-400' },
-          { label: 'Capture Active', value: stats.active, color: 'text-blue-600 dark:text-blue-400' },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            <div className={`text-2xl font-bold ${color}`}>{value}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</div>
+      {isLoading && (proposals || []).length === 0 ? (
+        <div className="flex min-h-[40vh] items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-rare-crimson" />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <FunnelHeader counts={laneCounts} filteredOut={laneCounts.watchlist + laneCounts.review_queue + laneCounts.active_pursuit - pool.length} />
+
+          {/* Intake Pool */}
+          <IntakePoolGrid
+            proposals={pool}
+            onCapture={handleCapture}
+            onMoveLane={handleMoveLane}
+            naicsOptions={naicsOptions}
+          />
+
+          {/* Do-Next + Blocked */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <DoNextQueue items={doNext} />
+            <BlockedQueue items={blocked} />
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* Tab nav */}
-      <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-        <nav className="-mb-px flex space-x-1 overflow-x-auto">
-          {TABS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                tab === id
-                  ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400'
-                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-              }`}
-            >
-              <Icon size={15} />
-              {label}
-              {id === 'scorecard' || id === 'dossier' || id === 'compliance' ? (
-                selected
-                  ? <span className="ml-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-1.5 rounded-full">{selected.title?.slice(0, 12) || 'Selected'}</span>
-                  : <span className="ml-1 text-xs text-gray-400 dark:text-gray-600">— none</span>
-              ) : null}
-            </button>
-          ))}
-        </nav>
-      </div>
+      {/* Capture record detail drawer */}
+      <Drawer
+        open={!!selected}
+        onClose={() => setSelectedId(null)}
+        title={selected?.title || 'Capture Record'}
+        wide
+      >
+        {selected && (
+          <>
+            <div className="mb-4 flex items-center gap-1 border-b border-rare-gray-light dark:border-white/10">
+              {DRAWER_TABS.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setDrawerTab(id)}
+                  className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2 font-rare-sans text-xs font-semibold uppercase tracking-wide transition-colors ${
+                    drawerTab === id
+                      ? 'border-rare-crimson text-rare-crimson'
+                      : 'border-transparent text-rare-gray hover:text-rare-ink dark:text-white/50 dark:hover:text-white'
+                  }`}
+                >
+                  <Icon size={14} /> {label}
+                </button>
+              ))}
+              <button
+                onClick={() => deleteRecord(selected.id)}
+                className="ml-auto flex items-center gap-1 px-2 py-2 text-xs text-rare-crimson hover:underline"
+                title="Delete capture record"
+              >
+                <Trash2 size={13} /> Delete
+              </button>
+            </div>
+            {drawerTab === 'scorecard' && <ScorecardTab record={selected} onUpdate={updateRecord} />}
+            {drawerTab === 'dossier' && <DossierTab record={selected} onUpdate={updateRecord} />}
+            {drawerTab === 'compliance' && <ComplianceTab record={selected} onUpdate={updateRecord} />}
+          </>
+        )}
+      </Drawer>
 
-      {/* Tab content */}
-      {tab === 'pipeline' && (
-        <PipelineTab
-          records={records}
-          selectedId={selectedId}
-          setSelectedId={setSelectedId}
-          onAdd={addRecord}
-          onDelete={deleteRecord}
-          onUpdateStage={updateStage}
-        />
-      )}
-      {tab === 'scorecard' && (
-        <ScorecardTab record={selected} onUpdate={updateRecord} />
-      )}
-      {tab === 'dossier' && (
-        <DossierTab record={selected} onUpdate={updateRecord} />
-      )}
-      {tab === 'compliance' && (
-        <ComplianceTab record={selected} onUpdate={updateRecord} />
-      )}
-      {tab === 'knowledge' && (
+      {/* Knowledge library drawer */}
+      <Drawer open={showKnowledge} onClose={() => setShowKnowledge(false)} title="Knowledge Library" wide>
         <KnowledgeTab items={knowledgeItems} onAdd={addKnowledgeItem} onDelete={deleteKnowledgeItem} />
-      )}
+      </Drawer>
     </div>
   );
 }

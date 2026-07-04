@@ -83,6 +83,38 @@ router.get('/activities', async (_req, res) => {
   }
 });
 
+router.get('/audit', async (_req, res) => {
+  try {
+    const data = await bridge.getAudit();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'CRM audit failed', detail: err.message });
+  }
+});
+
+router.get('/views', async (req, res) => {
+  try {
+    const viewIds = req.query.ids ? req.query.ids.split(',') : null;
+    const data = await bridge.getSavedViews(viewIds);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Saved views failed', detail: err.message });
+  }
+});
+
+router.get('/views/:viewId', async (req, res) => {
+  try {
+    const data = await bridge.getSavedViews([req.params.viewId]);
+    const view = data.views[req.params.viewId];
+    if (!view) {
+      return res.status(404).json({ error: `View "${req.params.viewId}" not found`, available: data.available_views });
+    }
+    res.json({ generated: data.generated, ...view });
+  } catch (err) {
+    res.status(500).json({ error: 'Saved view failed', detail: err.message });
+  }
+});
+
 router.get('/pipeline', async (_req, res) => {
   try {
     const dashboard = await bridge.getDashboard();

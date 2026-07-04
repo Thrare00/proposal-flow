@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProposalList } from './ProposalList.jsx';
 import ProposalDevelopmentGuide from './ProposalDevelopmentGuide.jsx';
+import PageHeader from '../components/PageHeader.jsx';
 import { buildApiUrl } from '../lib/runtimeApi.js';
 
 function WorkflowBuilderTab() {
@@ -145,7 +146,7 @@ export default function ProposalsTabs() {
   const [tab, setTab] = useState('list');
   return (
     <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <h1 className="text-2xl font-bold mb-4">Proposals</h1>
+      <PageHeader title="Proposals" />
       <div className="border-b mb-4">
         <nav className="-mb-px flex space-x-6" aria-label="Tabs">
           <button className={`py-2 border-b-2 ${tab === 'list' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`} onClick={() => setTab('list')}>List</button>

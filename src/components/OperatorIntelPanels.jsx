@@ -6,7 +6,6 @@ import {
   Crown,
   FileCheck,
   Layers,
-  Shield,
   Swords,
   Target,
   XCircle,
@@ -16,8 +15,8 @@ import {
 
 function Section({ title, icon: Icon, color, children }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-      <div className={`flex items-center gap-2 border-b border-gray-200 px-5 py-3 ${color}`}>
+    <div className="rounded-xl border border-slate-200 bg-white/95 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/95">
+      <div className={`flex items-center gap-2 border-b border-slate-200 px-5 py-3 dark:border-slate-700 ${color}`}>
         {Icon && <Icon className="h-5 w-5" />}
         <h3 className="text-base font-semibold">{title}</h3>
       </div>
@@ -28,16 +27,16 @@ function Section({ title, icon: Icon, color, children }) {
 
 function Row({ label, value, tone }) {
   const tones = {
-    good: 'text-emerald-700',
-    warn: 'text-amber-700',
-    danger: 'text-red-700',
-    muted: 'text-gray-400 italic',
+    good: 'text-emerald-700 dark:text-emerald-300',
+    warn: 'text-amber-700 dark:text-amber-300',
+    danger: 'text-red-700 dark:text-red-300',
+    muted: 'text-slate-400 italic dark:text-slate-500',
   };
   return (
     <div className="flex items-start justify-between gap-3 py-1.5">
-      <span className="text-sm text-gray-600">{label}</span>
-      <span className={`text-sm font-medium text-right ${tones[tone] || 'text-gray-900'}`}>
-        {value ?? <span className="text-gray-400 italic">--</span>}
+      <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
+      <span className={`text-sm font-medium text-right ${tones[tone] || 'text-slate-900 dark:text-slate-100'}`}>
+        {value ?? <span className="text-slate-400 italic dark:text-slate-500">--</span>}
       </span>
     </div>
   );
@@ -49,11 +48,11 @@ function ScoreBar({ label, value, max = 5 }) {
   const color = pct >= 70 ? 'bg-emerald-500' : pct >= 40 ? 'bg-amber-400' : 'bg-red-500';
   return (
     <div className="py-1">
-      <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+      <div className="mb-1 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
         <span>{label}</span>
         <span className="font-semibold">{value}/{max}</span>
       </div>
-      <div className="h-2 w-full rounded-full bg-gray-200">
+      <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700">
         <div className={`h-2 rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -62,7 +61,7 @@ function ScoreBar({ label, value, max = 5 }) {
 
 function TagList({ items, empty, color = 'bg-gray-100 text-gray-700' }) {
   if (!items || items.length === 0) {
-    return <p className="text-sm text-gray-400 italic">{empty}</p>;
+    return <p className="text-sm italic text-slate-400 dark:text-slate-500">{empty}</p>;
   }
   return (
     <div className="flex flex-wrap gap-1.5">
@@ -80,8 +79,8 @@ function Indicator({ ok, label }) {
     <div className="flex items-center gap-2 py-0.5">
       {ok
         ? <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-        : <XCircle className="h-4 w-4 text-gray-300 shrink-0" />}
-      <span className={`text-sm ${ok ? 'text-gray-900' : 'text-gray-400'}`}>{label}</span>
+        : <XCircle className="h-4 w-4 shrink-0 text-slate-300 dark:text-slate-600" />}
+      <span className={`text-sm ${ok ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}>{label}</span>
     </div>
   );
 }
@@ -175,7 +174,7 @@ function MissionCriticalPanel({ proposal }) {
           {criticalItems.map((item, i) => (
             <div key={i} className={`flex items-start gap-2 rounded-lg border p-3 ${severityBg(item.severity)}`}>
               {severityIcon(item.severity)}
-              <span className="text-sm font-medium text-gray-900">{item.text}</span>
+              <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{item.text}</span>
             </div>
           ))}
         </div>
@@ -229,9 +228,9 @@ function CompetitiveExclusionPanel({ proposal }) {
             <ScoreBar label="Strategic Value" value={bnb.strategicValue} />
           </div>
           {bnb.total != null && (
-            <div className="mt-3 flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2">
-              <span className="text-sm font-semibold text-gray-700">Total Score</span>
-              <span className="text-lg font-bold text-gray-900">{bnb.total}/30</span>
+            <div className="mt-3 flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/70">
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Total Score</span>
+              <span className="text-lg font-bold text-slate-900 dark:text-slate-100">{bnb.total}/30</span>
             </div>
           )}
           {bnb.recommendation && (
@@ -383,7 +382,7 @@ function StructuralAdvantagePanel({ proposal }) {
         {(preSol.riskNotes || []).length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Risk Notes</p>
-            <ul className="list-disc pl-5 text-sm text-gray-700 space-y-0.5">
+            <ul className="list-disc space-y-0.5 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {preSol.riskNotes.map((note, i) => <li key={i}>{note}</li>)}
             </ul>
           </div>
@@ -392,7 +391,7 @@ function StructuralAdvantagePanel({ proposal }) {
         {(preSol.positioningNotes || []).length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Positioning Notes</p>
-            <ul className="list-disc pl-5 text-sm text-gray-700 space-y-0.5">
+            <ul className="list-disc space-y-0.5 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {preSol.positioningNotes.map((note, i) => <li key={i}>{note}</li>)}
             </ul>
           </div>
@@ -405,9 +404,9 @@ function StructuralAdvantagePanel({ proposal }) {
               {stakeholders.map((s, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
                   <Crown className="h-3.5 w-3.5 text-violet-400 shrink-0" />
-                  <span className="font-medium text-gray-900">{s.role}</span>
-                  {s.name && <span className="text-gray-600">- {s.name}</span>}
-                  {s.agency && <span className="text-gray-400">({s.agency})</span>}
+                  <span className="font-medium text-slate-900 dark:text-slate-100">{s.role}</span>
+                  {s.name && <span className="text-slate-600 dark:text-slate-300">- {s.name}</span>}
+                  {s.agency && <span className="text-slate-400 dark:text-slate-500">({s.agency})</span>}
                 </div>
               ))}
             </div>

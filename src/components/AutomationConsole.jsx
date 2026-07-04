@@ -110,8 +110,9 @@ export default function AutomationConsole() {
     return (
       <button 
         onClick={() => setIsDrawerOpen(true)}
-        className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+        className="rounded-full border border-slate-300/80 bg-white/80 p-2 text-slate-700 shadow-sm transition-colors hover:bg-white hover:text-slate-900 dark:border-slate-600 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
         title="Open Automation Console"
+        aria-label="Open Automation Console"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
@@ -149,9 +150,9 @@ export default function AutomationConsole() {
                   <textarea
                     id="payload"
                     rows={10}
-                    className={`w-full px-3 py-2 border rounded-md font-mono text-sm ${
-                      error ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
+                    className={`w-full rounded-md border px-3 py-2 font-mono text-sm ${
+                      error ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                    } bg-white text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500`}
                     value={payload}
                     onChange={(e) => setPayload(e.target.value)}
                     disabled={submitting}
@@ -181,7 +182,7 @@ export default function AutomationConsole() {
                     type="button"
                     onClick={handleReset}
                     disabled={submitting}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
                   >
                     Reset
                   </button>

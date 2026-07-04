@@ -103,7 +103,7 @@ export default function ProposalCommandCenter({ proposal, onProposalRefresh, add
       disabled={Boolean(activeAction)}
       className={`rounded-md px-4 py-2 text-sm font-medium ${
         variant === 'secondary'
-          ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+          ? 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800'
           : 'bg-blue-600 text-white hover:bg-blue-700'
       } disabled:cursor-not-allowed disabled:opacity-60`}
     >
@@ -126,10 +126,6 @@ export default function ProposalCommandCenter({ proposal, onProposalRefresh, add
   const docxUrl = finalDraftArtifact?.docxUrl
     ? buildApiUrl(finalDraftArtifact.docxUrl.replace(/^\/proposal-flow\/api/, ''))
     : '';
-  const finalDraftUrl = docxUrl || (finalDraftArtifact
-    ? buildApiUrl(`/proposals/${proposal.id}/artifacts/${finalDraftArtifact.id}`)
-    : '');
-
   const [exporting, setExporting] = useState('');
 
   const exportToGoogleDocs = async (endpoint, label) => {
@@ -151,12 +147,12 @@ export default function ProposalCommandCenter({ proposal, onProposalRefresh, add
   };
 
   return (
-    <div className="mb-6 rounded-xl border border-gray-200 bg-white shadow-sm">
-      <div className="border-b border-gray-200 px-6 py-4">
+    <div className="mb-6 rounded-xl border border-slate-200 bg-white/95 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/95">
+      <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">GovCon Command Center</h2>
-            <p className="text-sm text-gray-500">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">GovCon Command Center</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Compliance-first workflow with staged artifacts and visible outputs at every step.
             </p>
           </div>
@@ -171,14 +167,14 @@ export default function ProposalCommandCenter({ proposal, onProposalRefresh, add
         </div>
       </div>
 
-      <div className="border-b border-gray-200 px-6 py-3">
+      <div className="border-b border-slate-200 px-6 py-3 dark:border-slate-700">
         <div className="flex flex-wrap gap-2">
           {TAB_LABELS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setTab(id)}
               className={`inline-flex items-center rounded-full px-3 py-2 text-sm font-medium ${
-                tab === id ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                tab === id ? 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
               }`}
             >
               <Icon className="mr-2 h-4 w-4" />
@@ -202,12 +198,12 @@ export default function ProposalCommandCenter({ proposal, onProposalRefresh, add
               <MetricCard label="Open Gaps" value={proposal.scoring?.unresolved_gap_count || 0} tone={(proposal.scoring?.unresolved_gap_count || 0) === 0 ? 'good' : 'danger'} />
               <MetricCard label="Open Red-Team Findings" value={openRedFlags.length} tone={openRedFlags.length === 0 ? 'good' : 'danger'} />
             </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-              <div className="text-sm font-semibold text-gray-700">Workflow guardrail</div>
-              <p className="mt-2 text-sm text-gray-600">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70">
+              <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">Workflow guardrail</div>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Whole-proposal drafting stays blocked until ingestion, compliance, pre-solicitation, and outline are complete.
                 Current state:{' '}
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-slate-900 dark:text-slate-100">
                   {proposal.workflow?.stageGate?.canDraftWholeProposal ? 'ready to draft' : 'still gated'}
                 </span>
               </p>

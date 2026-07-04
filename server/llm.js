@@ -124,12 +124,15 @@ async function extractPdfText(filePath) {
   }
 }
 
-// Build a concatenated text corpus from the proposal: solicitation text, notes,
-// and all attached PDFs. Capped at ~150K chars (Claude has huge context).
+// Build a concatenated text corpus from the proposal using raw solicitation source,
+// operator notes, and attached PDFs. Intake scoring / award-analysis metadata must
+// not contaminate compliance generation or drafting prompts.
 export async function gatherSolicitationText(proposal) {
   const parts = [];
-  if (proposal.solicitationText) parts.push(`SOLICITATION\n${proposal.solicitationText}`);
-  if (proposal.notes) parts.push(`NOTES\n${proposal.notes}`);
+  const rawSolicitation = proposal.solicitationTextRaw || proposal.solicitationText || '';
+  const operatorNotes = proposal.notes || '';
+  if (rawSolicitation) parts.push(`SOLICITATION\n${rawSolicitation}`);
+  if (operatorNotes) parts.push(`NOTES\n${operatorNotes}`);
 
   const files = Array.isArray(proposal.files) ? proposal.files : [];
   for (const file of files) {

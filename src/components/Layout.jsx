@@ -3,13 +3,12 @@ import {
   LayoutGrid,
   Menu,
   ChevronLeft,
-  Activity,
   BookOpen,
   Target,
-  DollarSign,
+  Waypoints,
   Inbox,
-  Radio,
-  Layers,
+  Award,
+  Settings as SettingsIcon,
 } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom'; // Removed useLocation
 import ThemeSlider from './ThemeSlider.jsx';
@@ -20,15 +19,14 @@ import AutomationConsole from './AutomationConsole';
 // Navigation items (relative to router basename)
 const navigationItems = [
   { to: '/dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-  { to: 'intake-lanes', icon: <Layers size={18} />, label: 'Intake Lanes' },
   { to: 'capture', icon: <Target size={18} />, label: 'Capture Board' },
   { to: 'flowboard', icon: <LayoutGrid size={18} />, label: 'Flow Board' },
-  { to: 'govcon-inbox', icon: <Inbox size={18} />, label: 'GovCon Inbox' },
-  { to: 'operator-updates', icon: <Radio size={18} />, label: 'Operator Updates' },
-  { to: 'ceo-actions', icon: <Activity size={18} />, label: 'CEO Actions' },
+  { to: 'govcon-inbox', icon: <Inbox size={18} />, label: 'Activity' },
   { to: 'proposals', icon: <LayoutGrid size={18} />, label: 'Proposals' },
-  { to: 'pricing', icon: <DollarSign size={18} />, label: 'Pricing' },
+  { to: 'pricing', icon: <Waypoints size={18} />, label: 'Pipeline' },
+  { to: 'past-performance', icon: <Award size={18} />, label: 'Past Performance' },
   { to: 'guides/federal-proposal', icon: <BookOpen size={18} />, label: 'Fed. Guide' },
+  { to: 'settings', icon: <SettingsIcon size={18} />, label: 'Settings' },
 ];
 
 const WALLPAPER_ROTATION_MS = 15 * 60 * 1000;
@@ -73,7 +71,7 @@ const Layout = ({ children }) => {
         style={{ backgroundImage: `url("${desktopWallpapers[activeWallpaperIndex]}")` }}
       />
       <div className="desktop-wallpaper-tint" />
-      <header className="glass-panel fixed top-0 left-0 right-0 z-50 border-b border-white/30 dark:border-slate-700/40">
+      <header className="glass-panel fixed top-0 left-0 right-0 z-50 border-b-2 border-rare-crimson/70 dark:border-rare-crimson/60">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -84,7 +82,13 @@ const Layout = ({ children }) => {
                 {isMenuCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
               </button>
               <Link to="/" className="flex items-center">
-                <span className="text-xl font-bold text-slate-900 dark:text-slate-100 drop-shadow-sm">ProposalFlow</span>
+                <span className="rare-wordmark text-xl drop-shadow-sm">
+                  <span className="rare-word-primary">RARE</span>{' '}
+                  <span className="rare-word-secondary">EARTH</span>
+                </span>
+                <span className="ml-2 hidden sm:inline text-xs font-rare-sans uppercase tracking-widest text-rare-gray dark:text-slate-400">
+                  Proposal Flow
+                </span>
               </Link>
             </div>
 
@@ -105,7 +109,7 @@ const Layout = ({ children }) => {
               to={item.to}
               key={item.to}
               className={({ isActive }) =>
-                `mx-2 mt-2 flex items-center px-4 py-3 text-slate-700 dark:text-slate-300 hover:bg-white/45 dark:hover:bg-slate-800/65 rounded-xl transition-colors ${isActive ? 'bg-white/65 dark:bg-slate-800/85 shadow-sm' : ''}`
+                `mx-2 mt-2 flex items-center px-4 py-3 border-l-4 text-slate-700 dark:text-slate-300 hover:bg-white/45 dark:hover:bg-slate-800/65 rounded-xl transition-colors ${isActive ? 'bg-white/65 dark:bg-slate-800/85 shadow-sm border-l-rare-crimson text-rare-crimson dark:text-rare-crimson font-semibold' : 'border-l-transparent'}`
               }
             >
               {isMenuCollapsed ? item.icon : null}
