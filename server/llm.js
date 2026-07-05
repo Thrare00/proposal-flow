@@ -12,9 +12,41 @@ const require = createRequire(import.meta.url);
 
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+const SECRETS_PATH = '/opt/morpheus/secrets/.morpheus_secrets';
+
+// The production systemd unit's own .env doesn't carry ANTHROPIC_API_KEY —
+// it lives in the shared morpheus secrets file. Same fallback pattern as
+// server/amendment-watcher.js's SAM_API_KEY resolution.
+let cachedApiKey; // undefined = not yet resolved, '' = resolved-but-absent
+
+function readKeyFromSecretsFile() {
+  try {
+    if (!existsSync(SECRETS_PATH)) return '';
+    const raw = readFileSync(SECRETS_PATH, 'utf8');
+    for (const line of raw.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq === -1) continue;
+      const key = trimmed.slice(0, eq).trim();
+      if (key === 'ANTHROPIC_API_KEY') {
+        return trimmed.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
+      }
+    }
+  } catch {
+    // Best effort only — treat as absent.
+  }
+  return '';
+}
+
+function resolveApiKey() {
+  if (cachedApiKey !== undefined) return cachedApiKey;
+  cachedApiKey = process.env.ANTHROPIC_API_KEY || readKeyFromSecretsFile() || '';
+  return cachedApiKey;
+}
 
 export function isLlmAvailable() {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(resolveApiKey());
 }
 
 export function getLlmStatus() {
@@ -24,7 +56,8 @@ export function getLlmStatus() {
 }
 
 async function callAnthropic({ system, userPrompt, maxTokens = 4096 }) {
-  if (!isLlmAvailable()) {
+  const apiKey = resolveApiKey();
+  if (!apiKey) {
     const err = new Error('LLM_UNAVAILABLE');
     err.code = 'LLM_UNAVAILABLE';
     throw err;
@@ -34,7 +67,7 @@ async function callAnthropic({ system, userPrompt, maxTokens = 4096 }) {
     signal: AbortSignal.timeout(60_000),
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
+      'x-api-key': apiKey,
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({

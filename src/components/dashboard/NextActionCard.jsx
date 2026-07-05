@@ -42,6 +42,16 @@ ReadinessBar.propTypes = {
  * Computes whole-day countdown to a due date, ignoring time-of-day.
  * Returns null if dueDate is missing/unparseable.
  */
+/**
+ * Formats an ISO/date-ish value as "Jul 4, 2026". Returns '' if unparseable.
+ */
+function formatShortDate(value) {
+  if (!value) return '';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return '';
+  return parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
 function getDaysUntilDue(dueDate) {
   if (!dueDate) return null;
   const due = new Date(dueDate);
@@ -98,7 +108,9 @@ function NextActionCard({ proposal = null }) {
     tasks,
   } = proposal;
 
-  const hasAmendmentAlert = Boolean(proposal.metadata?.amendmentAlert);
+  const amendmentAlert = proposal.metadata?.amendmentAlert;
+  const hasAmendmentAlert = Boolean(amendmentAlert);
+  const isDueDateChangeAlert = amendmentAlert?.type === 'due_date_change';
 
   const daysUntilDue = getDaysUntilDue(dueDate);
   const isOverdue = daysUntilDue !== null && daysUntilDue < 0;
@@ -169,6 +181,18 @@ function NextActionCard({ proposal = null }) {
                   {isOverdue ? 'days overdue' : 'days left'}
                 </span>
               </>
+            )}
+            {isDueDateChangeAlert && (
+              <div className="mt-2 rounded-md border border-rare-crimson/60 bg-rare-crimson/10 px-2.5 py-1.5 text-right">
+                <p className="font-rare-sans text-[10px] uppercase tracking-wider text-rare-crimson/70">
+                  Amendment — due date changed
+                </p>
+                <p className="font-rare-serif text-base font-bold text-rare-crimson">
+                  {formatShortDate(amendmentAlert.from) || amendmentAlert.from || 'unknown'}
+                  {' → '}
+                  {formatShortDate(amendmentAlert.to) || amendmentAlert.to || 'unknown'}
+                </p>
+              </div>
             )}
           </div>
         </div>

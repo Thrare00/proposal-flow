@@ -52,6 +52,7 @@ import {
 import { importLocalProposalAttachments } from './server/proposal-attachments.js';
 import { notifyProposalUpdate } from './server/discord-notify.js';
 import { checkAmendments } from './server/amendment-watcher.js';
+import { checkAmendmentEmails } from './server/amendment-email-watcher.js';
 import {
   isLlmAvailable,
   getLlmStatus,
@@ -979,6 +980,20 @@ app.post(apiPath('/proposals/check-amendments'), async (req, res) => {
     res.json({ ok: true, ...summary });
   } catch (error) {
     console.error('[amendment-watcher] manual check failed:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Manual "Check amendment emails" action -- forces an immediate scan of the
+// rareearthcontracting@ inbox for amendment/addendum/modification emails
+// (bypassing the once-per-hour throttle). No-ops cleanly (200 with
+// skipped:'no_mechanism') if the gog CLI / keyring password isn't available.
+app.post(apiPath('/proposals/check-amendment-emails'), async (req, res) => {
+  try {
+    const summary = await checkAmendmentEmails({ force: true });
+    res.json({ ok: true, ...summary });
+  } catch (error) {
+    console.error('[amendment-email-watcher] manual check failed:', error);
     res.status(500).json({ ok: false, error: error.message });
   }
 });
@@ -4351,6 +4366,18 @@ const workerInterval = setInterval(async () => {
       console.log(`[amendment-watcher] checked=${ac.checked} alerted=${ac.alerted}`);
     }
   } catch (err) { console.error('[amendment-watcher]', err.message); }
+
+  // Scan the rareearthcontracting@ inbox for amendment/addendum emails from
+  // solicitation portals. Self-throttles to once/hour via
+  // db.settings.lastAmendmentEmailCheck, so it's cheap to call every tick;
+  // no-ops immediately (after one warning log) if the gog CLI / keyring
+  // password isn't configured.
+  try {
+    const ae = await checkAmendmentEmails();
+    if (ae.matched > 0 || ae.alerted > 0) {
+      console.log(`[amendment-email-watcher] scanned=${ae.scanned} matched=${ae.matched} dateChanges=${ae.dateChanges} alerted=${ae.alerted} unmatched=${ae.unmatched || 0}`);
+    }
+  } catch (err) { console.error('[amendment-email-watcher]', err.message); }
 
   // Backfill tasks + scoring on proposals that slipped through intake
   try {
