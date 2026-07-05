@@ -25546,7 +25546,8 @@
         "lane": "default"
       }
     },
-    "outboundEmail": "rareearthcontracting@gmail.com"
+    "outboundEmail": "rareearthcontracting@gmail.com",
+    "lastAmendmentEmailCheck": "2026-07-05T20:10:27.937Z"
   },
   "businessProfile": {
     "companyName": "Rare Earth Ltd",
