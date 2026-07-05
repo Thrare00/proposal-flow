@@ -176,7 +176,89 @@ function findMatchingProposal(proposals, haystackLower) {
  * returns null unless the model is confident a new due date is clearly
  * stated (never infer from unrelated dates like posting date or Q&A cutoff).
  */
+const MONTHS = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7,
+  august: 8, september: 9, october: 10, november: 11, december: 12,
+  jan: 1, feb: 2, mar: 3, apr: 4, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9,
+  oct: 10, nov: 11, dec: 12,
+};
+
+function isoFrom(year, month, day) {
+  if (!year || !month || !day) return null;
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+  if (year < 2000 || year > 2100) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${year}-${pad(month)}-${pad(day)}`;
+}
+
+// Collect every date-shaped token in the text with its position, across the
+// formats government/commercial bid amendments actually use.
+function collectDateCandidates(text) {
+  const out = [];
+  const push = (iso, index, length) => { if (iso) out.push({ iso, index, length }); };
+  const monthAlt = Object.keys(MONTHS).join('|');
+  let m;
+  // "July 22, 2026" / "Jul 22 2026" / "July 22nd, 2026"
+  const reMDY = new RegExp(`\\b(${monthAlt})\\.?\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s+(\\d{4})\\b`, 'gi');
+  while ((m = reMDY.exec(text))) push(isoFrom(+m[3], MONTHS[m[1].toLowerCase()], +m[2]), m.index, m[0].length);
+  // "22 July 2026" / "22nd of July, 2026"
+  const reDMY = new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?(${monthAlt})\\.?,?\\s+(\\d{4})\\b`, 'gi');
+  while ((m = reDMY.exec(text))) push(isoFrom(+m[3], MONTHS[m[2].toLowerCase()], +m[1]), m.index, m[0].length);
+  // "07/22/2026" / "7-22-2026" (US month-first)
+  const reNum = /\b(\d{1,2})[/\-](\d{1,2})[/\-](\d{4})\b/g;
+  while ((m = reNum.exec(text))) push(isoFrom(+m[3], +m[1], +m[2]), m.index, m[0].length);
+  // "2026-07-22"
+  const reIso = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+  while ((m = reIso.exec(text))) push(isoFrom(+m[1], +m[2], +m[3]), m.index, m[0].length);
+  return out;
+}
+
+const DUE_CTX = /(new\s+|revised\s+|updated\s+|amended\s+|extended\s+(?:to\s+)?|changed\s+(?:to\s+)?)?(due\s+date|closing\s+date|close\s+date|response\s+date|deadline|receipt\s+of\s+(?:proposals|bids|quotes|offers|responses|submissions)|proposals?\s+(?:are\s+)?due|bids?\s+(?:are\s+)?due|offers?\s+(?:are\s+)?due|submission\s+deadline|submittal\s+deadline|no\s+later\s+than|due\s+by|closes?\s+on|extended\s+to|revised\s+to)/i;
+const DUE_STRONG = /(new|revised|updated|amended|extended|changed)/i;
+// Markers that mean a nearby date is the OLD/irrelevant one, not the new due date.
+const DUE_NEG = /(previous|prior|\bold\b|\bwas\b|originally|question|q\s*&\s*a|q\s*and\s*a|inquir|site\s+visit|pre-?bid|pre-?proposal|posting|posted|issued|award)/i;
+
+// Deterministic due-date extraction: pick the date that sits nearest a
+// due/closing/response-date phrase, demoting ones tagged as previous/Q&A/etc.
+// Free, offline, and the primary path — the LLM below is optional refinement.
+function extractDueDateDeterministic(emailText, subject) {
+  const text = `${subject || ''}\n${emailText || ''}`.replace(/ /g, ' ');
+  const candidates = collectDateCandidates(text);
+  if (candidates.length === 0) return null;
+
+  let best = null;
+  for (const c of candidates) {
+    const pre = text.slice(Math.max(0, c.index - 90), c.index);
+    const post = text.slice(c.index + c.length, c.index + c.length + 50);
+    const nearPre = text.slice(Math.max(0, c.index - 30), c.index);
+    // A due phrase BEFORE the date ("due date: July 30") is the real signal;
+    // one AFTER it ("...July 30. Proposals due Aug 2") usually belongs to the
+    // next date, so it only counts weakly and can't outrank a pre-context hit.
+    let score = 0;
+    if (DUE_CTX.test(pre)) {
+      score += 2;
+      if (DUE_STRONG.test(pre)) score += 2;
+    } else if (DUE_CTX.test(post)) {
+      score += 1;
+    } else {
+      continue;
+    }
+    if (DUE_NEG.test(nearPre)) score -= 3; // e.g. "(previously July 15, 2026)"
+    if (score <= 0) continue;
+    if (!best || score > best.score) best = { iso: c.iso, score };
+  }
+  return best ? best.iso : null;
+}
+
 async function extractDueDateFromEmail(emailText, subject) {
+  // Primary: deterministic, offline, no external dependency. This is what
+  // actually runs in production — the Anthropic API path below has no credit
+  // balance on a Max-subscription stack, so it can never be the sole mechanism.
+  const deterministic = extractDueDateDeterministic(emailText, subject);
+  if (deterministic) return deterministic;
+
+  // Secondary: LLM refinement, only when reachable. Any failure (no key, no
+  // credit, malformed output) just yields null and we keep the generic alert.
   if (!isLlmAvailable()) return null;
 
   const system = [
