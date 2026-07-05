@@ -1,5 +1,924 @@
 [
   {
+    "id": "op-eeead1f0-9b2b-498d-b6f8-5a413ca0faf6",
+    "ts": "2026-07-04T00:00:10.560Z",
+    "hour": "2026-07-04T00",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-d8c2727c-41f6-478d-9ef3-b4964e0a54d6",
+    "ts": "2026-07-03T20:04:54.599Z",
+    "hour": "2026-07-03T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-07-03T20:04:54.356795+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-90b9784f-5a10-42ff-8ae9-cf953245cc5b",
+    "ts": "2026-07-03T04:00:06.736Z",
+    "hour": "2026-07-03T04",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-576786e8-298d-43fe-9ccd-d2c74015040d",
+    "ts": "2026-07-02T00:00:10.056Z",
+    "hour": "2026-07-02T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-b28d7cc4-dee9-49aa-8f58-17ec9a0ef633",
+    "ts": "2026-07-01T05:01:16.937Z",
+    "hour": "2026-07-01T05",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-1a9a1405-5bc0-4d8c-a7a3-4064ee471147",
+    "ts": "2026-06-30T00:00:04.361Z",
+    "hour": "2026-06-30T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-6c8a1e5c-7b84-415e-973a-6ee1bf435e48",
+    "ts": "2026-06-29T20:03:33.333Z",
+    "hour": "2026-06-29T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-29T20:03:33.322546+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-5457a95d-e6b1-4e47-9ae4-226c82364cfc",
+    "ts": "2026-06-29T04:00:13.443Z",
+    "hour": "2026-06-29T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-e1027d00-0b37-411d-a1f1-10edcbf51643",
+    "ts": "2026-06-29T01:57:19.090Z",
+    "hour": "2026-06-29T01",
+    "done": [
+      "[run_stage] Proposal stage updated to pre-solicitation (handoff: clean)"
+    ],
+    "queued": [],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-66f3f684-565c-47a2-9095-cfc86877646a",
+    "ts": "2026-06-27T00:00:09.072Z",
+    "hour": "2026-06-27T00",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-430321e4-462a-4ddf-9987-7b3d73aff16d",
+    "ts": "2026-06-26T20:03:39.212Z",
+    "hour": "2026-06-26T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-26T20:03:39.202148+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-8e1ac414-3b32-446a-9218-44e57ca598ae",
+    "ts": "2026-06-26T20:03:28.771Z",
+    "hour": "2026-06-26T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-26T20:03:28.755671+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-5f0f310f-938e-4b42-a45d-4eb1003b633b",
+    "ts": "2026-06-26T04:00:09.216Z",
+    "hour": "2026-06-26T04",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-04f233a4-5683-4fd2-9d9f-aa5d365dc6b2",
+    "ts": "2026-06-25T19:33:32.300Z",
+    "hour": "2026-06-25T19",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-25T19:33:32.287491+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-b237a1aa-af83-4af1-b85b-dea1dd80d8b2",
+    "ts": "2026-06-25T00:00:04.140Z",
+    "hour": "2026-06-25T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-99fd6404-571e-4c98-9d19-01a9784c2c7c",
+    "ts": "2026-06-24T20:03:46.875Z",
+    "hour": "2026-06-24T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-24T20:03:46.861267+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-bcb6bafb-ef27-466f-bf23-9d2239ee163f",
+    "ts": "2026-06-24T04:00:14.960Z",
+    "hour": "2026-06-24T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-9146d645-c6b8-4a7a-8979-8eabef66e3da",
+    "ts": "2026-06-23T00:00:11.944Z",
+    "hour": "2026-06-23T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-830b5557-8431-4845-8118-b0059c709c6a",
+    "ts": "2026-06-22T04:00:10.349Z",
+    "hour": "2026-06-22T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-cbfdea74-f56a-4aaf-9d2d-f98fe8860389",
+    "ts": "2026-06-20T00:00:14.124Z",
+    "hour": "2026-06-20T00",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-4cebd8d7-1803-4b35-a134-0148fd1212fe",
+    "ts": "2026-06-19T20:04:00.974Z",
+    "hour": "2026-06-19T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-19T20:04:00.809851+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-b485d02d-514c-4c8e-b134-a041a7850bf6",
+    "ts": "2026-06-19T04:00:05.906Z",
+    "hour": "2026-06-19T04",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-36ba4e24-5694-49cb-a0a5-ba7f3abdbdd2",
+    "ts": "2026-06-18T00:00:11.844Z",
+    "hour": "2026-06-18T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-b99b1539-7950-4266-9702-ed1783d43597",
+    "ts": "2026-06-17T04:00:06.785Z",
+    "hour": "2026-06-17T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-8ffd761f-04f2-4e1f-850e-759fc1998a36",
+    "ts": "2026-06-16T00:00:10.944Z",
+    "hour": "2026-06-16T00",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-cee7afc4-7f84-4599-b2de-557078601170",
+    "ts": "2026-06-15T04:00:03.210Z",
+    "hour": "2026-06-15T04",
+    "done": [
+      "[post_daily_report] Daily report posted",
+      "[run_market_research] Market research blocked: no inputs available",
+      "[run_followup_cadence] Follow-up cadence: no overdue actions found",
+      "[run_outreach_cadence] Outreach cadence: all relationships within threshold"
+    ],
+    "queued": [
+      "Cadence enqueued: post_daily_report",
+      "Cadence enqueued: run_market_research",
+      "Cadence enqueued: run_followup_cadence",
+      "Cadence enqueued: run_outreach_cadence"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-2b1afc28-b7de-4512-8505-05e8c1106e3a",
+    "ts": "2026-06-13T00:00:09.128Z",
+    "hour": "2026-06-13T00",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-628ed6b1-6dd3-4434-9c0d-c41253fc8676",
+    "ts": "2026-06-12T21:07:16.353Z",
+    "hour": "2026-06-12T21",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T21:07:16.337716+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-04a6ee65-e9ed-4237-9425-fda5e2222602",
+    "ts": "2026-06-12T20:07:07.412Z",
+    "hour": "2026-06-12T20",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T20:07:07.391363+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-49309212-1ffa-4cb4-bfed-d8cb0e7bcb69",
+    "ts": "2026-06-12T19:07:21.256Z",
+    "hour": "2026-06-12T19",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T19:07:21.238074+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-e364676c-8166-415b-a83d-ccd87834970d",
+    "ts": "2026-06-12T18:07:06.832Z",
+    "hour": "2026-06-12T18",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T18:07:06.816477+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-b2c41138-cfac-458b-8a80-af665133b91c",
+    "ts": "2026-06-12T17:07:08.690Z",
+    "hour": "2026-06-12T17",
+    "done": [],
+    "queued": [],
+    "blocked": [],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T17:07:08.675549+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-9ff1ca97-1d6b-4841-9e1c-dca075257dba",
+    "ts": "2026-06-12T16:07:45.618Z",
+    "hour": "2026-06-12T16",
+    "done": [],
+    "queued": [
+      "Norfolk custodial/janitorial services: 2026-06-15",
+      "Charlton Recreation Sites janitorial services: 2026-06-15",
+      "MKARNS Conway AR janitorial services: 2026-06-17",
+      "129th RQW janitorial services: 2026-06-18",
+      "Santa Teresa NM landscaping services: 2026-06-18",
+      "USDA Catahoula Ranger District janitorial: 2026-06-19",
+      "USDA Sam Houston Ranger District janitorial: 2026-06-19",
+      "Pierce invoice: 2026-06-04 (19 DAYS PAST DUE)",
+      "Pierce Prescott $10K invoice",
+      "Proposal Flow intake triage"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "ATL Suppliers procurement scan path"
+      },
+      {
+        "text": "DeKalb OpenGov procurement path"
+      },
+      {
+        "text": "SAM.gov API key rotation"
+      },
+      {
+        "text": "MetroGreen payment blocker"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T16:07:45.603419+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-984fa336-92c4-43da-b6b8-2fda4e4ce9f9",
+    "ts": "2026-06-12T15:07:08.532Z",
+    "hour": "2026-06-12T15",
+    "done": [],
+    "queued": [
+      "Norfolk custodial/janitorial services: 2026-06-15",
+      "Charlton Recreation Sites janitorial services: 2026-06-15",
+      "MKARNS Conway AR janitorial services: 2026-06-17",
+      "129th RQW janitorial services: 2026-06-18",
+      "Santa Teresa NM landscaping services: 2026-06-18",
+      "USDA Catahoula Ranger District janitorial: 2026-06-19",
+      "USDA Sam Houston Ranger District janitorial: 2026-06-19",
+      "Pierce invoice: 2026-06-04 (19 DAYS PAST DUE)",
+      "Pierce Prescott $10K invoice",
+      "Proposal Flow intake triage"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "ATL Suppliers procurement scan path"
+      },
+      {
+        "text": "DeKalb OpenGov procurement path"
+      },
+      {
+        "text": "SAM.gov API key rotation"
+      },
+      {
+        "text": "MetroGreen payment blocker"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T15:07:08.518840+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-c8187661-5e95-4004-a3eb-83bba205f07e",
+    "ts": "2026-06-12T14:07:07.824Z",
+    "hour": "2026-06-12T14",
+    "done": [],
+    "queued": [
+      "Norfolk custodial/janitorial services: 2026-06-15",
+      "Charlton Recreation Sites janitorial services: 2026-06-15",
+      "MKARNS Conway AR janitorial services: 2026-06-17",
+      "129th RQW janitorial services: 2026-06-18",
+      "Santa Teresa NM landscaping services: 2026-06-18",
+      "USDA Catahoula Ranger District janitorial: 2026-06-19",
+      "USDA Sam Houston Ranger District janitorial: 2026-06-19",
+      "Pierce invoice: 2026-06-04 (19 DAYS PAST DUE)",
+      "Pierce Prescott $10K invoice",
+      "Proposal Flow intake triage"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "ATL Suppliers procurement scan path"
+      },
+      {
+        "text": "DeKalb OpenGov procurement path"
+      },
+      {
+        "text": "SAM.gov API key rotation"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T14:07:07.810153+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-f1d72f75-f91c-48d1-afd1-acff1947aa7e",
+    "ts": "2026-06-12T13:07:11.230Z",
+    "hour": "2026-06-12T13",
+    "done": [],
+    "queued": [
+      "Norfolk custodial/janitorial services: 2026-06-15",
+      "Charlton Recreation Sites janitorial services: 2026-06-15",
+      "MKARNS Conway AR janitorial services: 2026-06-17",
+      "129th RQW janitorial services: 2026-06-18",
+      "Santa Teresa NM landscaping services: 2026-06-18",
+      "USDA Catahoula Ranger District janitorial: 2026-06-19",
+      "USDA Sam Houston Ranger District janitorial: 2026-06-19",
+      "Pierce invoice: 2026-06-04 (19 DAYS PAST DUE)",
+      "Pierce Prescott $10K invoice",
+      "Proposal Flow intake triage"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "BLKR-017: Proposal Flow intake drift"
+      },
+      {
+        "text": "ATL Suppliers procurement scan path"
+      },
+      {
+        "text": "DeKalb OpenGov procurement path"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-12T13:07:11.216086+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-550babaa-29ae-4804-95f2-05e1e07c7878",
+    "ts": "2026-06-12T04:00:08.081Z",
+    "hour": "2026-06-12T04",
+    "done": [
+      "[post_weekly_report] Weekly report posted"
+    ],
+    "queued": [
+      "Cadence enqueued: post_weekly_report"
+    ],
+    "blocked": [],
+    "source": "loop"
+  },
+  {
+    "id": "op-b0633576-07fd-402c-b835-8bce32194e89",
+    "ts": "2026-06-11T21:07:07.628Z",
+    "hour": "2026-06-11T21",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T21:07:07.611544+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-13b3f789-9f4f-44d1-8965-c54587fb26b7",
+    "ts": "2026-06-11T20:07:09.251Z",
+    "hour": "2026-06-11T20",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T20:07:09.233620+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-afa927ea-7dda-4fa9-a095-76e0a1009792",
+    "ts": "2026-06-11T19:07:21.532Z",
+    "hour": "2026-06-11T19",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T19:07:21.379168+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
+    "id": "op-d7628484-9b5e-41e2-8ac7-019f7403fc5d",
+    "ts": "2026-06-11T18:07:08.288Z",
+    "hour": "2026-06-11T18",
+    "done": [],
+    "queued": [
+      "Pierce invoice: 2026-06-04 (7 DAYS PAST DUE)",
+      "GDOT App #2271",
+      "CloudNSite sales posting",
+      "MBDA grant: 2026-06-29",
+      "Pierce Prescott $10K invoice",
+      "CloudNSite sales hire",
+      "GDOT prequalification App #2271",
+      "GDOT prequalification App #2269"
+    ],
+    "blocked": [
+      {
+        "text": "BLKR-013: GDOT App #2271 validation + Form 478"
+      },
+      {
+        "text": "BLKR-016: Gateway model routing drift"
+      },
+      {
+        "text": "GDOT Form 478: executed/notarized form still missing for App #2271"
+      },
+      {
+        "text": "RingCentral: payment-method update required"
+      },
+      {
+        "text": "BLKR-013: GDOT prequalification App #2271"
+      },
+      {
+        "text": "BLKR-016: Primary model routing drift"
+      }
+    ],
+    "source": "operator-update-bridge",
+    "meta": {
+      "generatedAt": "2026-06-11T18:07:08.272495+00:00",
+      "sources": [
+        "BOARD.md",
+        "CURRENT_STATE.md"
+      ]
+    }
+  },
+  {
     "id": "op-809af35c-7fb2-4446-879c-b34a64f420f8",
     "ts": "2026-06-11T17:07:08.649Z",
     "hour": "2026-06-11T17",
