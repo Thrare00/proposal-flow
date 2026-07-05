@@ -155,6 +155,19 @@ async function dispatchOfficialGovconSmtpMessage(payload = {}) {
   });
 }
 
+function escapeGmailQueryValue(value) {
+  return String(value).replace(/"/g, '\\"');
+}
+
+async function findRecentDuplicate({ gmail, to, subject, windowDays }) {
+  if (!to.length || !subject) return null;
+  const toClause = to.map((addr) => `to:(${addr})`).join(' OR ');
+  const query = `in:sent (${toClause}) subject:"${escapeGmailQueryValue(subject)}" newer_than:${windowDays}d`;
+  const { data } = await gmail.users.messages.list({ userId: 'me', q: query, maxResults: 1 });
+  const match = (data.messages || [])[0];
+  return match ? { messageId: match.id, threadId: match.threadId, query } : null;
+}
+
 async function dispatchViaGmail(payload = {}) {
   const to = normalizeRecipients(payload.to);
   if (!to.length) {
@@ -172,6 +185,20 @@ async function dispatchViaGmail(payload = {}) {
 
   const auth = await getAuthenticatedClient();
   const gmail = google.gmail({ version: 'v1', auth });
+
+  if (mode === 'send' && !payload.allowDuplicate) {
+    const windowDays = Number(payload.dedupWindowDays || 3);
+    const duplicate = await findRecentDuplicate({ gmail, to, subject, windowDays });
+    if (duplicate) {
+      const error = new Error(
+        `Refusing to send: a matching message to ${to.join(', ')} with subject "${subject}" was already sent within ${windowDays}d (thread ${duplicate.threadId}). Pass allowDuplicate: true to override.`
+      );
+      error.statusCode = 409;
+      error.duplicate = duplicate;
+      throw error;
+    }
+  }
+
   const raw = buildMimeMessage({ from, to, cc, bcc, replyTo, subject, text, html });
 
   const requestBody = {
