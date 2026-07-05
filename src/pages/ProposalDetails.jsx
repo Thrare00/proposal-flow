@@ -53,6 +53,7 @@ import RapidResponseDrafts from '../components/RapidResponseDrafts.jsx';
 import StageChecklist from '../components/StageChecklist.jsx';
 import StageReadinessPanel from '../components/StageReadinessPanel.jsx';
 import OperatorIntelPanels from '../components/OperatorIntelPanels.jsx';
+import AmendmentBadge from '../components/AmendmentBadge.jsx';
 
 /**
  * Displays detailed information about a proposal including status and files.
@@ -404,6 +405,8 @@ const ProposalDetails = () => {
                 {proposal.opportunityType}
               </Badge>
             )}
+
+            <AmendmentBadge proposal={proposal} showDetail />
           </div>
         </CardHeader>
 

@@ -13,6 +13,7 @@ import { formatDate, getUrgencyLevel, getUrgencyColor, isOverdue } from '../util
 import { getStatusName, getStatusColor } from '../utils/statusUtils.js';
 import { STAGE_LABELS } from '../../shared/proposalWorkflow.js';
 import { PURSUIT_POSTURES, DASHBOARD_HORIZONS } from '../lib/pursuitTiming.js';
+import AmendmentBadge from './AmendmentBadge.jsx';
 
 const ProposalCard = ({ proposal = {}, showActions = true }) => {
   // Safely handle missing or malformed proposal data
@@ -70,14 +71,17 @@ const ProposalCard = ({ proposal = {}, showActions = true }) => {
         <h3 id={`proposal-${id}-title`} className="text-xl font-semibold line-clamp-1 text-gray-900 dark:text-gray-100">
           {title}
         </h3>
-        <span 
-          className={`badge ${statusColorClass}`}
-          aria-label={`Status: ${getStatusName(status)}`}
-        >
-          {getStatusName(status)}
-        </span>
+        <div className="flex flex-shrink-0 items-center gap-2">
+          <AmendmentBadge proposal={proposal} />
+          <span
+            className={`badge ${statusColorClass}`}
+            aria-label={`Status: ${getStatusName(status)}`}
+          >
+            {getStatusName(status)}
+          </span>
+        </div>
       </div>
-      
+
       <div className="space-y-2 mb-4">
         <div className="flex items-center text-gray-600">
           <Building size={16} className="mr-2" aria-hidden="true" />

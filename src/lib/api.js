@@ -250,6 +250,17 @@ export async function getStageReadiness(proposalId) {
   return requestJson(buildApiUrl(`/proposals/${encodeURIComponent(proposalId)}/stage-readiness`));
 }
 
+// Force an immediate SAM.gov amendment re-check across active, tracked
+// proposals. Returns { ok, checked, alerted } (or skipped:'no_api_key' when
+// SAM_API_KEY isn't configured server-side).
+export async function checkAmendments() {
+  if (!isLocalRuntime()) throw new Error('checkAmendments requires local server runtime');
+  return requestJson(buildApiUrl('/proposals/check-amendments'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 export async function gasGet(fn) {
   const urls = [];
   if (isLocalRuntime()) {

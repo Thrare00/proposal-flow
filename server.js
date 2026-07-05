@@ -51,6 +51,7 @@ import {
 } from './server/attachment-store.js';
 import { importLocalProposalAttachments } from './server/proposal-attachments.js';
 import { notifyProposalUpdate } from './server/discord-notify.js';
+import { checkAmendments } from './server/amendment-watcher.js';
 import {
   isLlmAvailable,
   getLlmStatus,
@@ -966,6 +967,20 @@ app.patch(apiPath('/proposals/:id'), (req, res) => {
     notifyProposalUpdate(`\uD83D\uDCCB ${updatedProposal.title || 'Proposal'}: ${prevStatus || '?'} \u2192 ${updatedProposal.status}`);
   }
   res.json(updatedProposal);
+});
+
+// Manual "Re-check amendments" action -- forces an immediate SAM re-check
+// (bypassing the per-proposal throttle) for every active, solicitation-linked
+// proposal. No-ops cleanly (200 with skipped:'no_api_key') if SAM_API_KEY
+// isn't configured.
+app.post(apiPath('/proposals/check-amendments'), async (req, res) => {
+  try {
+    const summary = await checkAmendments({ force: true });
+    res.json({ ok: true, ...summary });
+  } catch (error) {
+    console.error('[amendment-watcher] manual check failed:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
 });
 
 // ─── Structured Decisions (go/no-go, bid/no-bid) ───────────────────────────
@@ -4325,6 +4340,17 @@ const workerInterval = setInterval(async () => {
 
   const cadenceResult = runCadencePass();
   _loopState.lastCadenceResult = cadenceResult;
+
+  // Detect SAM amendments on tracked, active solicitations. Each proposal
+  // self-throttles via metadata.lastAmendmentCheck, so this is cheap to call
+  // every tick; no-ops immediately (after one warning log) if SAM_API_KEY
+  // isn't configured.
+  try {
+    const ac = await checkAmendments();
+    if (ac.checked > 0 || ac.alerted > 0) {
+      console.log(`[amendment-watcher] checked=${ac.checked} alerted=${ac.alerted}`);
+    }
+  } catch (err) { console.error('[amendment-watcher]', err.message); }
 
   // Backfill tasks + scoring on proposals that slipped through intake
   try {

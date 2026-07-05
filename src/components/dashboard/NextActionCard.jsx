@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Crosshair, CalendarClock, ListChecks, ArrowRight, Compass } from 'lucide-react';
+import AmendmentBadge from '../AmendmentBadge.jsx';
 
 /**
  * ReadinessBar — a single slim horizontal readiness meter.
@@ -97,6 +98,8 @@ function NextActionCard({ proposal = null }) {
     tasks,
   } = proposal;
 
+  const hasAmendmentAlert = Boolean(proposal.metadata?.amendmentAlert);
+
   const daysUntilDue = getDaysUntilDue(dueDate);
   const isOverdue = daysUntilDue !== null && daysUntilDue < 0;
   const isDueToday = daysUntilDue === 0;
@@ -118,16 +121,20 @@ function NextActionCard({ proposal = null }) {
       <div className="flex flex-col gap-6 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <span className="inline-flex items-center gap-2 font-rare-sans text-xs uppercase tracking-widest text-rare-crimson">
-              <Crosshair className="h-3.5 w-3.5" aria-hidden="true" />
-              Up Next
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 font-rare-sans text-xs uppercase tracking-widest text-rare-crimson">
+                <Crosshair className="h-3.5 w-3.5" aria-hidden="true" />
+                Up Next
+              </span>
+              {hasAmendmentAlert && <AmendmentBadge proposal={proposal} />}
+            </div>
             <h2 className="mt-2 truncate font-rare-serif text-2xl text-white sm:text-3xl">
               {title || 'Untitled proposal'}
             </h2>
             {agency && (
               <p className="mt-1 truncate text-sm text-rare-cream/60">{agency}</p>
             )}
+            {hasAmendmentAlert && <AmendmentBadge proposal={proposal} showDetail className="mt-2" />}
             {currentStage && (
               <p className="mt-1 font-rare-sans text-[11px] uppercase tracking-wider text-rare-cream/40">
                 {currentStage}
@@ -218,6 +225,8 @@ NextActionCard.propTypes = {
         completed: PropTypes.bool,
       })
     ),
+    // eslint-disable-next-line react/forbid-prop-types
+    metadata: PropTypes.object,
   }),
 };
 

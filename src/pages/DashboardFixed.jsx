@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Plus,
@@ -13,6 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   TrendingUp,
+  RefreshCw,
 } from 'lucide-react';
 import ConnectivityStatus from '../components/ConnectivityStatus';
 import CeoActionForm from '../components/CeoActionForm.jsx';
@@ -20,6 +21,7 @@ import { useProposalContext } from '../contexts/ProposalContext.jsx';
 import ProposalCard from '../components/ProposalCard.jsx';
 import { STATUS_OPTIONS as ALL_STATUSES } from '../utils/statusUtils.js';
 import { getUrgencyLevel, isOverdue } from '../utils/dateUtils.js';
+import { checkAmendments } from '../lib/api.js';
 
 // Command Deck components (dark cinematic momentum zone)
 import NextActionCard from '../components/dashboard/NextActionCard.jsx';
@@ -31,11 +33,27 @@ import QuickAccessTile from '../components/dashboard/QuickAccessTile.jsx';
 import EmptyStateHero from '../components/dashboard/EmptyStateHero.jsx';
 
 const Dashboard = () => {
-  const { proposals, isLoading, error } = useProposalContext();
+  const { proposals, isLoading, error, fetchProposals } = useProposalContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [urgencyFilter, setUrgencyFilter] = useState('all');
   const [ceoOpen, setCeoOpen] = useState(false);
+  const [isCheckingAmendments, setIsCheckingAmendments] = useState(false);
+  const [amendmentCheckResult, setAmendmentCheckResult] = useState(null);
+
+  const handleCheckAmendments = useCallback(async () => {
+    setIsCheckingAmendments(true);
+    setAmendmentCheckResult(null);
+    try {
+      const result = await checkAmendments();
+      setAmendmentCheckResult(result);
+      await fetchProposals();
+    } catch (checkError) {
+      setAmendmentCheckResult({ ok: false, error: checkError.message });
+    } finally {
+      setIsCheckingAmendments(false);
+    }
+  }, [fetchProposals]);
 
   const proposalList = Array.isArray(proposals) ? proposals : [];
 
@@ -138,13 +156,36 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <Link
-          to="/proposals/new"
-          className="btn btn-primary relative z-10 flex items-center justify-center space-x-2 self-start"
-        >
-          <Plus size={18} />
-          <span>New Proposal</span>
-        </Link>
+        <div className="relative z-10 flex flex-col items-start gap-2 self-start md:items-end">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCheckAmendments}
+              disabled={isCheckingAmendments}
+              className="btn btn-secondary flex items-center justify-center space-x-2 disabled:opacity-60"
+              title="Re-check SAM.gov for amendments on active, tracked solicitations"
+            >
+              <RefreshCw size={16} className={isCheckingAmendments ? 'animate-spin' : ''} />
+              <span>{isCheckingAmendments ? 'Checking...' : 'Re-check amendments'}</span>
+            </button>
+            <Link
+              to="/proposals/new"
+              className="btn btn-primary flex items-center justify-center space-x-2"
+            >
+              <Plus size={18} />
+              <span>New Proposal</span>
+            </Link>
+          </div>
+          {amendmentCheckResult && (
+            <p className="font-rare-sans text-xs text-rare-cream/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+              {amendmentCheckResult.ok === false
+                ? `Check failed: ${amendmentCheckResult.error}`
+                : amendmentCheckResult.skipped === 'no_api_key'
+                  ? 'SAM_API_KEY not configured — amendment checks disabled'
+                  : `Checked ${amendmentCheckResult.checked} solicitation(s), ${amendmentCheckResult.alerted} amendment(s) found`}
+            </p>
+          )}
+        </div>
       </div>
 
       {!hasProposals ? (
