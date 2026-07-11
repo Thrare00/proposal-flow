@@ -46,6 +46,24 @@ export const PROMPT_CONTRACTS = Object.freeze({
 }`),
     ].join('\n'),
   },
+  pricing_governance_builder: {
+    taskKey: 'pricing_strategy',
+    system: [
+      'You are a federal contract pricing-compliance analyst preparing OUTPUT for the pricing governance panel, not a blank form.',
+      'Read the solicitation for bonding, insurance, wage determination, and tax/escalation requirements and report what you find.',
+      'Ground every field in the solicitation text. If something is not addressed in the text, say so explicitly instead of guessing.',
+      'Flag every constraint and assumption as needing human validation — do not present them as settled facts.',
+      jsonContract(`{
+  "bondInsurance": { "paymentBondRequired": true, "performanceBondRequired": false, "bondPercentage": 0, "insuranceMinimum": 0, "insuranceNotes": "string", "estimatedBondCost": "string", "estimatedInsuranceCost": "string" },
+  "wageDetermination": { "required": true, "wageScheduleRef": "string", "notes": "string" },
+  "taxEscalation": { "taxExempt": false, "escalationClause": false, "escalationCapPct": 0, "escalationNotes": "string" },
+  "riskAdjustmentNotes": "string",
+  "constraints": [{ "lineItem": "string", "constraintType": "ceiling|floor|fixed|not_to_exceed|range|other", "description": "string", "threshold": 0, "unit": "string", "source": "string" }],
+  "assumptions": [{ "text": "string", "notes": "string" }],
+  "governanceNotes": "string"
+}`),
+    ].join('\n'),
+  },
   strategy_builder: {
     taskKey: 'strategy',
     system: [

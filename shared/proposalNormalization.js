@@ -1,6 +1,22 @@
 import { recomputeProposalState } from './proposalWorkflow.js';
 import { getRecommendedWindows, normalizePosture } from '../src/lib/pursuitTiming.js';
 
+// Date-only dueDate strings ("2026-07-10") carry no timezone info. `new Date()` parses
+// them as UTC midnight, which is still evening-before in US Eastern (where our deadlines
+// actually live) — comparing that directly against "now" flags a proposal as past-due
+// hours before its real deadline. A due date isn't passed until the Eastern calendar date
+// has moved past it.
+function isDueDatePassed(dueDateStr, now = new Date()) {
+  if (!dueDateStr) return false;
+  const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(dueDateStr);
+  if (dateOnly) {
+    const nowEasternYmd = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(now);
+    return nowEasternYmd > dueDateStr;
+  }
+  const dueMs = new Date(dueDateStr).getTime();
+  return !isNaN(dueMs) && dueMs < now.getTime();
+}
+
 const PROPOSAL_TYPE_MAP = Object.freeze({
   federal: 'federal',
   commercial: 'commercial',
@@ -182,10 +198,7 @@ export function deriveIntakeLane(proposal) {
 
   // Hard gate: archive
   if (proposal.status === 'closed' || proposal.status === 'submitted') return 'archive';
-  if (proposal.dueDate) {
-    const due = new Date(proposal.dueDate);
-    if (!isNaN(due) && due < new Date()) return 'archive';
-  }
+  if (isDueDatePassed(proposal.dueDate)) return 'archive';
 
   // Score-based routing (prefer morpheusScore when present — it's the patched intake value)
   const score = meta.morpheusScore ?? meta.fitScore ?? null;

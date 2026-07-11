@@ -24,9 +24,9 @@ export const PROPOSAL_WORKFLOW_STAGES = Object.freeze([
   {
     id: 'compliance',
     label: 'Compliance',
-    description: 'Extract atomic requirements and build the compliance matrix before drafting.',
+    description: 'Extract atomic requirements and build the compliance matrix (including its pricing-governance section) before drafting.',
     prerequisites: ['ingestion'],
-    outputs: ['complianceMatrix', 'requirements', 'evaluationFactors'],
+    outputs: ['complianceMatrix', 'requirements', 'evaluationFactors', 'pricingGovernance'],
     nextStageInputs: ['strategy needs requirements + evaluationFactors to set win themes'],
   },
   {
@@ -48,9 +48,9 @@ export const PROPOSAL_WORKFLOW_STAGES = Object.freeze([
   {
     id: 'pricing_strategy',
     label: 'Pricing Strategy',
-    description: 'Define pricing model, cost narrative, competitive positioning, and rate strategy before drafting.',
+    description: 'Define pricing model, cost narrative, competitive positioning, and rate strategy before drafting. Fed by the compliance matrix pricing-governance section; kept distinct from it.',
     prerequisites: ['outline'],
-    outputs: ['pricingGovernance', 'pricingGovernance.constraints'],
+    outputs: ['pricingGovernance', 'pricingGovernance.constraints', 'pricingStrategy'],
     nextStageInputs: ['drafting needs pricingGovernance + outline to draft all sections'],
   },
   {
@@ -84,6 +84,130 @@ export const PROPOSAL_STAGE_IDS = PROPOSAL_WORKFLOW_STAGES.map((stage) => stage.
 export const STAGE_LABELS = Object.freeze(
   Object.fromEntries(PROPOSAL_WORKFLOW_STAGES.map((stage) => [stage.id, stage.label])),
 );
+
+// ── Pipeline v2 — 7-stage bid pipeline (Eric, 2026-07-10) ───────────────────
+// Additive overlay on the existing 8-stage workflow. workflow.currentStage
+// remains the operational driver everywhere (automation-worker, compliance-gate,
+// portal-preflight all keep working unchanged); workflow.pipeline is DERIVED on
+// every normalize so it can never drift from the underlying stage.
+// Key design rule: pricing governance (compliance-derived pricing constraints —
+// bonds, prevailing wage, DBE %, insurance floors) lives with the Compliance
+// Matrix (stage 2). Pricing Strategy (stage 6) is the actual numbers/margin
+// work: it is FED BY the governance section but never conflated with it.
+export const PIPELINE_V2_STAGES = Object.freeze([
+  {
+    id: 'solicitation_intake',
+    label: 'Solicitation Intake',
+    description: 'Capture the solicitation, documents, deadline, buyer, and go/no-go qualification.',
+  },
+  {
+    id: 'compliance_matrix',
+    label: 'Compliance Matrix',
+    description: 'Extract atomic requirements into the compliance matrix, including the pricing-governance section (bond, prevailing wage, DBE/subcontracting %, insurance cost floors) that will feed Pricing Strategy.',
+  },
+  {
+    id: 'technical_extraction',
+    label: 'Technical Extraction',
+    description: 'Extract technical scope, evaluation factors, win themes, and positioning from the solicitation.',
+  },
+  {
+    id: 'execution_plan',
+    label: 'Execution Plan',
+    description: 'Build the delivery/execution plan and annotated proposal outline (staffing, sections, page budgets).',
+  },
+  {
+    id: 'past_performance_mapping',
+    label: 'Past Performance Mapping',
+    description: 'Map past performance records and evidence to the contract requirements.',
+  },
+  {
+    id: 'pricing_strategy',
+    label: 'Pricing Strategy',
+    description: 'Set the actual pricing: model, rates, margin vs. floor, market comps. Consumes complianceMatrix pricing governance as constraints — distinct from it.',
+  },
+  {
+    id: 'final_packaging',
+    label: 'Final Packaging / Submission QA',
+    description: 'Assemble, QA, and submit the final package: forms, attachments, page/format checks, submission review.',
+  },
+]);
+
+export const PIPELINE_V2_STAGE_IDS = PIPELINE_V2_STAGES.map((stage) => stage.id);
+
+export const PIPELINE_V2_STAGE_LABELS = Object.freeze(
+  Object.fromEntries(PIPELINE_V2_STAGES.map((stage) => [stage.id, stage.label])),
+);
+
+// Old (8-stage workflow) → new (7-stage pipeline). 'drafting' is handled
+// data-aware in pipelineStageFromWorkflowStage below.
+const WORKFLOW_STAGE_TO_PIPELINE_V2 = Object.freeze({
+  ingestion: 'solicitation_intake',
+  compliance: 'compliance_matrix',
+  strategy: 'technical_extraction',
+  outline: 'execution_plan',
+  pricing_strategy: 'pricing_strategy',
+  red_team: 'final_packaging',
+  final_review: 'final_packaging',
+});
+
+function pipelineV2Index(stageId) {
+  return PIPELINE_V2_STAGE_IDS.indexOf(stageId);
+}
+
+function hasPricingWork(proposal) {
+  const pg = proposal?.pricingGovernance || {};
+  if (pg.reviewStatus && pg.reviewStatus !== 'not_started') return true;
+  if (pg.internalCostEstimate && typeof pg.internalCostEstimate === 'object' && Object.keys(pg.internalCostEstimate).length > 0) return true;
+  if (Array.isArray(pg.subQuotes) && pg.subQuotes.length > 0) return true;
+  const ps = proposal?.pricingStrategy || {};
+  return Boolean(ps.status && ps.status !== 'not_started');
+}
+
+function pipelineStageFromWorkflowStage(stageId, proposal) {
+  if (stageId === 'drafting') {
+    // Old model put drafting AFTER pricing; if pricing evidence exists the
+    // remaining work is packaging/QA, otherwise pricing is still owed.
+    return hasPricingWork(proposal) ? 'final_packaging' : 'pricing_strategy';
+  }
+  return WORKFLOW_STAGE_TO_PIPELINE_V2[stageId] || null;
+}
+
+/**
+ * Derive the 7-stage pipeline position for a proposal. Considers BOTH
+ * workflow.currentStage and the legacy status field (older records sometimes
+ * carry a legacy status further along than their workflow stage, e.g.
+ * currentStage "ingestion" + status "drafting") and takes the furthest.
+ */
+export function derivePipelineV2Stage(proposal, workflowStage) {
+  const wfStage = workflowStage || proposal?.workflow?.currentStage || null;
+  const fromWorkflow = wfStage ? pipelineStageFromWorkflowStage(wfStage, proposal) : null;
+  const legacyStage = LEGACY_STATUS_TO_STAGE[proposal?.status] || null;
+  const fromStatus = legacyStage ? pipelineStageFromWorkflowStage(legacyStage, proposal) : null;
+  const candidates = [fromWorkflow, fromStatus].filter(Boolean);
+  if (!candidates.length) return 'solicitation_intake';
+  return candidates.sort((a, b) => pipelineV2Index(b) - pipelineV2Index(a))[0];
+}
+
+/** Build the derived workflow.pipeline object (version 2, 7 stages). */
+export function buildPipelineV2(proposal, workflow) {
+  const currentStage = derivePipelineV2Stage(proposal, workflow?.currentStage);
+  const currentIdx = pipelineV2Index(currentStage);
+  return {
+    version: 2,
+    currentStage,
+    label: PIPELINE_V2_STAGE_LABELS[currentStage] || currentStage,
+    mappedFrom: {
+      workflowStage: workflow?.currentStage || null,
+      legacyStatus: proposal?.status || null,
+    },
+    stages: PIPELINE_V2_STAGES.map((stage, idx) => ({
+      id: stage.id,
+      order: idx + 1,
+      label: stage.label,
+      status: idx < currentIdx ? 'completed' : idx === currentIdx ? 'in_progress' : 'pending',
+    })),
+  };
+}
 
 export const DEFAULT_MODEL_ROUTING = Object.freeze({
   extraction: { provider: 'minimax', model: 'MiniMax-M2.5', lane: 'default' },
@@ -277,6 +401,7 @@ export function createPricingGovernance() {
   return {
     constraints: [],
     marginFloor: null,
+    suggestedMarginFloor: null,
     riskAdjustmentNotes: '',
     bondInsurance: {
       paymentBondRequired: false,
@@ -284,10 +409,19 @@ export function createPricingGovernance() {
       bondPercentage: null,
       insuranceMinimum: null,
       insuranceNotes: '',
+      estimatedBondCost: '',
+      estimatedInsuranceCost: '',
     },
     wageDetermination: {
       required: false,
       wageScheduleRef: '',
+      notes: '',
+    },
+    dbeSubcontracting: {
+      required: false,
+      minPct: null,
+      goalPct: null,
+      certifiedFirmsIdentified: false,
       notes: '',
     },
     taxEscalation: {
@@ -307,6 +441,9 @@ export function createPricingGovernance() {
 export function normalizePricingGovernance(pg = {}) {
   const defaults = createPricingGovernance();
   return {
+    // Preserve server-side extensions (internalCostEstimate, subQuotes, …)
+    // instead of silently stripping them on normalize.
+    ...(pg || {}),
     constraints: Array.isArray(pg.constraints) ? pg.constraints.map((c, i) => ({
       id: c.id || `pgc-${i + 1}`,
       lineItem: c.lineItem || c.line_item || '',
@@ -319,9 +456,11 @@ export function normalizePricingGovernance(pg = {}) {
       notes: c.notes || '',
     })) : [],
     marginFloor: pg.marginFloor ?? defaults.marginFloor,
+    suggestedMarginFloor: pg.suggestedMarginFloor ?? defaults.suggestedMarginFloor,
     riskAdjustmentNotes: pg.riskAdjustmentNotes || '',
     bondInsurance: { ...defaults.bondInsurance, ...(pg.bondInsurance || {}) },
     wageDetermination: { ...defaults.wageDetermination, ...(pg.wageDetermination || {}) },
+    dbeSubcontracting: { ...defaults.dbeSubcontracting, ...(pg.dbeSubcontracting || {}) },
     taxEscalation: { ...defaults.taxEscalation, ...(pg.taxEscalation || {}) },
     assumptions: Array.isArray(pg.assumptions) ? pg.assumptions.map((a, i) => ({
       id: a.id || `pga-${i + 1}`,
@@ -335,6 +474,47 @@ export function normalizePricingGovernance(pg = {}) {
     reviewedBy: pg.reviewedBy || '',
     reviewedAt: pg.reviewedAt || null,
     notes: pg.notes || '',
+  };
+}
+
+// ── Pricing Strategy (Pipeline v2 stage 6) ──────────────────────────────────
+// The ACTUAL pricing work — model, rates, margin vs. floor, market comps.
+// It references complianceMatrix pricing governance (pricingGovernance) as its
+// constraint input but deliberately does not duplicate any governance data.
+
+export function createPricingStrategy() {
+  return {
+    status: 'not_started', // not_started | in_progress | priced | approved
+    pricingModel: '',      // firm_fixed_price | unit_price | time_and_materials | hybrid
+    basis: '',             // broker_markup | self_perform | sub_quote_markup
+    targetMarginPct: null,
+    clearsMarginFloor: null, // true/false once checked against pricingGovernance.marginFloor
+    totalPrice: null,
+    priceLines: [],
+    marketComps: [],
+    governanceRef: 'pricingGovernance', // constraints live in the compliance matrix's governance section
+    governanceAcknowledged: false,      // set true once pricing was built against the governance constraints
+    notes: '',
+    updatedAt: null,
+  };
+}
+
+export function normalizePricingStrategy(ps = {}) {
+  const defaults = createPricingStrategy();
+  return {
+    ...(ps || {}),
+    status: ps.status || defaults.status,
+    pricingModel: ps.pricingModel || '',
+    basis: ps.basis || '',
+    targetMarginPct: ps.targetMarginPct ?? null,
+    clearsMarginFloor: typeof ps.clearsMarginFloor === 'boolean' ? ps.clearsMarginFloor : null,
+    totalPrice: ps.totalPrice ?? null,
+    priceLines: Array.isArray(ps.priceLines) ? ps.priceLines : [],
+    marketComps: Array.isArray(ps.marketComps) ? ps.marketComps : [],
+    governanceRef: 'pricingGovernance',
+    governanceAcknowledged: Boolean(ps.governanceAcknowledged),
+    notes: ps.notes || '',
+    updatedAt: ps.updatedAt || null,
   };
 }
 
@@ -368,6 +548,7 @@ export function createGovConProposalShape(proposal = {}) {
     evaluationFactors: [],
     complianceMatrix: [],
     pricingGovernance: createPricingGovernance(),
+    pricingStrategy: createPricingStrategy(),
     artifacts: [],
     pastPerformanceRecords: [],
     capabilityStatements: [],
@@ -427,14 +608,21 @@ export function getMissingStagePrerequisites(proposal, targetStageId) {
   });
 }
 
+// Status vocabulary is produced by two different builders (the LLM compliance_matrix_builder
+// contract uses open|covered|missing|blocked|resolved; the deterministic fallback in server.js
+// uses identified|action_required|met|open). Normalize both here so completeness/gap math is
+// correct regardless of which path generated the matrix.
+const COMPLETED_STATUSES = ['covered', 'resolved', 'complete', 'met'];
+const GAP_STATUSES = ['missing', 'blocked', 'open', 'action_required', 'identified'];
+
 export function buildRequirementCoverage(proposal) {
   const matrix = Array.isArray(proposal.complianceMatrix) ? proposal.complianceMatrix : [];
   const requirementIds = uniqueBy(
     matrix.map((item) => item.requirement_id).filter(Boolean),
     (item) => item,
   );
-  const completed = matrix.filter((item) => ['covered', 'resolved', 'complete'].includes(String(item.status || '').toLowerCase())).length;
-  const gaps = matrix.filter((item) => ['missing', 'blocked', 'open'].includes(String(item.status || '').toLowerCase())).length;
+  const completed = matrix.filter((item) => COMPLETED_STATUSES.includes(String(item.status || '').toLowerCase())).length;
+  const gaps = matrix.filter((item) => GAP_STATUSES.includes(String(item.status || '').toLowerCase())).length;
   return {
     totalRequirements: requirementIds.length,
     completed,
@@ -593,7 +781,7 @@ export function recomputeProposalState(proposal) {
     low: redTeamFindings.filter((finding) => finding.severity === 'low' && finding.status !== 'resolved').length,
   };
 
-  const unresolvedGapCount = complianceMatrix.filter((item) => ['open', 'missing', 'blocked'].includes(String(item.status || '').toLowerCase())).length;
+  const unresolvedGapCount = complianceMatrix.filter((item) => GAP_STATUSES.includes(String(item.status || '').toLowerCase())).length;
   const missingEvidenceCount = complianceMatrix.filter((item) => (item.evidence_needed || []).length > 0 && !item.verified).length;
   const disqualifyingOmissionCount = complianceMatrix.filter((item) => item.mandatory_or_scored === 'mandatory' && ['missing', 'blocked'].includes(String(item.status || '').toLowerCase())).length;
 
@@ -653,6 +841,10 @@ export function recomputeProposalState(proposal) {
     };
   });
 
+  // Derived 7-stage pipeline overlay (Pipeline v2) — recomputed on every
+  // normalize so it always reflects the operational currentStage.
+  workflow.pipeline = buildPipelineV2(proposal, workflow);
+
   return {
     ...proposal,
     workflow,
@@ -668,6 +860,7 @@ export function recomputeProposalState(proposal) {
     evaluationFactors: Array.isArray(proposal.evaluationFactors) ? proposal.evaluationFactors : [],
     complianceMatrix,
     pricingGovernance,
+    pricingStrategy: normalizePricingStrategy(proposal.pricingStrategy),
     artifacts: Array.isArray(proposal.artifacts) ? proposal.artifacts : [],
     pastPerformanceRecords: Array.isArray(proposal.pastPerformanceRecords) ? proposal.pastPerformanceRecords : [],
     capabilityStatements: Array.isArray(proposal.capabilityStatements) ? proposal.capabilityStatements : [],
